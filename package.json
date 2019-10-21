@@ -1,0 +1,65 @@
+{
+  "name": "bvtablenet-items-provider",
+  "version": "0.1.0",
+  "description": "a modal",
+  "author": "Tom Noogen",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "keywords": [
+    "bootstrap-vue",
+    "bootstrap",
+    "javascript",
+    "pure",
+    "css",
+    "simple",
+    "datatables.net",
+    "jquery",
+    "provider",
+    "b-table",
+    "vue"
+  ],
+  "repository": "git://github.com/niiknow/bvtablenet-items-provider.git",
+  "scripts": {
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "build": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "test": "cross-env NODE_ENV=test node_modules/.bin/nyc node_modules/.bin/ava",
+    "watch-test": "npm run test -- --watch",
+    "lint": "eslint --ext .js,.vue src/",
+    "lint-fix": "eslint --fix --ext .js,.vue src/",
+    "check-outdated": "npm outdated"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "ava": "^2.3.0",
+    "babel-eslint": "^10.0.3",
+    "browser-env": "^3.2.6",
+    "browser-sync": "^2.26.7",
+    "browser-sync-webpack-plugin": "^2.0.1",
+    "cross-env": "^5.2.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^3.0.2",
+    "eslint-plugin-vue": "^5.2.3",
+    "file-loader": "^3.0.1",
+    "laravel-mix": "^4.1.2",
+    "nyc": "^14.1.1",
+    "raw-loader": "^3.1.0",
+    "smart-banner-webpack-plugin": "^3.0.1",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "ava": {
+    "require": [
+      "./tests/_setup-browser-env.js"
+    ]
+  }
+}
