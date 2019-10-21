@@ -29,24 +29,8 @@ class ItemsProviderWrapper {
     that.filterIgnoredFields = []
     that.filterIncludedFields = []
     that.axiosConfig = {}
-    that.serverFields = {}
     that.columns = []
-
-    if (that.fields) {
-      const fields = that.fields
-
-      for (let i = 0; i < fields.length; i++) {
-        let field = fields[i]
-        if (!field.key) {
-          field = { key: field }
-        }
-        field.__index = i
-
-        that.serverFields[field.key] = field
-
-        that.columns.push(field)
-      }
-    }
+    that.isBusy = false
   }
 
   /**
@@ -142,14 +126,19 @@ class ItemsProviderWrapper {
       query.order.column = (that.serverFields[that.sortBy] || { __index: 0 }).__index
     }
 
-    for(let k in that.serverFields) {
-      field = that.serverFields[k]
+    for (let i = 0; i < fields.length; i++) {
+      let field = fields[i]
+      if (!field.key) {
+        field = { key: field }
+      }
+
       const col = {
         data: field.key,
         name: field.key,
         searchable: true,
-        orderable: field.sortable || true,
-        search: { value: '', regex: false }
+        // implement this only when we allow for per field filter
+        // search: { value: '', regex: false },
+        orderable: field.sortable || true
       }
 
       if (that.filterIgnoredFields && that.filterIgnoredFields.indexOf(field.key) > -1) {
@@ -158,6 +147,10 @@ class ItemsProviderWrapper {
 
       if (that.filterIncludedFields && that.filterIncludedFields.indexOf(field.key) > -1) {
         col.searchable = true
+      }
+
+      if (typeof(that.onFieldTranslate) === 'function') {
+        that.onFieldTranslate(field, col)
       }
 
       query.columns.push(col)
@@ -184,6 +177,10 @@ class ItemsProviderWrapper {
 
     query = that.translateContext(ctx, query)
 
+    if (typeof(that.onBeforeQuery) === 'function') {
+      that.onBeforeQuery(query, ctx)
+    }
+
     that.isBusy = true
     that.ajaxResponse = null
     that.ajaxError = null
@@ -202,8 +199,8 @@ class ItemsProviderWrapper {
       that.isBusy = false
       return (rsp.data)
     }).catch(error => {
-      that.isBusy = false
       that.ajaxError = error
+      that.isBusy = false
       return []
     })
   }

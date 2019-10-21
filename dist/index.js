@@ -157,26 +157,8 @@ function () {
       that.filterIgnoredFields = [];
       that.filterIncludedFields = [];
       that.axiosConfig = {};
-      that.serverFields = {};
       that.columns = [];
-
-      if (that.fields) {
-        var _fields = that.fields;
-
-        for (var i = 0; i < _fields.length; i++) {
-          var _field = _fields[i];
-
-          if (!_field.key) {
-            _field = {
-              key: _field
-            };
-          }
-
-          _field.__index = i;
-          that.serverFields[_field.key] = _field;
-          that.columns.push(_field);
-        }
-      }
+      that.isBusy = false;
     }
     /**
      * safely decode the string
@@ -289,17 +271,22 @@ function () {
         }).__index;
       }
 
-      for (var k in that.serverFields) {
-        field = that.serverFields[k];
+      for (var i = 0; i < fields.length; i++) {
+        var field = fields[i];
+
+        if (!field.key) {
+          field = {
+            key: field
+          };
+        }
+
         var col = {
           data: field.key,
           name: field.key,
           searchable: true,
-          orderable: field.sortable || true,
-          search: {
-            value: '',
-            regex: false
-          }
+          // implement this only when we allow for per field filter
+          // search: { value: '', regex: false },
+          orderable: field.sortable || true
         };
 
         if (that.filterIgnoredFields && that.filterIgnoredFields.indexOf(field.key) > -1) {
@@ -308,6 +295,10 @@ function () {
 
         if (that.filterIncludedFields && that.filterIncludedFields.indexOf(field.key) > -1) {
           col.searchable = true;
+        }
+
+        if (typeof that.onFieldTranslate === 'function') {
+          that.onFieldTranslate(field, col);
         }
 
         query.columns.push(col);
@@ -335,6 +326,11 @@ function () {
       }
 
       query = that.translateContext(ctx, query);
+
+      if (typeof that.onBeforeQuery === 'function') {
+        that.onBeforeQuery(query, ctx);
+      }
+
       that.isBusy = true;
       that.ajaxResponse = null;
       that.ajaxError = null;
@@ -353,8 +349,8 @@ function () {
         that.isBusy = false;
         return rsp.data;
       }).catch(function (error) {
-        that.isBusy = false;
         that.ajaxError = error;
+        that.isBusy = false;
         return [];
       });
     }

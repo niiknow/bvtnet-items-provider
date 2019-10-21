@@ -12,13 +12,22 @@ const ipw = new ItemsProviderWrapper(axios, fields)
 ```html
 <b-table 
   :items="ipw.provider"
-  :fields="ipw.bvFields"
-  :busy="ipw.busy"
+  :fields="ipw.fields"
+  :busy="ipw.isBusy"
   :sort-by="ipw.sortBy"
   :sort-desc="ipw.sortDesc"
-  :sort-direction="ipw.sortDirection"
   :current-page="ipw.currentPage"
   :per-page="ipw.perPage"
   :filter="ipw.filter"
+  :filter-ignored-fields="ipw.filterIgnoredFields"
+  :filter-included-fields="ipw.filterIncludedFields"
 />
 ```
+
+# NOTE
+This plugin support most searver-side feature except for:
+
+1. Per column filtering
+2. Multi-column sorting
+
+# MIT
