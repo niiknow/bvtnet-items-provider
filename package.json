@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "a modal",
   "author": "Tom Noogen",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "keywords": [
     "bootstrap-vue",
