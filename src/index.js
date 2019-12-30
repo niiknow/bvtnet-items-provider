@@ -1,23 +1,23 @@
-class ItemsProviderWrapper {
+class ItemsProvider {
   /**
-	 * Initialize an instance of ItemsProviderWrapper
+	 * Initialize an instance of ItemsProvider
 	 *
-	 * @return ItemsProviderWrapper an instance of ItemsProviderWrapper
+	 * @return an instance of ItemsProvider
 	 */
   constructor(axios, fields) {
     return this.init(axios, fields)
   }
 
   /**
-	 * Initialize an instance of ItemsProviderWrapper
+	 * Initialize an instance of ItemsProvider
 	 * @param  Object axios  an instance of axios
 	 * @param  Object fields object containing our fields definition
-	 * @return ItemsProviderWrapper       an instance of ItemsProviderWrapper
+	 * @return ItemsProvider       an instance of ItemsProvider
 	 */
   init(axios, fields) {
     const that = this
 
-    that._name = 'ItemsProviderWrapper'
+    that._name = 'ItemsProvider'
     that.axios = axios
     that.fields = fields
     that.perPage = 15
@@ -165,7 +165,7 @@ class ItemsProviderWrapper {
 	 * @param  Object ctx bootstrap-vue context object
 	 * @return Array   array of items
 	 */
-  doQuery(ctx) {
+  items(ctx) {
     const that = this
     const apiParts = ctx.apiUrl.split('?')
     let query = {},
@@ -206,4 +206,4 @@ class ItemsProviderWrapper {
   }
 }
 
-export default ItemsProviderWrapper
+export default ItemsProvider

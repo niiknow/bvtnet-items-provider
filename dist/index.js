@@ -1,8 +1,8 @@
 /*!
- * bvtablenet-items-provider
+ * bvtnet-items-provider
  * a modal
 
- * @version v0.1.0
+ * @version v0.2.0
  * @author Tom Noogen
  * @homepage undefined
  * @repository undefined
@@ -11,11 +11,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("bvtablenet-items-provider", [], factory);
+		define("bvtnet-items-provider", [], factory);
 	else if(typeof exports === 'object')
-		exports["bvtablenet-items-provider"] = factory();
+		exports["bvtnet-items-provider"] = factory();
 	else
-		root["bvtablenet-items-provider"] = factory();
+		root["bvtnet-items-provider"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -120,32 +120,32 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var ItemsProviderWrapper =
+var ItemsProvider =
 /*#__PURE__*/
 function () {
   /**
-  * Initialize an instance of ItemsProviderWrapper
+  * Initialize an instance of ItemsProvider
   *
-  * @return ItemsProviderWrapper an instance of ItemsProviderWrapper
+  * @return an instance of ItemsProvider
   */
-  function ItemsProviderWrapper(axios, fields) {
-    _classCallCheck(this, ItemsProviderWrapper);
+  function ItemsProvider(axios, fields) {
+    _classCallCheck(this, ItemsProvider);
 
     return this.init(axios, fields);
   }
   /**
-  * Initialize an instance of ItemsProviderWrapper
+  * Initialize an instance of ItemsProvider
   * @param  Object axios  an instance of axios
   * @param  Object fields object containing our fields definition
-  * @return ItemsProviderWrapper       an instance of ItemsProviderWrapper
+  * @return ItemsProvider       an instance of ItemsProvider
   */
 
 
-  _createClass(ItemsProviderWrapper, [{
+  _createClass(ItemsProvider, [{
     key: "init",
     value: function init(axios, fields) {
       var that = this;
-      that._name = 'ItemsProviderWrapper';
+      that._name = 'ItemsProvider';
       that.axios = axios;
       that.fields = fields;
       that.perPage = 15;
@@ -314,8 +314,8 @@ function () {
     */
 
   }, {
-    key: "doQuery",
-    value: function doQuery(ctx) {
+    key: "items",
+    value: function items(ctx) {
       var that = this;
       var apiParts = ctx.apiUrl.split('?');
       var query = {},
@@ -356,10 +356,10 @@ function () {
     }
   }]);
 
-  return ItemsProviderWrapper;
+  return ItemsProvider;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (ItemsProviderWrapper);
+/* harmony default export */ __webpack_exports__["default"] = (ItemsProvider);
 
 /***/ }),
 

@@ -1,6 +1,6 @@
 {
-  "name": "bvtablenet-items-provider",
-  "version": "0.1.0",
+  "name": "bvtnet-items-provider",
+  "version": "0.2.0",
   "description": "a modal",
   "author": "Tom Noogen",
   "main": "lib/index.js",
