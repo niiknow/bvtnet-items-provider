@@ -370,7 +370,7 @@ function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/tomnoogen/Desktop/work/niiknow/bvtablenet-items-provider/src/index.js */"./src/index.js");
+module.exports = __webpack_require__(/*! /Users/tomnoogen/Desktop/work/niiknow/bvtnet-items-provider/src/index.js */"./src/index.js");
 
 
 /***/ })
