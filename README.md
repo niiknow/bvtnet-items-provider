@@ -6,28 +6,30 @@ The goal if this library is to provide connection between jQuery datatables.net 
 ```js
 import ItemsProvider from 'bvtnet-items-provider'
 
-const ipw = new ItemsProvider(axios, fields)
+const ip = new ItemsProvider(axios, fields)
 ```
 
 ```html
 <b-table 
-  :items="ipw.items"
-  :fields="ipw.fields"
-  :busy="ipw.isBusy"
-  :sort-by="ipw.sortBy"
-  :sort-desc="ipw.sortDesc"
-  :current-page="ipw.currentPage"
-  :per-page="ipw.perPage"
-  :filter="ipw.filter"
-  :filter-ignored-fields="ipw.filterIgnoredFields"
-  :filter-included-fields="ipw.filterIncludedFields"
+  :items="ip.items"
+  :fields="ip.fields"
+  :busy="ip.isBusy"
+  :sort-by="ip.sortBy"
+  :sort-desc="ip.sortDesc"
+  :current-page="ip.currentPage"
+  :per-page="ip.perPage"
+  :filter="ip.filter"
+  :filter-ignored-fields="ip.filterIgnoredFields"
+  :filter-included-fields="ip.filterIncludedFields"
 />
 ```
 
 # NOTE
-This plugin support most searver-side feature except for:
+This plugin support most server-side features except for:
 
 1. Per column filtering
 2. Multi-column sorting
+
+This is because we have not found a good way to wire this up to the current bootstrap-vue b-table implementation.
 
 # MIT
