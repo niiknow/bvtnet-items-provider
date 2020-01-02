@@ -10,6 +10,7 @@
       <div class="col-12 col-md-3">
         <form
           class="form-inline d-flex mx-1 justify-content-end"
+          @submit.stop.prevent="doSearch"
         >
           <div class="input-group">
             <input
@@ -50,6 +51,17 @@
       :filter-included-fields="ip.filterIncludedFields"
       api-url="https://laratt.niiknow.org/api/v1/democontact/example?x-tenant=test&x-api-key=demo123"
     />
+
+    <p class="mt-3">
+      Current Page: {{ ip.currentPage }}
+    </p>
+
+    <b-pagination
+      v-model="ip.currentPage"
+      :total-rows="ip.totalRows"
+      :per-page="ip.perPage"
+      aria-controls="my-table"
+    />
   </div>
 </template>
 
@@ -57,7 +69,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
-
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 
 import ItemsProvider from '../src'
@@ -67,6 +79,9 @@ export default {
   data() {
     const vm = this
     const fields = {
+      id: {
+        sortable: true, searchable: true, label: 'Email'
+      },
       email: {
         sortable: true, searchable: true, label: 'Email'
       },
@@ -127,6 +142,9 @@ export default {
   methods: {
     fetchItems(ctx) {
       return this.ip.items(ctx)
+    },
+    doSearch() {
+      this.ip.filter = this.quickSearch
     }
   }
 }

@@ -161,7 +161,7 @@ class ItemsProvider {
     const fields = that.fields
     const query  = {
       draw: 1,
-      start: that.currentPage * that.perPage,
+      start: (that.currentPage - 1) * that.perPage,
       length: that.perPage,
       search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
       order:[ { column: 0, dir: ctx.sortDesc ? 'desc' : 'asc' } ],
