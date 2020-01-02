@@ -5,13 +5,7 @@
   >
     <div class="row">
       <div class="col-12 col-md-9">
-        Below are client-side buttons demo, go here to see
-        <a
-          href="https://laratt.niiknow.org/home/contacts"
-          target="_blank"
-        >
-          server-side buttons demo
-        </a>
+        Demo
       </div>
       <div class="col-12 col-md-3">
         <form

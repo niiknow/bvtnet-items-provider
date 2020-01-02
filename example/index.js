@@ -2028,12 +2028,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -35472,7 +35466,9 @@ var render = function() {
     { staticClass: "col-12", attrs: { id: "app" } },
     [
       _c("div", { staticClass: "row" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "col-12 col-md-9" }, [
+          _vm._v("\n      Demo\n    ")
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-12 col-md-3" }, [
           _c(
@@ -35502,7 +35498,7 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm._m(0)
               ])
             ]
           )
@@ -35536,26 +35532,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-md-9" }, [
-      _vm._v(
-        "\n      Below are client-side buttons demo, go here to see\n      "
-      ),
-      _c(
-        "a",
-        {
-          attrs: {
-            href: "https://laratt.niiknow.org/home/contacts",
-            target: "_blank"
-          }
-        },
-        [_vm._v("\n        server-side buttons demo\n      ")]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

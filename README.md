@@ -3,10 +3,6 @@
 
 The goal if this library is to provide connection between jQuery datatables.net server-side REST endpoint with client-side b-table of the bootstrap-vue described here - https://bootstrap-vue.js.org/docs/components/table/#using-items-provider-functions
 
-```js
-
-```
-
 ```html
 <b-table 
   :items="fetchItems"
@@ -22,9 +18,7 @@ The goal if this library is to provide connection between jQuery datatables.net 
 />
 ```
 
-
 ```js
-<script>
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
