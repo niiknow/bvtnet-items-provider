@@ -253,8 +253,11 @@ class ItemsProvider {
 
       let myData = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow = query.start
+      that.startRow = query.start + 1
       that.endRow = query.start + query.length
+      if (that.endRow > that.totalRows || that.endRow < 0) {
+        that.endRow = that.totalRows
+      }
 
       that.isBusy = false
       return myData.data || []

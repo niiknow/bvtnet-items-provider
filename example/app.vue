@@ -53,10 +53,10 @@
       api-url="https://laratt.niiknow.org/api/v1/democontact/example?x-tenant=test&x-api-key=demo123"
     />
      <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-5">
         Showing {{ ip.startRow }} to {{ ip.endRow }} of {{ ip.totalRows }} entries
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-7">
         <b-pagination
           v-model="ip.currentPage"
           :total-rows="ip.totalRows"
@@ -64,6 +64,18 @@
           class="float-right"
           aria-controls="my-table"
         />
+
+        <div class="dataTables_length float-right">
+          <label>
+            Show
+            <b-form-select
+              v-model="ip.perPage"
+              :options="pageLengths"
+              class="dataTables_length_select"
+            />
+            entries
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -140,7 +152,14 @@ export default {
 
     return {
       ip: ip,
-      quickSearch: ''
+      quickSearch: '',
+      pageLengths: [
+        { value: 15, text: '15'},
+        { value: 100, text: '100'},
+        { value: 500, text: '500'},
+        { value: 1000, text: '1000'},
+        { value: -1, text: 'All'}
+      ]
     }
   },
   methods: {
@@ -155,4 +174,19 @@ export default {
 </script>
 
 <style scoped>
+.dataTables_length label {
+  font-weight: normal;
+  text-align: left;
+  white-space: nowrap;
+  padding-right: 20px;
+}
+
+.dataTables_length label * {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+.dataTables_length_select {
+  width: 80px;
+}
 </style>
