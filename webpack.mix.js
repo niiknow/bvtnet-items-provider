@@ -3,7 +3,7 @@ const path    = require('path');
 const mix     = require('laravel-mix');
 const pkg     = require('./package.json');
 const fs      = require('fs');
-const public  = 'dist';
+const public  = mix.inProduction() ? 'dist' : 'example';
 
 mix.setPublicPath(path.normalize(public));
 
@@ -20,6 +20,10 @@ const banner  = `/*!
 const fileName = 'index' + (mix.inProduction() ? '.min.js' : '.js');
 
 const config = {
+  externals: {
+    'jquery': 'jQuery',
+    'vue': 'Vue'
+  },
   module: {
     rules: [
       {
@@ -62,8 +66,10 @@ const config = {
 };
 
 mix.webpackConfig(config).sourceMaps();
-mix.js(`src/index.js`, `${ public }`);
-mix.then(function () {
+
+if (mix.inProduction()) {
+  mix.js(`src/index.js`, `${ public }`);
+  mix.then(function () {
   const data   = fs.readFileSync(`${ public }/${ fileName }`);
   const fd     = fs.openSync(`${ public }/${ fileName }`, 'w+');
   const insert = new Buffer(banner);
@@ -73,11 +79,10 @@ mix.then(function () {
     if (err) throw err;
   });
 });
-
-if (mix.inProduction()) {
   mix.version();
   mix.disableNotifications();
 } else {
+  mix.js(`example/app.js`, `${ public }`);
   mix.browserSync({
     proxy: false,
     port: 3000,

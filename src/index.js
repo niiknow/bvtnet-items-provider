@@ -10,12 +10,14 @@ class ItemsProvider {
 
   /**
 	 * Initialize an instance of ItemsProvider
-	 * @param  Object axios  an instance of axios
-	 * @param  Object fields object containing our fields definition
+	 * @param  Object  axios                  an instance of axios
+	 * @param  Object  fields                 object containing our fields definition
 	 * @return ItemsProvider       an instance of ItemsProvider
 	 */
   init(axios, fields) {
     const that = this
+    const isFieldsArray = fields.constructor === Array || Array.isArray(fields)
+    const copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']
 
     that._name = 'ItemsProvider'
     that.axios = axios
@@ -31,6 +33,32 @@ class ItemsProvider {
     that.axiosConfig = {}
     that.columns = []
     that.isBusy = false
+
+    if (!isFieldsArray) {
+      that.fields = []
+
+      for (let k in fields) {
+        const field = fields[k]
+        let col = {}
+
+        field.key  = field.name || field.key || k
+
+        // disable search and sort for local field
+        if (field.isLocal) {
+          field.searchable = false
+          field.sortable  = false
+          delete field['filterByFormatted']
+        }
+
+        for(let i = 0; i < copyable.length; i++) {
+          if (field.hasOwnProperty(copyable[i])) {
+            col[copyable[i]] = field[copyable[i]]
+          }
+        }
+
+        that.fields.push(col)
+      }
+    }
   }
 
   /**
@@ -94,32 +122,54 @@ class ItemsProvider {
    * @param  Object obj the object
    * @return String     the query string
    */
-  queryStringify(obj) {
-    let str = '',
-      encode = this.encode
+  queryStringify(obj, prefix) {
+    const that   = this
+    const encode = that.encode
 
-    for(let k in obj) {
-      str += `&${k}=${encode(obj[k])}`
+    let str = [], p
+
+    for (p in obj) {
+      if (obj.hasOwnProperty(p)) {
+        let k = prefix ? prefix + '[' + p + ']' : p, v = obj[p]
+
+        str.push((v !== null && typeof v === 'object') ?
+          that.queryStringify(v, k) :
+          encode(k) + '=' + encode(v))
+      }
     }
 
-    return str.replace('&', '')
+    return str.join('&')
+  }
+
+  /**
+   * get the last server Params
+   * @return Object server params as an object
+   */
+  getServerParams() {
+    return this._query
   }
 
   /**
    * translate the context to datatables.net query object
    *
-   * @param  Object ctx the context object
+   * @param  Object  ctx the context object
+   * @param  inQuery the additional query data
    * @return Object    the query object
    */
-  translateContext(ctx) {
-    const that = this
-    const query = {
+  translateContext(ctx, inQuery = {}) {
+    const that   = this
+    const fields = that.fields
+    const query  = {
       draw: 1,
       start: that.currentPage * that.perPage,
       length: that.perPage,
       search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
       order:[ { column: 0, dir: ctx.sortDesc ? 'desc' : 'asc' } ],
       columns: []
+    }
+
+    for(let k in inQuery) {
+      query[k] = inQuery[k]
     }
 
     if (that.sortBy) {
@@ -167,7 +217,7 @@ class ItemsProvider {
 	 */
   items(ctx) {
     const that = this
-    const apiParts = ctx.apiUrl.split('?')
+    const apiParts = (ctx.apiUrl || that.apiUrl).split('?')
     let query = {},
       promise = null
 
@@ -185,19 +235,23 @@ class ItemsProvider {
     that.ajaxResponse = null
     that.ajaxError = null
     that.sortDirection = ctx.sortDesc ? 'desc' : 'asc'
+    that._apiUrl = apiParts[0]
+    that._query = query
 
     if (that.method === 'POST') {
-      promise = that.axios.post(ctx.apiUrl, query, that.axiosConfig)
+      promise = that.axios.post(that._apiUrl, query, that.axiosConfig)
     } else {
-      const apiUrl = apiParts[0] + '?' + that.queryStringify(query)
+      const apiUrl = that._apiUrl + '?' + that.queryStringify(query)
       promise = that.axios.get(apiUrl, that.axiosConfig)
     }
 
     return promise.then((rsp) => {
       that.ajaxResponse = rsp
-   		that.totalRows = rsp.recordsTotal
+
+      let myData = rsp.data
+   		that.totalRows = myData.recordsFiltered || myData.recordsTotal
       that.isBusy = false
-      return (rsp.data)
+      return myData.data || []
     }).catch(error => {
       that.ajaxError = error
       that.isBusy = false
