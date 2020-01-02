@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.4.0
+ * @version v0.5.0
  * @author Tom Noogen
  * @homepage undefined
  * @repository undefined
