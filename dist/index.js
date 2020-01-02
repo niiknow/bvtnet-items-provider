@@ -1,8 +1,8 @@
 /*!
  * bvtnet-items-provider
- * a modal
+ * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.2.0
+ * @version v0.4.0
  * @author Tom Noogen
  * @homepage undefined
  * @repository undefined
@@ -114,6 +114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -135,8 +137,8 @@ function () {
   }
   /**
   * Initialize an instance of ItemsProvider
-  * @param  Object axios  an instance of axios
-  * @param  Object fields object containing our fields definition
+  * @param  Object  axios                  an instance of axios
+  * @param  Object  fields                 object containing our fields definition
   * @return ItemsProvider       an instance of ItemsProvider
   */
 
@@ -145,6 +147,8 @@ function () {
     key: "init",
     value: function init(axios, fields) {
       var that = this;
+      var isFieldsArray = fields.constructor === Array || Array.isArray(fields);
+      var copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn'];
       that._name = 'ItemsProvider';
       that.axios = axios;
       that.fields = fields;
@@ -159,6 +163,32 @@ function () {
       that.axiosConfig = {};
       that.columns = [];
       that.isBusy = false;
+      that.startRow = 0;
+      that.endRow = 0;
+
+      if (!isFieldsArray) {
+        that.fields = [];
+
+        for (var k in fields) {
+          var field = fields[k];
+          var col = {};
+          field.key = field.name || field.key || k; // disable search and sort for local field
+
+          if (field.isLocal) {
+            field.searchable = false;
+            field.sortable = false;
+            delete field['filterByFormatted'];
+          }
+
+          for (var i = 0; i < copyable.length; i++) {
+            if (field.hasOwnProperty(copyable[i])) {
+              col[copyable[i]] = field[copyable[i]];
+            }
+          }
+
+          that.fields.push(col);
+        }
+      }
     }
     /**
      * safely decode the string
@@ -229,30 +259,49 @@ function () {
 
   }, {
     key: "queryStringify",
-    value: function queryStringify(obj) {
-      var str = '',
-          encode = this.encode;
+    value: function queryStringify(obj, prefix) {
+      var that = this;
+      var encode = that.encode;
+      var str = [],
+          p;
 
-      for (var k in obj) {
-        str += "&".concat(k, "=").concat(encode(obj[k]));
+      for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          var k = prefix ? prefix + '[' + p + ']' : p,
+              v = obj[p];
+          str.push(v !== null && _typeof(v) === 'object' ? that.queryStringify(v, k) : encode(k) + '=' + encode(v));
+        }
       }
 
-      return str.replace('&', '');
+      return str.join('&');
+    }
+    /**
+     * get the last server Params
+     * @return Object server params as an object
+     */
+
+  }, {
+    key: "getServerParams",
+    value: function getServerParams() {
+      return this._query;
     }
     /**
      * translate the context to datatables.net query object
      *
-     * @param  Object ctx the context object
+     * @param  Object  ctx the context object
+     * @param  inQuery the additional query data
      * @return Object    the query object
      */
 
   }, {
     key: "translateContext",
     value: function translateContext(ctx) {
+      var inQuery = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var that = this;
+      var fields = that.fields;
       var query = {
         draw: 1,
-        start: that.currentPage * that.perPage,
+        start: (that.currentPage - 1) * that.perPage,
         length: that.perPage,
         search: {
           value: "".concat(ctx.filter || ''),
@@ -264,6 +313,10 @@ function () {
         }],
         columns: []
       };
+
+      for (var k in inQuery) {
+        query[k] = inQuery[k];
+      }
 
       if (that.sortBy) {
         query.order.column = (that.serverFields[that.sortBy] || {
@@ -317,7 +370,7 @@ function () {
     key: "items",
     value: function items(ctx) {
       var that = this;
-      var apiParts = ctx.apiUrl.split('?');
+      var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
       var query = {},
           promise = null;
 
@@ -331,23 +384,34 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
+      that.startRow = that.endRow = 0;
       that.isBusy = true;
       that.ajaxResponse = null;
       that.ajaxError = null;
       that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
+      that._apiUrl = apiParts[0];
+      that._query = query;
 
       if (that.method === 'POST') {
-        promise = that.axios.post(ctx.apiUrl, query, that.axiosConfig);
+        promise = that.axios.post(that._apiUrl, query, that.axiosConfig);
       } else {
-        var apiUrl = apiParts[0] + '?' + that.queryStringify(query);
+        var apiUrl = that._apiUrl + '?' + that.queryStringify(query);
         promise = that.axios.get(apiUrl, that.axiosConfig);
       }
 
       return promise.then(function (rsp) {
         that.ajaxResponse = rsp;
-        that.totalRows = rsp.recordsTotal;
+        var myData = rsp.data;
+        that.totalRows = myData.recordsFiltered || myData.recordsTotal;
+        that.startRow = query.start + 1;
+        that.endRow = query.start + query.length;
+
+        if (that.endRow > that.totalRows || that.endRow < 0) {
+          that.endRow = that.totalRows;
+        }
+
         that.isBusy = false;
-        return rsp.data;
+        return myData.data || [];
       }).catch(function (error) {
         that.ajaxError = error;
         that.isBusy = false;

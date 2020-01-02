@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
     "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-poll": "npm run watch -- --watch-poll",
     "build": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=build node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "cross-env NODE_ENV=test node_modules/.bin/nyc node_modules/.bin/ava",
     "watch-test": "npm run test -- --watch",
     "lint": "eslint --ext .js,.vue src/",
