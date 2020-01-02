@@ -1,6 +1,8 @@
 # bvtnet-items-provider
 > datatables.net ajax items provider for bootstrap-vue b-table
 
+Demo https://niiknow.github.io/bvtnet-items-provider/
+
 The goal if this library is to provide connection between jQuery datatables.net server-side REST endpoint with client-side b-table of the bootstrap-vue described here - https://bootstrap-vue.js.org/docs/components/table/#using-items-provider-functions
 
 ```html
