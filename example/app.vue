@@ -37,6 +37,7 @@
       borderless
       hover
       small
+      striped
       responsivve="sm"
       head-variant="light"
       :items="fetchItems"
@@ -51,17 +52,20 @@
       :filter-included-fields="ip.filterIncludedFields"
       api-url="https://laratt.niiknow.org/api/v1/democontact/example?x-tenant=test&x-api-key=demo123"
     />
-
-    <p class="mt-3">
-      Current Page: {{ ip.currentPage }}
-    </p>
-
-    <b-pagination
-      v-model="ip.currentPage"
-      :total-rows="ip.totalRows"
-      :per-page="ip.perPage"
-      aria-controls="my-table"
-    />
+     <div class="row">
+      <div class="col-12 col-md-6">
+        Showing {{ ip.startRow }} to {{ ip.endRow }} of {{ ip.totalRows }} entries
+      </div>
+      <div class="col-12 col-md-6">
+        <b-pagination
+          v-model="ip.currentPage"
+          :total-rows="ip.totalRows"
+          :per-page="ip.perPage"
+          class="float-right"
+          aria-controls="my-table"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -80,7 +84,7 @@ export default {
     const vm = this
     const fields = {
       id: {
-        sortable: true, searchable: true, label: 'Email'
+        sortable: true, searchable: true, label: 'Id'
       },
       email: {
         sortable: true, searchable: true, label: 'Email'

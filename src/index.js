@@ -33,6 +33,8 @@ class ItemsProvider {
     that.axiosConfig = {}
     that.columns = []
     that.isBusy = false
+    that.startRow = 0
+    that.endRow = 0
 
     if (!isFieldsArray) {
       that.fields = []
@@ -231,6 +233,7 @@ class ItemsProvider {
       that.onBeforeQuery(query, ctx)
     }
 
+    that.startRow = that.endRow = 0
     that.isBusy = true
     that.ajaxResponse = null
     that.ajaxError = null
@@ -250,6 +253,9 @@ class ItemsProvider {
 
       let myData = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
+      that.startRow = query.start
+      that.endRow = query.start + query.length
+
       that.isBusy = false
       return myData.data || []
     }).catch(error => {

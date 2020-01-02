@@ -2042,6 +2042,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2056,7 +2060,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       id: {
         sortable: true,
         searchable: true,
-        label: 'Email'
+        label: 'Id'
       },
       email: {
         sortable: true,
@@ -36188,6 +36192,7 @@ var render = function() {
           borderless: "",
           hover: "",
           small: "",
+          striped: "",
           responsivve: "sm",
           "head-variant": "light",
           items: _vm.fetchItems,
@@ -36205,24 +36210,42 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("p", { staticClass: "mt-3" }, [
-        _vm._v("\n    Current Page: " + _vm._s(_vm.ip.currentPage) + "\n  ")
-      ]),
-      _vm._v(" "),
-      _c("b-pagination", {
-        attrs: {
-          "total-rows": _vm.ip.totalRows,
-          "per-page": _vm.ip.perPage,
-          "aria-controls": "my-table"
-        },
-        model: {
-          value: _vm.ip.currentPage,
-          callback: function($$v) {
-            _vm.$set(_vm.ip, "currentPage", $$v)
-          },
-          expression: "ip.currentPage"
-        }
-      })
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-12 col-md-6" }, [
+          _vm._v(
+            "\n      Showing " +
+              _vm._s(_vm.ip.startRow) +
+              " to " +
+              _vm._s(_vm.ip.endRow) +
+              " of " +
+              _vm._s(_vm.ip.totalRows) +
+              " entries\n    "
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-12 col-md-6" },
+          [
+            _c("b-pagination", {
+              staticClass: "float-right",
+              attrs: {
+                "total-rows": _vm.ip.totalRows,
+                "per-page": _vm.ip.perPage,
+                "aria-controls": "my-table"
+              },
+              model: {
+                value: _vm.ip.currentPage,
+                callback: function($$v) {
+                  _vm.$set(_vm.ip, "currentPage", $$v)
+                },
+                expression: "ip.currentPage"
+              }
+            })
+          ],
+          1
+        )
+      ])
     ],
     1
   )
@@ -36446,6 +36469,8 @@ function () {
       that.axiosConfig = {};
       that.columns = [];
       that.isBusy = false;
+      that.startRow = 0;
+      that.endRow = 0;
 
       if (!isFieldsArray) {
         that.fields = [];
@@ -36665,6 +36690,7 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
+      that.startRow = that.endRow = 0;
       that.isBusy = true;
       that.ajaxResponse = null;
       that.ajaxError = null;
@@ -36683,6 +36709,8 @@ function () {
         that.ajaxResponse = rsp;
         var myData = rsp.data;
         that.totalRows = myData.recordsFiltered || myData.recordsTotal;
+        that.startRow = query.start;
+        that.endRow = query.start + query.length;
         that.isBusy = false;
         return myData.data || [];
       }).catch(function (error) {
