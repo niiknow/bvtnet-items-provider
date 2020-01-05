@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.0
+ * @version v0.9.1
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -178,7 +178,7 @@ function () {
           var col = {};
           field.key = "".concat(field.key || field.name || field.data || k); // disable search and sort for local field
 
-          if (field.isLocal) {
+          if (field.isLocal || "".concat(field.key) === '') {
             field.searchable = false;
             field.sortable = false;
             delete field['filterByFormatted'];
@@ -381,7 +381,7 @@ function () {
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
 
-        if (!field.key) {
+        if (typeof field === 'string') {
           field = {
             key: field
           };

@@ -48,7 +48,7 @@ class ItemsProvider {
         field.key  = `${field.key || field.name || field.data || k}`
 
         // disable search and sort for local field
-        if (field.isLocal) {
+        if (field.isLocal || `${field.key}` === '') {
           field.searchable = false
           field.sortable  = false
           delete field['filterByFormatted']
@@ -228,7 +228,7 @@ class ItemsProvider {
     let index = 0
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i]
-      if (!field.key) {
+      if (typeof field === 'string') {
         field = { key: field }
       }
 
