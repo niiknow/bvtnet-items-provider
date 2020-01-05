@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",
@@ -18,7 +18,11 @@
     "b-table",
     "vue"
   ],
-  "repository": "git://github.com/niiknow/bvtablenet-items-provider.git",
+  "homepage": "https://github.com/niiknow/bvtnet-items-provider",
+  "repository": {
+    "url": "https://github.com/niiknow/bvtnet-items-provider.git",
+    "type": "git"
+  },
   "scripts": {
     "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-poll": "npm run watch -- --watch-poll",

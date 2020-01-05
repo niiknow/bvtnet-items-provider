@@ -2,10 +2,10 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.6.0
+ * @version v0.7.0
  * @author Tom Noogen
- * @homepage undefined
- * @repository undefined
+ * @homepage https://github.com/niiknow/bvtnet-items-provider
+ * @repository https://github.com/niiknow/bvtnet-items-provider.git
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -122,6 +122,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var _name = new WeakMap(),
+    _ajaxUrl = new WeakMap(),
+    _query = new WeakMap(),
+    _axios = new WeakMap();
+
 var ItemsProvider =
 /*#__PURE__*/
 function () {
@@ -149,8 +154,11 @@ function () {
       var that = this;
       var isFieldsArray = fields.constructor === Array || Array.isArray(fields);
       var copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn'];
-      that._name = 'ItemsProvider';
-      that.axios = axios;
+
+      _name.set(that, 'ItemsProvider');
+
+      _axios.set(that, axios);
+
       that.fields = fields;
       that.perPage = 15;
       that.currentPage = 1;
@@ -160,7 +168,6 @@ function () {
       that.filter = null;
       that.filterIgnoredFields = [];
       that.filterIncludedFields = [];
-      that.axiosConfig = {};
       that.columns = [];
       that.busy = false;
       that.startRow = 0;
@@ -195,6 +202,50 @@ function () {
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
       };
+    }
+    /**
+     * get the component name
+     *
+     * @return String component name
+     */
+
+  }, {
+    key: "getName",
+    value: function getName() {
+      return _name.get(this);
+    }
+    /**
+     * Get last server params
+     *
+     * @return Object last server parameters/query object
+     */
+
+  }, {
+    key: "getServerParams",
+    value: function getServerParams() {
+      return _query.get(this);
+    }
+    /**
+     * get the axios
+     *
+     * @return Object the axios object
+     */
+
+  }, {
+    key: "getAxios",
+    value: function getAxios() {
+      return _axios.get(this);
+    }
+    /**
+     * get last ajax url (without query)
+     *
+     * @return String the last ajax url without query/server parameters object
+     */
+
+  }, {
+    key: "getAjaxUrl",
+    value: function getAjaxUrl() {
+      return _ajaxUrl.get(this);
     }
     /**
      * safely decode the string
@@ -280,16 +331,6 @@ function () {
       }
 
       return str.join('&');
-    }
-    /**
-     * get the last server Params
-     * @return Object server params as an object
-     */
-
-  }, {
-    key: "getServerParams",
-    value: function getServerParams() {
-      return this._query;
     }
     /**
      * translate the context to datatables.net query object
@@ -380,10 +421,6 @@ function () {
       var query = {},
           promise = null;
 
-      if (that._name !== 'ItemsProvider') {
-        throw new Error('Calling context must be of ItemsProvider.');
-      }
-
       if (apiParts.length > 1) {
         query = that.queryParseString(apiParts[1]);
       }
@@ -396,21 +433,20 @@ function () {
 
       that.totalRows = that.startRow = that.endRow = 0;
       that.busy = true;
-      that.responseResponse = null;
-      that.responseError = null;
       that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
-      that._apiUrl = apiParts[0];
-      that._query = query;
+
+      _ajaxUrl.set(that, apiParts[0]);
+
+      _query.set(that, query);
 
       if (that.method === 'POST') {
-        promise = that.axios.post(that._apiUrl, query, that.axiosConfig);
+        promise = that.getAxios().post(that.getAjaxUrl(), query);
       } else {
-        var apiUrl = that._apiUrl + '?' + that.queryStringify(query);
-        promise = that.axios.get(apiUrl, that.axiosConfig);
+        var apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query);
+        promise = that.getAxios().get(apiUrl);
       }
 
       return promise.then(function (rsp) {
-        that.responseResponse = rsp;
         var myData = rsp.data;
         that.totalRows = myData.recordsFiltered || myData.recordsTotal;
         that.startRow = query.start + 1;
@@ -428,7 +464,6 @@ function () {
 
         return myData.data || [];
       }).catch(function (error) {
-        that.responseError = error;
         that.busy = false;
 
         if (that.onError) {

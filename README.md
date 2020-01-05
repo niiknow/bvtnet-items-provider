@@ -27,7 +27,7 @@ import axios from 'axios'
 
 Vue.use(BootstrapVue)
 
-import ItemsProvider from '../src'
+import ItemsProvider from 'bvtnet-items-provider'
 
 export default {
   name: 'App',

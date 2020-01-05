@@ -1,3 +1,8 @@
+let _name = new WeakMap(),
+ _ajaxUrl = new WeakMap(),
+ _query = new WeakMap(),
+ _axios = new WeakMap()
+
 class ItemsProvider {
   /**
 	 * Initialize an instance of ItemsProvider
@@ -19,8 +24,9 @@ class ItemsProvider {
     const isFieldsArray = fields.constructor === Array || Array.isArray(fields)
     const copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']
 
-    that._name = 'ItemsProvider'
-    that.axios = axios
+    _name.set(that, 'ItemsProvider')
+    _axios.set(that, axios)
+
     that.fields = fields
     that.perPage = 15
     that.currentPage = 1
@@ -30,7 +36,6 @@ class ItemsProvider {
     that.filter = null
     that.filterIgnoredFields = []
     that.filterIncludedFields = []
-    that.axiosConfig = {}
     that.columns = []
     that.busy = false
     that.startRow = 0
@@ -67,6 +72,42 @@ class ItemsProvider {
     that.items = function (ctx, cb) {
       return that.executeQuery(ctx, cb, this)
     }
+  }
+
+  /**
+   * get the component name
+   *
+   * @return String component name
+   */
+  getName() {
+    return _name.get(this)
+  }
+
+  /**
+   * Get last server params
+   *
+   * @return Object last server parameters/query object
+   */
+  getServerParams() {
+    return _query.get(this)
+  }
+
+  /**
+   * get the axios
+   *
+   * @return Object the axios object
+   */
+  getAxios() {
+    return _axios.get(this)
+  }
+
+  /**
+   * get last ajax url (without query)
+   *
+   * @return String the last ajax url without query/server parameters object
+   */
+  getAjaxUrl() {
+    return _ajaxUrl.get(this)
   }
 
   /**
@@ -150,14 +191,6 @@ class ItemsProvider {
   }
 
   /**
-   * get the last server Params
-   * @return Object server params as an object
-   */
-  getServerParams() {
-    return this._query
-  }
-
-  /**
    * translate the context to datatables.net query object
    *
    * @param  Object  ctx the context object
@@ -229,10 +262,6 @@ class ItemsProvider {
     let query = {},
       promise = null
 
-    if (that._name !== 'ItemsProvider') {
-      throw new Error('Calling context must be of ItemsProvider.')
-    }
-
     if (apiParts.length > 1) {
       query = that.queryParseString(apiParts[1])
     }
@@ -245,22 +274,18 @@ class ItemsProvider {
 
     that.totalRows = that.startRow = that.endRow = 0
     that.busy = true
-    that.responseResponse = null
-    that.responseError = null
     that.sortDirection = ctx.sortDesc ? 'desc' : 'asc'
-    that._apiUrl = apiParts[0]
-    that._query = query
+    _ajaxUrl.set(that, apiParts[0])
+    _query.set(that, query)
 
     if (that.method === 'POST') {
-      promise = that.axios.post(that._apiUrl, query, that.axiosConfig)
+      promise = that.getAxios().post(that.getAjaxUrl(), query)
     } else {
-      const apiUrl = that._apiUrl + '?' + that.queryStringify(query)
-      promise = that.axios.get(apiUrl, that.axiosConfig)
+      const apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query)
+      promise = that.getAxios().get(apiUrl)
     }
 
     return promise.then(rsp => {
-      that.responseResponse = rsp
-
       let myData = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
       that.startRow = query.start + 1
@@ -277,7 +302,6 @@ class ItemsProvider {
 
       return myData.data || []
     }).catch(error => {
-      that.responseError = error
       that.busy = false
 
       if (that.onError) {
