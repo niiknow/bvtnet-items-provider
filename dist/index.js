@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.5.1
+ * @version v0.6.0
  * @author Tom Noogen
  * @homepage undefined
  * @repository undefined
@@ -162,7 +162,7 @@ function () {
       that.filterIncludedFields = [];
       that.axiosConfig = {};
       that.columns = [];
-      that.isBusy = false;
+      that.busy = false;
       that.startRow = 0;
       that.endRow = 0;
 
@@ -188,7 +188,13 @@ function () {
 
           that.fields.push(col);
         }
-      }
+      } // retaining the this context
+      // passing the b-table component ad 3rd parameter
+
+
+      that.items = function (ctx, cb) {
+        return that.executeQuery(ctx, cb, this);
+      };
     }
     /**
      * safely decode the string
@@ -367,12 +373,16 @@ function () {
     */
 
   }, {
-    key: "items",
-    value: function items(ctx) {
+    key: "executeQuery",
+    value: function executeQuery(ctx) {
       var that = this;
       var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
       var query = {},
           promise = null;
+
+      if (that._name !== 'ItemsProvider') {
+        throw new Error('Calling context must be of ItemsProvider.');
+      }
 
       if (apiParts.length > 1) {
         query = that.queryParseString(apiParts[1]);
@@ -384,10 +394,10 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      that.startRow = that.endRow = 0;
-      that.isBusy = true;
-      that.ajaxResponse = null;
-      that.ajaxError = null;
+      that.totalRows = that.startRow = that.endRow = 0;
+      that.busy = true;
+      that.responseResponse = null;
+      that.responseError = null;
       that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
       that._apiUrl = apiParts[0];
       that._query = query;
@@ -400,7 +410,7 @@ function () {
       }
 
       return promise.then(function (rsp) {
-        that.ajaxResponse = rsp;
+        that.responseResponse = rsp;
         var myData = rsp.data;
         that.totalRows = myData.recordsFiltered || myData.recordsTotal;
         that.startRow = query.start + 1;
@@ -410,11 +420,21 @@ function () {
           that.endRow = that.totalRows;
         }
 
-        that.isBusy = false;
+        that.busy = false;
+
+        if (that.onComplete) {
+          that.onResponseComplete(rsp);
+        }
+
         return myData.data || [];
       }).catch(function (error) {
-        that.ajaxError = error;
-        that.isBusy = false;
+        that.responseError = error;
+        that.busy = false;
+
+        if (that.onError) {
+          that.onResponseError(rsp);
+        }
+
         return [];
       });
     }

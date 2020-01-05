@@ -32,7 +32,7 @@ class ItemsProvider {
     that.filterIncludedFields = []
     that.axiosConfig = {}
     that.columns = []
-    that.isBusy = false
+    that.busy = false
     that.startRow = 0
     that.endRow = 0
 
@@ -60,6 +60,12 @@ class ItemsProvider {
 
         that.fields.push(col)
       }
+    }
+
+    // retaining the this context
+    // passing the b-table component ad 3rd parameter
+    that.items = function (ctx, cb) {
+      return that.executeQuery(ctx, cb, this)
     }
   }
 
@@ -217,11 +223,15 @@ class ItemsProvider {
 	 * @param  Object ctx bootstrap-vue context object
 	 * @return Array   array of items
 	 */
-  items(ctx) {
+  executeQuery(ctx) {
     const that = this
     const apiParts = (ctx.apiUrl || that.apiUrl).split('?')
     let query = {},
       promise = null
+
+    if (that._name !== 'ItemsProvider') {
+      throw new Error('Calling context must be of ItemsProvider.')
+    }
 
     if (apiParts.length > 1) {
       query = that.queryParseString(apiParts[1])
@@ -233,10 +243,10 @@ class ItemsProvider {
       that.onBeforeQuery(query, ctx)
     }
 
-    that.startRow = that.endRow = 0
-    that.isBusy = true
-    that.ajaxResponse = null
-    that.ajaxError = null
+    that.totalRows = that.startRow = that.endRow = 0
+    that.busy = true
+    that.responseResponse = null
+    that.responseError = null
     that.sortDirection = ctx.sortDesc ? 'desc' : 'asc'
     that._apiUrl = apiParts[0]
     that._query = query
@@ -248,8 +258,8 @@ class ItemsProvider {
       promise = that.axios.get(apiUrl, that.axiosConfig)
     }
 
-    return promise.then((rsp) => {
-      that.ajaxResponse = rsp
+    return promise.then(rsp => {
+      that.responseResponse = rsp
 
       let myData = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
@@ -259,11 +269,21 @@ class ItemsProvider {
         that.endRow = that.totalRows
       }
 
-      that.isBusy = false
+      that.busy = false
+
+      if (that.onComplete) {
+        that.onResponseComplete(rsp)
+      }
+
       return myData.data || []
     }).catch(error => {
-      that.ajaxError = error
-      that.isBusy = false
+      that.responseError = error
+      that.busy = false
+
+      if (that.onError) {
+        that.onResponseError(rsp)
+      }
+
       return []
     })
   }

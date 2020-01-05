@@ -10,7 +10,7 @@
       <div class="col-12 col-md-3">
         <form
           class="form-inline d-flex mx-1 justify-content-end"
-          @submit.stop.prevent="doSearch"
+          @submit.stop.prevent="ip.filter = quickSearch"
         >
           <div class="input-group">
             <input
@@ -40,9 +40,9 @@
       striped
       responsivve="sm"
       head-variant="light"
-      :items="fetchItems"
+      :items="ip.items"
       :fields="ip.fields"
-      :busy="ip.isBusy"
+      :busy="ip.busy"
       :sort-by="ip.sortBy"
       :sort-desc="ip.sortDesc"
       :current-page="ip.currentPage"
@@ -160,14 +160,6 @@ export default {
         { value: 1000, text: '1000'},
         { value: -1, text: 'All'}
       ]
-    }
-  },
-  methods: {
-    fetchItems(ctx) {
-      return this.ip.items(ctx)
-    },
-    doSearch() {
-      this.ip.filter = this.quickSearch
     }
   }
 }

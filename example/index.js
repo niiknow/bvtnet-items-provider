@@ -2194,14 +2194,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         text: 'All'
       }]
     };
-  },
-  methods: {
-    fetchItems: function fetchItems(ctx) {
-      return this.ip.items(ctx);
-    },
-    doSearch: function doSearch() {
-      this.ip.filter = this.quickSearch;
-    }
   }
 });
 
@@ -36246,7 +36238,7 @@ var render = function() {
                 submit: function($event) {
                   $event.stopPropagation()
                   $event.preventDefault()
-                  return _vm.doSearch($event)
+                  _vm.ip.filter = _vm.quickSearch
                 }
               }
             },
@@ -36290,9 +36282,9 @@ var render = function() {
           striped: "",
           responsivve: "sm",
           "head-variant": "light",
-          items: _vm.fetchItems,
+          items: _vm.ip.items,
           fields: _vm.ip.fields,
-          busy: _vm.ip.isBusy,
+          busy: _vm.ip.busy,
           "sort-by": _vm.ip.sortBy,
           "sort-desc": _vm.ip.sortDesc,
           "current-page": _vm.ip.currentPage,
@@ -36585,7 +36577,7 @@ function () {
       that.filterIncludedFields = [];
       that.axiosConfig = {};
       that.columns = [];
-      that.isBusy = false;
+      that.busy = false;
       that.startRow = 0;
       that.endRow = 0;
 
@@ -36611,7 +36603,13 @@ function () {
 
           that.fields.push(col);
         }
-      }
+      } // retaining the this context
+      // passing the b-table component ad 3rd parameter
+
+
+      that.items = function (ctx, cb) {
+        return that.executeQuery(ctx, cb, this);
+      };
     }
     /**
      * safely decode the string
@@ -36790,12 +36788,16 @@ function () {
     */
 
   }, {
-    key: "items",
-    value: function items(ctx) {
+    key: "executeQuery",
+    value: function executeQuery(ctx) {
       var that = this;
       var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
       var query = {},
           promise = null;
+
+      if (that._name !== 'ItemsProvider') {
+        throw new Error('Calling context must be of ItemsProvider.');
+      }
 
       if (apiParts.length > 1) {
         query = that.queryParseString(apiParts[1]);
@@ -36807,10 +36809,10 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      that.startRow = that.endRow = 0;
-      that.isBusy = true;
-      that.ajaxResponse = null;
-      that.ajaxError = null;
+      that.totalRows = that.startRow = that.endRow = 0;
+      that.busy = true;
+      that.responseResponse = null;
+      that.responseError = null;
       that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
       that._apiUrl = apiParts[0];
       that._query = query;
@@ -36823,7 +36825,7 @@ function () {
       }
 
       return promise.then(function (rsp) {
-        that.ajaxResponse = rsp;
+        that.responseResponse = rsp;
         var myData = rsp.data;
         that.totalRows = myData.recordsFiltered || myData.recordsTotal;
         that.startRow = query.start + 1;
@@ -36833,11 +36835,21 @@ function () {
           that.endRow = that.totalRows;
         }
 
-        that.isBusy = false;
+        that.busy = false;
+
+        if (that.onComplete) {
+          that.onResponseComplete(rsp);
+        }
+
         return myData.data || [];
       }).catch(function (error) {
-        that.ajaxError = error;
-        that.isBusy = false;
+        that.responseError = error;
+        that.busy = false;
+
+        if (that.onError) {
+          that.onResponseError(rsp);
+        }
+
         return [];
       });
     }
