@@ -107,6 +107,9 @@ export default {
       last_name: {
         sortable: true, searchable: true, label: 'Last name'
       },
+      local_field: {
+        isLocal: true, label: 'Local Field'
+      },
       photo_url: {
         sortable: true, searchable: true, label: 'Photo url'
       },

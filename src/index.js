@@ -23,7 +23,7 @@ class ItemsProvider {
   init(axios, fields) {
     const that = this
     const isFieldsArray = fields.constructor === Array || Array.isArray(fields)
-    const copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']
+    const copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']
 
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
@@ -34,7 +34,6 @@ class ItemsProvider {
     that.filter = null
     that.filterIgnoredFields = []
     that.filterIncludedFields = []
-    that.columns = []
     that.busy = false
     that.totalRows = 0
     that.resetCounterVars()
@@ -46,7 +45,7 @@ class ItemsProvider {
         const field = fields[k]
         let col = {}
 
-        field.key  = field.name || field.key || k
+        field.key  = `${field.key || field.name || field.data || k}`
 
         // disable search and sort for local field
         if (field.isLocal) {
@@ -226,6 +225,7 @@ class ItemsProvider {
       query[k] = inQuery[k]
     }
 
+    let index = 0
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i]
       if (!field.key) {
@@ -249,15 +249,19 @@ class ItemsProvider {
         col.searchable = true
       }
 
-      if (typeof(that.onFieldTranslate) === 'function') {
+      if (typeof that.onFieldTranslate === 'function') {
         that.onFieldTranslate(field, col)
       }
 
       if (ctx.sortBy === field.key && col.orderable) {
-        query.order.push({column: i, dir: ctx.sortDesc ? 'desc' : 'asc' })
+        query.order.push({column: index, dir: ctx.sortDesc ? 'desc' : 'asc' })
       }
 
-      query.columns.push(col)
+      // skip local field or empty key
+      if (!field.isLocal || `${field.key}` === '') {
+        query.columns.push(col)
+        index++
+      }
     }
 
     return query
@@ -281,7 +285,7 @@ class ItemsProvider {
 
     query = that.translateContext(ctx, query)
 
-    if (typeof(that.onBeforeQuery) === 'function') {
+    if (typeof that.onBeforeQuery  === 'function') {
       that.onBeforeQuery(query, ctx)
     }
 
@@ -308,7 +312,7 @@ class ItemsProvider {
 
       that.busy = false
 
-      if (typeof(that.onResponseComplete) === 'function') {
+      if (typeof that.onResponseComplete === 'function') {
         that.onResponseComplete(rsp)
       }
 
@@ -316,7 +320,7 @@ class ItemsProvider {
     }).catch(error => {
       that.busy = false
 
-      if (typeof(that.onResponseError) === 'function') {
+      if (typeof that.onResponseError === 'function') {
         that.onResponseError(rsp)
       }
 

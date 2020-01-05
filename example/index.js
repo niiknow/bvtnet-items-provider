@@ -2107,6 +2107,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         searchable: true,
         label: 'Last name'
       },
+      local_field: {
+        isLocal: true,
+        label: 'Local Field'
+      },
       photo_url: {
         sortable: true,
         searchable: true,
@@ -36568,7 +36572,7 @@ function () {
     value: function init(axios, fields) {
       var that = this;
       var isFieldsArray = fields.constructor === Array || Array.isArray(fields);
-      var copyable = ['onFieldTranslate', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn'];
+      var copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn'];
 
       _name.set(that, 'ItemsProvider');
 
@@ -36580,7 +36584,6 @@ function () {
       that.filter = null;
       that.filterIgnoredFields = [];
       that.filterIncludedFields = [];
-      that.columns = [];
       that.busy = false;
       that.totalRows = 0;
       that.resetCounterVars();
@@ -36591,7 +36594,7 @@ function () {
         for (var k in fields) {
           var field = fields[k];
           var col = {};
-          field.key = field.name || field.key || k; // disable search and sort for local field
+          field.key = "".concat(field.key || field.name || field.data || k); // disable search and sort for local field
 
           if (field.isLocal) {
             field.searchable = false;
@@ -36791,6 +36794,8 @@ function () {
         query[k] = inQuery[k];
       }
 
+      var index = 0;
+
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
 
@@ -36823,12 +36828,16 @@ function () {
 
         if (ctx.sortBy === field.key && col.orderable) {
           query.order.push({
-            column: i,
+            column: index,
             dir: ctx.sortDesc ? 'desc' : 'asc'
           });
-        }
+        } // skip local field or empty key
 
-        query.columns.push(col);
+
+        if (!field.isLocal || "".concat(field.key) === '') {
+          query.columns.push(col);
+          index++;
+        }
       }
 
       return query;
