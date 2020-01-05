@@ -36272,6 +36272,7 @@ var render = function() {
           )
         ])
       ]),
+      _vm._v("\n  " + _vm._s(_vm.ip.currentPage) + "\n  "),
       _vm._v(" "),
       _c("b-table", {
         attrs: {
@@ -36285,8 +36286,6 @@ var render = function() {
           items: _vm.ip.items,
           fields: _vm.ip.fields,
           busy: _vm.ip.busy,
-          "sort-by": _vm.ip.sortBy,
-          "sort-desc": _vm.ip.sortDesc,
           "current-page": _vm.ip.currentPage,
           "per-page": _vm.ip.perPage,
           filter: _vm.ip.filter,
@@ -36557,6 +36556,7 @@ function () {
   }
   /**
   * Initialize an instance of ItemsProvider
+   *
   * @param  Object  axios                  an instance of axios
   * @param  Object  fields                 object containing our fields definition
   * @return ItemsProvider       an instance of ItemsProvider
@@ -36577,16 +36577,13 @@ function () {
       that.fields = fields;
       that.perPage = 15;
       that.currentPage = 1;
-      that.totalRows = 0;
-      that.sortBy = '';
-      that.sortDesc = false;
       that.filter = null;
       that.filterIgnoredFields = [];
       that.filterIncludedFields = [];
       that.columns = [];
       that.busy = false;
-      that.startRow = 0;
-      that.endRow = 0;
+      that.totalRows = 0;
+      that.resetCounterVars();
 
       if (!isFieldsArray) {
         that.fields = [];
@@ -36617,6 +36614,18 @@ function () {
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
       };
+    }
+    /**
+     * Reset counter ariables
+     *
+     * @return void
+     */
+
+  }, {
+    key: "resetCounterVars",
+    value: function resetCounterVars() {
+      var that = this;
+      that.startRow = that.endRow = 0;
     }
     /**
      * get the component name
@@ -36680,6 +36689,7 @@ function () {
     }
     /**
      * safely encode the string
+     *
      * @param  String str
      * @return String url encoded string
      */
@@ -36767,8 +36777,8 @@ function () {
       var fDict = {};
       var query = {
         draw: 1,
-        start: (that.currentPage - 1) * that.perPage,
-        length: that.perPage,
+        start: (ctx.currentPage - 1) * ctx.perPage,
+        length: ctx.perPage,
         search: {
           value: "".concat(ctx.filter || ''),
           regex: ctx.filter instanceof RegExp
@@ -36848,9 +36858,8 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      that.totalRows = that.startRow = that.endRow = 0;
+      that.resetCounterVars();
       that.busy = true;
-      that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
 
       _ajaxUrl.set(that, apiParts[0]);
 

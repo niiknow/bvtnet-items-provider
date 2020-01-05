@@ -31,6 +31,8 @@
         </form>
       </div>
     </div>
+    {{ ip.currentPage
+    }}
     <!-- Using the b-table component -->
     <b-table
       bordered
@@ -43,8 +45,6 @@
       :items="ip.items"
       :fields="ip.fields"
       :busy="ip.busy"
-      :sort-by="ip.sortBy"
-      :sort-desc="ip.sortDesc"
       :current-page="ip.currentPage"
       :per-page="ip.perPage"
       :filter="ip.filter"

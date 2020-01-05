@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",

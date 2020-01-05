@@ -12,13 +12,16 @@ https://datatables.net/manual/server-side
   :items="ip.items"
   :fields="ip.fields"
   :busy="ip.busy"
-  :sort-by="ip.sortBy"
-  :sort-desc="ip.sortDesc"
   :current-page="ip.currentPage"
   :per-page="ip.perPage"
   :filter="ip.filter"
   :filter-ignored-fields="ip.filterIgnoredFields"
   :filter-included-fields="ip.filterIncludedFields"
+/>
+<b-pagination
+  v-model="ip.currentPage"
+  :total-rows="ip.totalRows"
+  :per-page="ip.perPage"
 />
 ```
 

@@ -15,6 +15,7 @@ class ItemsProvider {
 
   /**
 	 * Initialize an instance of ItemsProvider
+   *
 	 * @param  Object  axios                  an instance of axios
 	 * @param  Object  fields                 object containing our fields definition
 	 * @return ItemsProvider       an instance of ItemsProvider
@@ -30,16 +31,13 @@ class ItemsProvider {
     that.fields = fields
     that.perPage = 15
     that.currentPage = 1
-    that.totalRows = 0
-    that.sortBy = ''
-    that.sortDesc = false
     that.filter = null
     that.filterIgnoredFields = []
     that.filterIncludedFields = []
     that.columns = []
     that.busy = false
-    that.startRow = 0
-    that.endRow = 0
+    that.totalRows = 0
+    that.resetCounterVars()
 
     if (!isFieldsArray) {
       that.fields = []
@@ -72,6 +70,16 @@ class ItemsProvider {
     that.items = function (ctx, cb) {
       return that.executeQuery(ctx, cb, this)
     }
+  }
+
+  /**
+   * Reset counter ariables
+   *
+   * @return void
+   */
+  resetCounterVars() {
+    const that = this
+    that.startRow = that.endRow = 0
   }
 
   /**
@@ -126,6 +134,7 @@ class ItemsProvider {
 
   /**
    * safely encode the string
+   *
    * @param  String str
    * @return String url encoded string
    */
@@ -206,8 +215,8 @@ class ItemsProvider {
     const fDict  = {}
     const query  = {
       draw: 1,
-      start: (that.currentPage - 1) * that.perPage,
-      length: that.perPage,
+      start: (ctx.currentPage - 1) * ctx.perPage,
+      length: ctx.perPage,
       search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
       order: [],
       columns: []
@@ -276,9 +285,8 @@ class ItemsProvider {
       that.onBeforeQuery(query, ctx)
     }
 
-    that.totalRows = that.startRow = that.endRow = 0
+    that.resetCounterVars()
     that.busy = true
-    that.sortDirection = ctx.sortDesc ? 'desc' : 'asc'
     _ajaxUrl.set(that, apiParts[0])
     _query.set(that, query)
 

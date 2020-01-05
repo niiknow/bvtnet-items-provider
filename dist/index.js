@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.7.2
+ * @version v0.8.0
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -142,6 +142,7 @@ function () {
   }
   /**
   * Initialize an instance of ItemsProvider
+   *
   * @param  Object  axios                  an instance of axios
   * @param  Object  fields                 object containing our fields definition
   * @return ItemsProvider       an instance of ItemsProvider
@@ -162,16 +163,13 @@ function () {
       that.fields = fields;
       that.perPage = 15;
       that.currentPage = 1;
-      that.totalRows = 0;
-      that.sortBy = '';
-      that.sortDesc = false;
       that.filter = null;
       that.filterIgnoredFields = [];
       that.filterIncludedFields = [];
       that.columns = [];
       that.busy = false;
-      that.startRow = 0;
-      that.endRow = 0;
+      that.totalRows = 0;
+      that.resetCounterVars();
 
       if (!isFieldsArray) {
         that.fields = [];
@@ -202,6 +200,18 @@ function () {
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
       };
+    }
+    /**
+     * Reset counter ariables
+     *
+     * @return void
+     */
+
+  }, {
+    key: "resetCounterVars",
+    value: function resetCounterVars() {
+      var that = this;
+      that.startRow = that.endRow = 0;
     }
     /**
      * get the component name
@@ -265,6 +275,7 @@ function () {
     }
     /**
      * safely encode the string
+     *
      * @param  String str
      * @return String url encoded string
      */
@@ -352,8 +363,8 @@ function () {
       var fDict = {};
       var query = {
         draw: 1,
-        start: (that.currentPage - 1) * that.perPage,
-        length: that.perPage,
+        start: (ctx.currentPage - 1) * ctx.perPage,
+        length: ctx.perPage,
         search: {
           value: "".concat(ctx.filter || ''),
           regex: ctx.filter instanceof RegExp
@@ -433,9 +444,8 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      that.totalRows = that.startRow = that.endRow = 0;
+      that.resetCounterVars();
       that.busy = true;
-      that.sortDirection = ctx.sortDesc ? 'desc' : 'asc';
 
       _ajaxUrl.set(that, apiParts[0]);
 
