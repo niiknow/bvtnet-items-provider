@@ -200,21 +200,18 @@ class ItemsProvider {
   translateContext(ctx, inQuery = {}) {
     const that   = this
     const fields = that.fields
+    const fDict  = {}
     const query  = {
       draw: 1,
       start: (that.currentPage - 1) * that.perPage,
       length: that.perPage,
       search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
-      order:[ { column: 0, dir: ctx.sortDesc ? 'desc' : 'asc' } ],
+      order: [],
       columns: []
     }
 
     for(let k in inQuery) {
       query[k] = inQuery[k]
-    }
-
-    if (that.sortBy) {
-      query.order.column = (that.serverFields[that.sortBy] || { __index: 0 }).__index
     }
 
     for (let i = 0; i < fields.length; i++) {
@@ -242,6 +239,10 @@ class ItemsProvider {
 
       if (typeof(that.onFieldTranslate) === 'function') {
         that.onFieldTranslate(field, col)
+      }
+
+      if (ctx.sortBy === field.key && col.orderable) {
+        query.order.push({column: i, dir: ctx.sortDesc ? 'des' : 'asc' })
       }
 
       query.columns.push(col)
@@ -296,7 +297,7 @@ class ItemsProvider {
 
       that.busy = false
 
-      if (that.onComplete) {
+      if (typeof(that.onResponseComplete) === 'function') {
         that.onResponseComplete(rsp)
       }
 
@@ -304,7 +305,7 @@ class ItemsProvider {
     }).catch(error => {
       that.busy = false
 
-      if (that.onError) {
+      if (typeof(that.onResponseError) === 'function') {
         that.onResponseError(rsp)
       }
 

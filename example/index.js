@@ -36761,6 +36761,7 @@ function () {
       var inQuery = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var that = this;
       var fields = that.fields;
+      var fDict = {};
       var query = {
         draw: 1,
         start: (that.currentPage - 1) * that.perPage,
@@ -36769,21 +36770,12 @@ function () {
           value: "".concat(ctx.filter || ''),
           regex: ctx.filter instanceof RegExp
         },
-        order: [{
-          column: 0,
-          dir: ctx.sortDesc ? 'desc' : 'asc'
-        }],
+        order: [],
         columns: []
       };
 
       for (var k in inQuery) {
         query[k] = inQuery[k];
-      }
-
-      if (that.sortBy) {
-        query.order.column = (that.serverFields[that.sortBy] || {
-          __index: 0
-        }).__index;
       }
 
       for (var i = 0; i < fields.length; i++) {
@@ -36814,6 +36806,13 @@ function () {
 
         if (typeof that.onFieldTranslate === 'function') {
           that.onFieldTranslate(field, col);
+        }
+
+        if (ctx.sortBy === field.key && col.orderable) {
+          query.order.push({
+            column: i,
+            dir: ctx.sortDesc ? 'des' : 'asc'
+          });
         }
 
         query.columns.push(col);
@@ -36873,7 +36872,7 @@ function () {
 
         that.busy = false;
 
-        if (that.onComplete) {
+        if (typeof that.onResponseComplete === 'function') {
           that.onResponseComplete(rsp);
         }
 
@@ -36881,7 +36880,7 @@ function () {
       }).catch(function (error) {
         that.busy = false;
 
-        if (that.onError) {
+        if (typeof that.onResponseError === 'function') {
           that.onResponseError(rsp);
         }
 
