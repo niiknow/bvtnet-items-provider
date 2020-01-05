@@ -68,7 +68,7 @@ class ItemsProvider {
     }
 
     // retaining the this context
-    // passing the b-table component ad 3rd parameter
+    // passing the b-table component as 3rd parameter
     that.items = function (ctx, cb) {
       return that.executeQuery(ctx, cb, this)
     }
@@ -112,6 +112,7 @@ class ItemsProvider {
 
   /**
    * safely decode the string
+   *
    * @param  String str
    * @return String url decoded string
    */
@@ -138,6 +139,7 @@ class ItemsProvider {
 
   /**
    * helper method to parse querystring to object
+   *
    * @param  String qstr the querystring
    * @return Object      result
    */
@@ -168,6 +170,7 @@ class ItemsProvider {
 
   /**
    * reverse object to query string
+   *
    * @param  Object obj the object
    * @return String     the query string
    */
@@ -242,7 +245,7 @@ class ItemsProvider {
       }
 
       if (ctx.sortBy === field.key && col.orderable) {
-        query.order.push({column: i, dir: ctx.sortDesc ? 'des' : 'asc' })
+        query.order.push({column: i, dir: ctx.sortDesc ? 'desc' : 'asc' })
       }
 
       query.columns.push(col)

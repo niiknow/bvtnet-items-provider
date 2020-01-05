@@ -3,7 +3,9 @@
 
 Demo https://niiknow.github.io/bvtnet-items-provider/
 
-The goal if this library is to connect the datatables.net server-side REST endpoint with b-table of the bootstrap-vue as described here - https://bootstrap-vue.js.org/docs/components/table/#using-items-provider-functions
+The goal if this library is to connect the datatables.net server-side REST endpoint with b-table of the bootstrap-vue as described here:
+https://bootstrap-vue.js.org/docs/components/table/#using-items-provider-functions and
+https://datatables.net/manual/server-side
 
 ```html
 <b-table 
@@ -47,6 +49,6 @@ This plugin support most server-side features except for:
 1. Per column filtering - https://github.com/bootstrap-vue/bootstrap-vue/issues/1970
 2. Multi-column sorting - https://github.com/bootstrap-vue/bootstrap-vue/issues/2068
 
-This is because b-table does not currently natively support this.  Future work is in progress, see b-table issue links.
+This is because b-table does not currently natively support it.  Future work is in progress, see b-table issue links.
 
 # MIT

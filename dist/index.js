@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.7.1
+ * @version v0.7.2
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -196,7 +196,7 @@ function () {
           that.fields.push(col);
         }
       } // retaining the this context
-      // passing the b-table component ad 3rd parameter
+      // passing the b-table component as 3rd parameter
 
 
       that.items = function (ctx, cb) {
@@ -249,6 +249,7 @@ function () {
     }
     /**
      * safely decode the string
+     *
      * @param  String str
      * @return String url decoded string
      */
@@ -279,6 +280,7 @@ function () {
     }
     /**
      * helper method to parse querystring to object
+     *
      * @param  String qstr the querystring
      * @return Object      result
      */
@@ -310,6 +312,7 @@ function () {
     }
     /**
      * reverse object to query string
+     *
      * @param  Object obj the object
      * @return String     the query string
      */
@@ -396,7 +399,7 @@ function () {
         if (ctx.sortBy === field.key && col.orderable) {
           query.order.push({
             column: i,
-            dir: ctx.sortDesc ? 'des' : 'asc'
+            dir: ctx.sortDesc ? 'desc' : 'asc'
           });
         }
 
