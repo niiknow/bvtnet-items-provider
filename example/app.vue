@@ -68,7 +68,7 @@
             Show
             <b-form-select
               v-model="ip.perPage"
-              :options="pageLengths"
+              :options="ip.pageLengths"
               class="dataTables_length_select"
             />
             entries
@@ -153,14 +153,7 @@ export default {
 
     return {
       ip: ip,
-      quickSearch: '',
-      pageLengths: [
-        { value: 15, text: '15'},
-        { value: 100, text: '100'},
-        { value: 500, text: '500'},
-        { value: 1000, text: '1000'},
-        { value: -1, text: 'All'}
-      ]
+      quickSearch: ''
     }
   }
 }

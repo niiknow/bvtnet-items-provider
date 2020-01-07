@@ -324,7 +324,7 @@ class ItemsProvider {
       that.totalRows   = locItems.length
       that.startRow    = 1
       that.endRow      = that.totalRows
-      that.perPage     = that.totalRows
+      that.perPage     = -1
 
       return locItems
     }

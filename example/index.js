@@ -2178,23 +2178,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     var ip = new _src__WEBPACK_IMPORTED_MODULE_4__["default"](axios__WEBPACK_IMPORTED_MODULE_2___default.a, fields);
     return {
       ip: ip,
-      quickSearch: '',
-      pageLengths: [{
-        value: 15,
-        text: '15'
-      }, {
-        value: 100,
-        text: '100'
-      }, {
-        value: 500,
-        text: '500'
-      }, {
-        value: 1000,
-        text: '1000'
-      }, {
-        value: -1,
-        text: 'All'
-      }]
+      quickSearch: ''
     };
   }
 });
@@ -36337,7 +36321,7 @@ var render = function() {
                   _vm._v("\n          Show\n          "),
                   _c("b-form-select", {
                     staticClass: "dataTables_length_select",
-                    attrs: { options: _vm.pageLengths },
+                    attrs: { options: _vm.ip.pageLengths },
                     model: {
                       value: _vm.ip.perPage,
                       callback: function($$v) {
@@ -36913,7 +36897,7 @@ function () {
         that.totalRows = locItems.length;
         that.startRow = 1;
         that.endRow = that.totalRows;
-        that.perPage = that.totalRows;
+        that.perPage = -1;
         return locItems;
       }
 
