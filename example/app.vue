@@ -34,12 +34,9 @@
     <!-- Using the b-table component -->
     <b-table
       bordered
-      borderless
       hover
       small
       striped
-      responsivve="sm"
-      head-variant="light"
       :items="ip.items"
       :fields="ip.fields"
       :busy="ip.busy"

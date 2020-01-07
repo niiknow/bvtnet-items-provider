@@ -2071,9 +2071,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -36262,12 +36259,9 @@ var render = function() {
       _c("b-table", {
         attrs: {
           bordered: "",
-          borderless: "",
           hover: "",
           small: "",
           striped: "",
-          responsivve: "sm",
-          "head-variant": "light",
           items: _vm.ip.items,
           fields: _vm.ip.fields,
           busy: _vm.ip.busy,
