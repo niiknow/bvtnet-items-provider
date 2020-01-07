@@ -14,6 +14,8 @@ test('ItemsProvider can set and return local items', t => {
 
   t.is(!!items, true)
   t.is(items.length, 1)
+  t.is(ip.totalRows, 1)
+  t.is(ip.perPage, -1)
   t.is(items[0].name, 'test')
 })
 

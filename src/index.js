@@ -128,10 +128,16 @@ class ItemsProvider {
   /**
    * Get the local items
    *
+   * @param  Function a callback function to return local items data
    * @return Array array of local items or empty
    */
-  getLocalItems() {
-    return _localItems.get(this)
+  getLocalItems(cb = null) {
+    const items = _localItems.get(this)
+    if (items && cb) {
+      cb(items)
+    }
+
+    return items
   }
 
   /**
@@ -140,6 +146,13 @@ class ItemsProvider {
    * @param Array items list of local items
    */
   setLocalItems(items) {
+    const that = this
+    that.currentPage = 1
+    that.totalRows   = items.length
+    that.startRow    = 1
+    that.endRow      = that.totalRows
+    that.perPage     = -1
+
     _localItems.set(this, items)
   }
 
@@ -296,12 +309,13 @@ class ItemsProvider {
   /**
 	 * the provider function to use with bootstrap vue
 	 *
-	 * @param  Object ctx bootstrap-vue context object
+	 * @param  Object   ctx bootstrap-vue context object
+   * @param  Function cb the callback function
 	 * @return Array   array of items
 	 */
-  executeQuery(ctx) {
+  executeQuery(ctx, cb = null) {
     const that     = this
-    const locItems = that.getLocalItems()
+    const locItems = that.getLocalItems(cb)
     const apiParts = (ctx.apiUrl || that.apiUrl).split('?')
     let query = {},
       promise = null
@@ -319,13 +333,7 @@ class ItemsProvider {
     _ajaxUrl.set(that, apiParts[0])
     _query.set(that, query)
 
-    if (locItems && Array.isArray(locItems)) {
-      that.currentPage = 1
-      that.totalRows   = locItems.length
-      that.startRow    = 1
-      that.endRow      = that.totalRows
-      that.perPage     = -1
-
+    if (locItems) {
       return locItems
     }
 
