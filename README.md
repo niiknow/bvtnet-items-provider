@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/niiknow/bvtnet-items-provider.svg?branch=master)](https://travis-ci.org/niiknow/bvtnet-items-provider)
 # bvtnet-items-provider
 > datatables.net ajax items provider for bootstrap-vue b-table
 
