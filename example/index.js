@@ -2074,8 +2074,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -36276,7 +36274,6 @@ var render = function() {
           )
         ])
       ]),
-      _vm._v("\n  " + _vm._s(_vm.ip.currentPage) + "\n  "),
       _vm._v(" "),
       _c("b-table", {
         attrs: {
@@ -36543,7 +36540,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var _name = new WeakMap(),
     _ajaxUrl = new WeakMap(),
     _query = new WeakMap(),
-    _axios = new WeakMap();
+    _axios = new WeakMap(),
+    _localItems = new WeakMap();
 
 var ItemsProvider =
 /*#__PURE__*/
@@ -36586,6 +36584,22 @@ function () {
       that.filterIncludedFields = [];
       that.busy = false;
       that.totalRows = 0;
+      that.pageLengths = [{
+        value: 15,
+        text: '15'
+      }, {
+        value: 100,
+        text: '100'
+      }, {
+        value: 500,
+        text: '500'
+      }, {
+        value: 1000,
+        text: '1000'
+      }, {
+        value: -1,
+        text: 'All'
+      }];
       that.resetCounterVars();
 
       if (!isFieldsArray) {
@@ -36673,6 +36687,28 @@ function () {
     key: "getAjaxUrl",
     value: function getAjaxUrl() {
       return _ajaxUrl.get(this);
+    }
+    /**
+     * Get the local items
+     *
+     * @return Array array of local items or empty
+     */
+
+  }, {
+    key: "getLocalItems",
+    value: function getLocalItems() {
+      return _localItems.get(this);
+    }
+    /**
+     * Set local items
+     *
+     * @param Array items list of local items
+     */
+
+  }, {
+    key: "setLocalItems",
+    value: function setLocalItems(items) {
+      _localItems.set(this, items);
     }
     /**
      * safely decode the string
@@ -36853,6 +36889,7 @@ function () {
     key: "executeQuery",
     value: function executeQuery(ctx) {
       var that = this;
+      var locItems = that.getLocalItems();
       var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
       var query = {},
           promise = null;
@@ -36867,12 +36904,21 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      that.resetCounterVars();
-      that.busy = true;
-
       _ajaxUrl.set(that, apiParts[0]);
 
       _query.set(that, query);
+
+      if (locItems && Array.isArray(locItems)) {
+        that.currentPage = 1;
+        that.totalRows = locItems.length;
+        that.startRow = 1;
+        that.endRow = that.totalRows;
+        that.perPage = that.totalRows;
+        return locItems;
+      }
+
+      that.resetCounterVars();
+      that.busy = true;
 
       if (that.method === 'POST') {
         promise = that.getAxios().post(that.getAjaxUrl(), query);
@@ -36891,12 +36937,11 @@ function () {
           that.endRow = that.totalRows;
         }
 
-        that.busy = false;
-
         if (typeof that.onResponseComplete === 'function') {
           that.onResponseComplete(rsp);
         }
 
+        that.busy = false;
         return myData.data || [];
       }).catch(function (error) {
         that.busy = false;

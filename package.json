@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
+    "@babel/register": "^7.7.7",
     "ava": "^2.3.0",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
@@ -66,6 +67,7 @@
   ],
   "ava": {
     "require": [
+      "@babel/register",
       "./tests/_setup-browser-env.js"
     ]
   }

@@ -31,8 +31,6 @@
         </form>
       </div>
     </div>
-    {{ ip.currentPage
-    }}
     <!-- Using the b-table component -->
     <b-table
       bordered

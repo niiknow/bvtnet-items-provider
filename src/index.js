@@ -1,7 +1,8 @@
 let _name = new WeakMap(),
  _ajaxUrl = new WeakMap(),
  _query = new WeakMap(),
- _axios = new WeakMap()
+ _axios = new WeakMap(),
+ _localItems = new WeakMap()
 
 class ItemsProvider {
   /**
@@ -36,6 +37,13 @@ class ItemsProvider {
     that.filterIncludedFields = []
     that.busy = false
     that.totalRows = 0
+    that.pageLengths = [
+      { value: 15, text: '15'},
+      { value: 100, text: '100'},
+      { value: 500, text: '500'},
+      { value: 1000, text: '1000'},
+      { value: -1, text: 'All'}
+    ]
     that.resetCounterVars()
 
     if (!isFieldsArray) {
@@ -115,6 +123,24 @@ class ItemsProvider {
    */
   getAjaxUrl() {
     return _ajaxUrl.get(this)
+  }
+
+  /**
+   * Get the local items
+   *
+   * @return Array array of local items or empty
+   */
+  getLocalItems() {
+    return _localItems.get(this)
+  }
+
+  /**
+   * Set local items
+   *
+   * @param Array items list of local items
+   */
+  setLocalItems(items) {
+    _localItems.set(this, items)
   }
 
   /**
@@ -274,7 +300,8 @@ class ItemsProvider {
 	 * @return Array   array of items
 	 */
   executeQuery(ctx) {
-    const that = this
+    const that     = this
+    const locItems = that.getLocalItems()
     const apiParts = (ctx.apiUrl || that.apiUrl).split('?')
     let query = {},
       promise = null
@@ -289,10 +316,21 @@ class ItemsProvider {
       that.onBeforeQuery(query, ctx)
     }
 
-    that.resetCounterVars()
-    that.busy = true
     _ajaxUrl.set(that, apiParts[0])
     _query.set(that, query)
+
+    if (locItems && Array.isArray(locItems)) {
+      that.currentPage = 1
+      that.totalRows   = locItems.length
+      that.startRow    = 1
+      that.endRow      = that.totalRows
+      that.perPage     = that.totalRows
+
+      return locItems
+    }
+
+    that.resetCounterVars()
+    that.busy = true
 
     if (that.method === 'POST') {
       promise = that.getAxios().post(that.getAjaxUrl(), query)
@@ -302,19 +340,20 @@ class ItemsProvider {
     }
 
     return promise.then(rsp => {
-      let myData = rsp.data
+      let myData     = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow = query.start + 1
-      that.endRow = query.start + query.length
+      that.startRow  = query.start + 1
+      that.endRow    = query.start + query.length
+
       if (that.endRow > that.totalRows || that.endRow < 0) {
         that.endRow = that.totalRows
       }
 
-      that.busy = false
-
       if (typeof that.onResponseComplete === 'function') {
         that.onResponseComplete(rsp)
       }
+
+      that.busy = false
 
       return myData.data || []
     }).catch(error => {
