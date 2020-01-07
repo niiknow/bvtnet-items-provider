@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.2
+ * @version v0.9.3
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -276,13 +276,22 @@ function () {
     /**
      * Get the local items
      *
+     * @param  Function a callback function to return local items data
      * @return Array array of local items or empty
      */
 
   }, {
     key: "getLocalItems",
     value: function getLocalItems() {
-      return _localItems.get(this);
+      var cb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      var items = _localItems.get(this);
+
+      if (items && cb) {
+        cb(items);
+      }
+
+      return items;
     }
     /**
      * Set local items
@@ -293,6 +302,13 @@ function () {
   }, {
     key: "setLocalItems",
     value: function setLocalItems(items) {
+      var that = this;
+      that.currentPage = 1;
+      that.totalRows = items.length;
+      that.startRow = 1;
+      that.endRow = that.totalRows;
+      that.perPage = -1;
+
       _localItems.set(this, items);
     }
     /**
@@ -466,15 +482,17 @@ function () {
     /**
     * the provider function to use with bootstrap vue
     *
-    * @param  Object ctx bootstrap-vue context object
+    * @param  Object   ctx bootstrap-vue context object
+     * @param  Function cb the callback function
     * @return Array   array of items
     */
 
   }, {
     key: "executeQuery",
     value: function executeQuery(ctx) {
+      var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var that = this;
-      var locItems = that.getLocalItems();
+      var locItems = that.getLocalItems(cb);
       var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
       var query = {},
           promise = null;
@@ -493,12 +511,7 @@ function () {
 
       _query.set(that, query);
 
-      if (locItems && Array.isArray(locItems)) {
-        that.currentPage = 1;
-        that.totalRows = locItems.length;
-        that.startRow = 1;
-        that.endRow = that.totalRows;
-        that.perPage = -1;
+      if (locItems) {
         return locItems;
       }
 
