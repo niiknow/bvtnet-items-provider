@@ -21,7 +21,6 @@ const fileName = 'index.js';
 
 const config = {
   externals: {
-    'jquery': 'jQuery',
     'vue': 'Vue'
   },
   module: {
