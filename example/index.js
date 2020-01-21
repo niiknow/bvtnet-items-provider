@@ -41697,10 +41697,10 @@ function () {
     value: function setLocalItems(items) {
       var that = this;
       that.currentPage = 1;
-      that.totalRows = items.length;
       that.startRow = 1;
-      that.endRow = that.totalRows;
       that.perPage = -1;
+      that.totalRows = items ? items.length : -1;
+      that.endRow = that.totalRows;
 
       _localItems.set(this, items);
     }

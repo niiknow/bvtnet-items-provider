@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.3
+ * @version v0.9.4
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -304,10 +304,10 @@ function () {
     value: function setLocalItems(items) {
       var that = this;
       that.currentPage = 1;
-      that.totalRows = items.length;
       that.startRow = 1;
-      that.endRow = that.totalRows;
       that.perPage = -1;
+      that.totalRows = items ? items.length : -1;
+      that.endRow = that.totalRows;
 
       _localItems.set(this, items);
     }
