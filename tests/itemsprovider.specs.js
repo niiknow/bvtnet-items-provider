@@ -15,7 +15,6 @@ test('ItemsProvider can set and return local items', t => {
   t.is(!!items, true)
   t.is(items.length, 1)
   t.is(ip.totalRows, 1)
-  t.is(ip.perPage, -1)
   t.is(items[0].name, 'test')
 })
 
@@ -28,7 +27,6 @@ test('ItemsProvider executeQuery returns local items', t => {
   t.is(!!items, true)
   t.is(items.length, 1)
   t.is(ip.totalRows, 1)
-  t.is(ip.perPage, -1)
   t.is(items[0].name, 'test')
 })
 
@@ -39,6 +37,5 @@ test('ItemsProvider.setLocalItems with nulls result in empty array', t => {
   const items = ip.getLocalItems()
 
   t.is(items, null)
-  t.is(ip.totalRows, -1)
-  t.is(ip.perPage, -1)
+  t.is(ip.totalRows, 0)
 })

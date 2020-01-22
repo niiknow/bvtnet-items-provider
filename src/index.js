@@ -149,8 +149,7 @@ class ItemsProvider {
     const that       = this
     that.currentPage = 1
     that.startRow    = 1
-    that.perPage     = -1
-    that.totalRows   = items ? items.length : -1
+    that.totalRows   = items ? items.length : 0
     that.endRow      = that.totalRows
 
     _localItems.set(this, items)
