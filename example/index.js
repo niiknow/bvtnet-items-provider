@@ -1471,7 +1471,6 @@ module.exports = function isAbsoluteURL(url) {
 
 
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
-var isValidXss = __webpack_require__(/*! ./isValidXss */ "./node_modules/axios/lib/helpers/isValidXss.js");
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -1491,10 +1490,6 @@ module.exports = (
     */
       function resolveURL(url) {
         var href = url;
-
-        if (isValidXss(url)) {
-          throw new Error('URL contains XSS injection attempt');
-        }
 
         if (msie) {
         // IE needs attribute set twice to normalize properties
@@ -1541,25 +1536,6 @@ module.exports = (
       };
     })()
 );
-
-
-/***/ }),
-
-/***/ "./node_modules/axios/lib/helpers/isValidXss.js":
-/*!******************************************************!*\
-  !*** ./node_modules/axios/lib/helpers/isValidXss.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function isValidXss(requestURL) {
-  var xssRegex = /(\b)(on\w+)=|javascript|(<\s*)(\/*)script/gi;
-  return xssRegex.test(requestURL);
-};
-
 
 
 /***/ }),
@@ -3157,6 +3133,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var NAME = 'BButtonClose';
 var props = {
+  content: {
+    type: String,
+    default: function _default() {
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_2__["getComponentConfig"])(NAME, 'content');
+    }
+  },
   disabled: {
     type: Boolean,
     default: false
@@ -3212,7 +3194,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
 
     if (!Object(_utils_normalize_slot__WEBPACK_IMPORTED_MODULE_4__["hasNormalizedSlot"])('default', $scopedSlots, $slots)) {
       componentData.domProps = {
-        innerHTML: '&times;'
+        innerHTML: props.content
       };
     }
 
@@ -6076,12 +6058,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/array */ "./node_modules/bootstrap-vue/esm/utils/array.js");
 /* harmony import */ var _utils_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/esm/utils/html.js");
 /* harmony import */ var _utils_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/esm/utils/config.js");
-/* harmony import */ var _utils_safe_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/esm/utils/safe-types.js");
-/* harmony import */ var _mixins_id__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/esm/mixins/id.js");
-/* harmony import */ var _mixins_dropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/dropdown */ "./node_modules/bootstrap-vue/esm/mixins/dropdown.js");
-/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js");
-/* harmony import */ var _button_button__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
-
+/* harmony import */ var _mixins_id__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/esm/mixins/id.js");
+/* harmony import */ var _mixins_dropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../mixins/dropdown */ "./node_modules/bootstrap-vue/esm/mixins/dropdown.js");
+/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js");
+/* harmony import */ var _button_button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
 
 
 
@@ -6116,7 +6096,7 @@ var props = {
     default: false
   },
   menuClass: {
-    type: [String, Array],
+    type: [String, Array, Object],
     default: null
   },
   toggleTag: {
@@ -6124,7 +6104,7 @@ var props = {
     default: 'button'
   },
   toggleClass: {
-    type: [String, Array],
+    type: [String, Array, Object],
     default: null
   },
   noCaret: {
@@ -6150,7 +6130,7 @@ var props = {
     }
   },
   splitClass: {
-    type: [String, Array],
+    type: [String, Array, Object],
     default: null
   },
   splitButtonType: {
@@ -6163,12 +6143,6 @@ var props = {
   role: {
     type: String,
     default: 'menu'
-  },
-  boundary: {
-    // String: `scrollParent`, `window` or `viewport`
-    // HTMLElement: HTML Element reference
-    type: [String, _utils_safe_types__WEBPACK_IMPORTED_MODULE_4__["HTMLElement"]],
-    default: 'scrollParent'
   }
 }; // @vue/component
 
@@ -6176,7 +6150,7 @@ var BDropdown =
 /*#__PURE__*/
 _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   name: NAME,
-  mixins: [_mixins_id__WEBPACK_IMPORTED_MODULE_5__["default"], _mixins_dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_7__["default"]],
+  mixins: [_mixins_id__WEBPACK_IMPORTED_MODULE_4__["default"], _mixins_dropdown__WEBPACK_IMPORTED_MODULE_5__["default"], _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_6__["default"]],
   props: props,
   computed: {
     dropdownClasses: function dropdownClasses() {
@@ -6228,7 +6202,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         btnProps.type = this.splitButtonType;
       }
 
-      split = h(_button_button__WEBPACK_IMPORTED_MODULE_8__["BButton"], {
+      split = h(_button_button__WEBPACK_IMPORTED_MODULE_7__["BButton"], {
         ref: 'button',
         props: btnProps,
         class: this.splitClass,
@@ -6236,12 +6210,12 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
           id: this.safeId('_BV_button_')
         },
         on: {
-          click: this.click
+          click: this.onSplitClick
         }
       }, [buttonContent]);
     }
 
-    var toggle = h(_button_button__WEBPACK_IMPORTED_MODULE_8__["BButton"], {
+    var toggle = h(_button_button__WEBPACK_IMPORTED_MODULE_7__["BButton"], {
       ref: 'toggle',
       staticClass: 'dropdown-toggle',
       class: this.toggleClasses,
@@ -6258,9 +6232,9 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         'aria-expanded': this.visible ? 'true' : 'false'
       },
       on: {
+        mousedown: this.onMousedown,
         click: this.toggle,
-        // click
-        keydown: this.toggle // enter, space, down
+        keydown: this.toggle // Handle ENTER, SPACE and DOWN
 
       }
     }, [this.split ? h('span', {
@@ -6276,7 +6250,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         'aria-labelledby': this.safeId(this.split ? '_BV_button_' : '_BV_toggle_')
       },
       on: {
-        keydown: this.onKeydown // up, down, esc
+        keydown: this.onKeydown // Handle UP, DOWN and ESC
 
       }
     }, !this.lazy || this.visible ? this.normalizeSlot('default', {
@@ -8529,8 +8503,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+ // --- Constants ---
 
-var NAME = 'BFormTags'; // --- Pre-compiled regular expressions for performance reasons ---
+var NAME = 'BFormTags'; // Supported input types (for built in input)
+
+var TYPES = ['text', 'email', 'tel', 'url', 'number']; // Pre-compiled regular expressions for performance reasons
 
 var RX_SPACES = /[\s\uFEFF\xA0]+/g; // --- Utility methods ---
 // Escape special chars in string and replace
@@ -8611,6 +8588,13 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     size: {
       type: String,
       default: null
+    },
+    inputType: {
+      type: String,
+      default: 'text',
+      validator: function validator(type) {
+        return Object(_utils_array__WEBPACK_IMPORTED_MODULE_4__["arrayIncludes"])(TYPES, type);
+      }
     },
     inputClass: {
       type: [String, Array, Object],
@@ -8718,6 +8702,10 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   computed: {
     computedInputId: function computedInputId() {
       return this.inputId || this.safeId('__input__');
+    },
+    computedInputType: function computedInputType() {
+      // We only allow certain types
+      return Object(_utils_array__WEBPACK_IMPORTED_MODULE_4__["arrayIncludes"])(TYPES, this.inputType) ? this.inputType : 'text';
     },
     computedInputAttrs: function computedInputAttrs() {
       return _objectSpread({}, this.inputAttrs, {
@@ -9025,6 +9013,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       var tags = _ref.tags,
           addTag = _ref.addTag,
           removeTag = _ref.removeTag,
+          inputType = _ref.inputType,
           inputAttrs = _ref.inputAttrs,
           inputHandlers = _ref.inputHandlers,
           inputClass = _ref.inputClass,
@@ -9089,7 +9078,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         },
         attrs: _objectSpread({}, inputAttrs, {
           'aria-describedby': ariaDescribedby || null,
-          type: 'text',
+          type: inputType,
           placeholder: placeholder || null
         }),
         domProps: {
@@ -9207,6 +9196,8 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       // Methods
       removeTag: this.removeTag,
       addTag: this.addTag,
+      // We don't include this in the attrs, as users may want to override this
+      inputType: this.computedInputType,
       // <input> v-bind:inputAttrs
       inputAttrs: this.computedInputAttrs,
       // <input> v-on:inputHandlers
@@ -11752,14 +11743,14 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       if (evtIsEvent && this.disabled) {
         // Stop event from bubbling up
         evt.stopPropagation(); // Kill the event loop attached to this specific `EventTarget`
-        // Needed to prevent `vue-router` for doing it's thing
+        // Needed to prevent `vue-router` for doing its thing
 
         evt.stopImmediatePropagation();
       } else {
         /* istanbul ignore next: difficult to test, but we know it works */
         if (isRouterLink && evt.currentTarget.__vue__) {
           // Router links do not emit instance `click` events, so we
-          // add in an $emit('click', evt) on it's vue instance
+          // add in an `$emit('click', evt)` on its Vue instance
           evt.currentTarget.__vue__.$emit('click', evt);
         } // Call the suppliedHandler(s), if any provided
 
@@ -11768,7 +11759,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
           return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_3__["isFunction"])(h);
         }).forEach(function (handler) {
           handler.apply(void 0, _toConsumableArray(_arguments));
-        }); // Emit the global $root click event
+        }); // Emit the global `$root` click event
 
         this.$root.$emit('clicked::link', evt);
       } // Stop scroll-to-top behavior or navigation on
@@ -12245,7 +12236,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BvModalEvent", function() { return BvModalEvent; });
 /* harmony import */ var _utils_bv_event_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/bv-event.class */ "./node_modules/bootstrap-vue/esm/utils/bv-event.class.js");
 /* harmony import */ var _utils_object__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/object */ "./node_modules/bootstrap-vue/esm/utils/object.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -12955,30 +12946,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/esm/utils/vue.js");
 /* harmony import */ var _utils_bv_transition__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/bv-transition */ "./node_modules/bootstrap-vue/esm/utils/bv-transition.js");
 /* harmony import */ var _utils_key_codes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/key-codes */ "./node_modules/bootstrap-vue/esm/utils/key-codes.js");
-/* harmony import */ var _utils_observe_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/observe-dom */ "./node_modules/bootstrap-vue/esm/utils/observe-dom.js");
-/* harmony import */ var _utils_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/array */ "./node_modules/bootstrap-vue/esm/utils/array.js");
-/* harmony import */ var _utils_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/esm/utils/config.js");
-/* harmony import */ var _utils_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/esm/utils/dom.js");
-/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/esm/utils/env.js");
-/* harmony import */ var _utils_html__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/esm/utils/html.js");
-/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
-/* harmony import */ var _utils_safe_types__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/esm/utils/safe-types.js");
-/* harmony import */ var _utils_transporter__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utils/transporter */ "./node_modules/bootstrap-vue/esm/utils/transporter.js");
-/* harmony import */ var _mixins_id__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/esm/mixins/id.js");
-/* harmony import */ var _mixins_listen_on_document__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../mixins/listen-on-document */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-document.js");
-/* harmony import */ var _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../mixins/listen-on-root */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-root.js");
-/* harmony import */ var _mixins_listen_on_window__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../mixins/listen-on-window */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-window.js");
-/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js");
-/* harmony import */ var _mixins_scoped_style_attrs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../mixins/scoped-style-attrs */ "./node_modules/bootstrap-vue/esm/mixins/scoped-style-attrs.js");
-/* harmony import */ var _button_button__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
-/* harmony import */ var _button_button_close__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../button/button-close */ "./node_modules/bootstrap-vue/esm/components/button/button-close.js");
-/* harmony import */ var _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./helpers/modal-manager */ "./node_modules/bootstrap-vue/esm/components/modal/helpers/modal-manager.js");
-/* harmony import */ var _helpers_bv_modal_event_class__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./helpers/bv-modal-event.class */ "./node_modules/bootstrap-vue/esm/components/modal/helpers/bv-modal-event.class.js");
+/* harmony import */ var _utils_identity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/identity */ "./node_modules/bootstrap-vue/esm/utils/identity.js");
+/* harmony import */ var _utils_observe_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/observe-dom */ "./node_modules/bootstrap-vue/esm/utils/observe-dom.js");
+/* harmony import */ var _utils_array__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/array */ "./node_modules/bootstrap-vue/esm/utils/array.js");
+/* harmony import */ var _utils_config__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/esm/utils/config.js");
+/* harmony import */ var _utils_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/esm/utils/dom.js");
+/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/esm/utils/env.js");
+/* harmony import */ var _utils_html__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/esm/utils/html.js");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
+/* harmony import */ var _utils_safe_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/esm/utils/safe-types.js");
+/* harmony import */ var _utils_transporter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../utils/transporter */ "./node_modules/bootstrap-vue/esm/utils/transporter.js");
+/* harmony import */ var _mixins_id__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/esm/mixins/id.js");
+/* harmony import */ var _mixins_listen_on_document__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../mixins/listen-on-document */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-document.js");
+/* harmony import */ var _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../mixins/listen-on-root */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-root.js");
+/* harmony import */ var _mixins_listen_on_window__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../mixins/listen-on-window */ "./node_modules/bootstrap-vue/esm/mixins/listen-on-window.js");
+/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js");
+/* harmony import */ var _mixins_scoped_style_attrs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../mixins/scoped-style-attrs */ "./node_modules/bootstrap-vue/esm/mixins/scoped-style-attrs.js");
+/* harmony import */ var _button_button__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
+/* harmony import */ var _button_button_close__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../button/button-close */ "./node_modules/bootstrap-vue/esm/components/button/button-close.js");
+/* harmony import */ var _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./helpers/modal-manager */ "./node_modules/bootstrap-vue/esm/components/modal/helpers/modal-manager.js");
+/* harmony import */ var _helpers_bv_modal_event_class__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./helpers/bv-modal-event.class */ "./node_modules/bootstrap-vue/esm/components/modal/helpers/bv-modal-event.class.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -13026,7 +13019,7 @@ var TABABLE_SELECTOR = ['button', '[href]:not(.disabled)', 'input', 'select', 't
 // Attempt to focus an element, and return true if successful
 
 var attemptFocus = function attemptFocus(el) {
-  if (el && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["isVisible"])(el) && el.focus) {
+  if (el && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["isVisible"])(el) && el.focus) {
     try {
       el.focus();
     } catch (_unused) {}
@@ -13041,7 +13034,7 @@ var props = {
   size: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'size');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'size');
     }
   },
   centered: {
@@ -13076,6 +13069,10 @@ var props = {
     type: Boolean,
     default: false
   },
+  ignoreEnforceFocusSelector: {
+    type: [Array, String],
+    default: ''
+  },
   title: {
     type: String,
     default: ''
@@ -13086,7 +13083,7 @@ var props = {
   titleTag: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'titleTag');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'titleTag');
     }
   },
   titleClass: {
@@ -13104,25 +13101,25 @@ var props = {
   headerBgVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'headerBgVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerBgVariant');
     }
   },
   headerBorderVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'headerBorderVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerBorderVariant');
     }
   },
   headerTextVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'headerTextVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerTextVariant');
     }
   },
   headerCloseVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'headerCloseVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerCloseVariant');
     }
   },
   headerClass: {
@@ -13132,13 +13129,13 @@ var props = {
   bodyBgVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'bodyBgVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'bodyBgVariant');
     }
   },
   bodyTextVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'bodyTextVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'bodyTextVariant');
     }
   },
   modalClass: {
@@ -13160,19 +13157,19 @@ var props = {
   footerBgVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'footerBgVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'footerBgVariant');
     }
   },
   footerBorderVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'footerBorderVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'footerBorderVariant');
     }
   },
   footerTextVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'footerTextVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'footerTextVariant');
     }
   },
   footerClass: {
@@ -13213,19 +13210,25 @@ var props = {
   },
   returnFocus: {
     // HTML Element, CSS selector string or Vue component instance
-    type: [_utils_safe_types__WEBPACK_IMPORTED_MODULE_10__["HTMLElement"], String, Object],
+    type: [_utils_safe_types__WEBPACK_IMPORTED_MODULE_11__["HTMLElement"], String, Object],
     default: null
+  },
+  headerCloseContent: {
+    type: String,
+    default: function _default() {
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerCloseContent');
+    }
   },
   headerCloseLabel: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'headerCloseLabel');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'headerCloseLabel');
     }
   },
   cancelTitle: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'cancelTitle');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'cancelTitle');
     }
   },
   cancelTitleHtml: {
@@ -13234,7 +13237,7 @@ var props = {
   okTitle: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'okTitle');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'okTitle');
     }
   },
   okTitleHtml: {
@@ -13243,13 +13246,13 @@ var props = {
   cancelVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'cancelVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'cancelVariant');
     }
   },
   okVariant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_5__["getComponentConfig"])(NAME, 'okVariant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_6__["getComponentConfig"])(NAME, 'okVariant');
     }
   },
   lazy: {
@@ -13269,7 +13272,7 @@ var props = {
     default: null,
     validator: function validator(val) {
       /* istanbul ignore next */
-      return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_9__["isUndefinedOrNull"])(val) || Object(_utils_array__WEBPACK_IMPORTED_MODULE_4__["arrayIncludes"])(['ok', 'cancel', 'close'], val);
+      return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_10__["isUndefinedOrNull"])(val) || Object(_utils_array__WEBPACK_IMPORTED_MODULE_5__["arrayIncludes"])(['ok', 'cancel', 'close'], val);
     }
   }
 }; // @vue/component
@@ -13278,7 +13281,7 @@ var BModal =
 /*#__PURE__*/
 _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   name: NAME,
-  mixins: [_mixins_id__WEBPACK_IMPORTED_MODULE_12__["default"], _mixins_listen_on_document__WEBPACK_IMPORTED_MODULE_13__["default"], _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_14__["default"], _mixins_listen_on_window__WEBPACK_IMPORTED_MODULE_15__["default"], _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_16__["default"], _mixins_scoped_style_attrs__WEBPACK_IMPORTED_MODULE_17__["default"]],
+  mixins: [_mixins_id__WEBPACK_IMPORTED_MODULE_13__["default"], _mixins_listen_on_document__WEBPACK_IMPORTED_MODULE_14__["default"], _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_15__["default"], _mixins_listen_on_window__WEBPACK_IMPORTED_MODULE_16__["default"], _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_17__["default"], _mixins_scoped_style_attrs__WEBPACK_IMPORTED_MODULE_18__["default"]],
   inheritAttrs: false,
   model: {
     prop: 'visible',
@@ -13307,7 +13310,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       return_focus: this.returnFocus || null,
       // The following items are controlled by the modalManager instance
       scrollbarWidth: 0,
-      zIndex: _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__["modalManager"].getBaseZIndex(),
+      zIndex: _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__["modalManager"].getBaseZIndex(),
       isTop: true,
       isBodyOverflowing: false
     };
@@ -13369,6 +13372,10 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         hide: this.hide,
         visible: this.isVisible
       };
+    },
+    computeIgnoreEnforceFocusSelector: function computeIgnoreEnforceFocusSelector() {
+      // Normalize to an single selector with selectors separated by `,`
+      return Object(_utils_array__WEBPACK_IMPORTED_MODULE_5__["concat"])(this.ignoreEnforceFocusSelector).filter(_utils_identity__WEBPACK_IMPORTED_MODULE_3__["default"]).join(',').trim();
     }
   },
   watch: {
@@ -13384,7 +13391,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   },
   mounted: function mounted() {
     // Set initial z-index as queried from the DOM
-    this.zIndex = _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__["modalManager"].getBaseZIndex(); // Listen for events from others to either open or close ourselves
+    this.zIndex = _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__["modalManager"].getBaseZIndex(); // Listen for events from others to either open or close ourselves
     // and listen to all modals to enable/disable enforce focus
 
     this.listenOnRoot('bv::show::modal', this.showHandler);
@@ -13422,7 +13429,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     // Private method to create a BvModalEvent object
     buildEvent: function buildEvent(type) {
       var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return new _helpers_bv_modal_event_class__WEBPACK_IMPORTED_MODULE_21__["BvModalEvent"](type, _objectSpread({
+      return new _helpers_bv_modal_event_class__WEBPACK_IMPORTED_MODULE_22__["BvModalEvent"](type, _objectSpread({
         // Default options
         cancelable: false,
         target: this.$refs.modal || this.$el || null,
@@ -13531,7 +13538,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     },
     // Private method to get the current document active element
     getActiveElement: function getActiveElement() {
-      if (_utils_env__WEBPACK_IMPORTED_MODULE_7__["isBrowser"]) {
+      if (_utils_env__WEBPACK_IMPORTED_MODULE_8__["isBrowser"]) {
         var activeElement = document.activeElement; // Note: On IE11, `document.activeElement` may be null.
         // So we test it for truthiness first.
         // https://github.com/bootstrap-vue/bootstrap-vue/issues/3206
@@ -13553,7 +13560,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     getTabables: function getTabables() {
       // Find all tabable elements in the modal content
       // Assumes users have not used tabindex > 0 on elements!
-      return Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["selectAll"])(TABABLE_SELECTOR, this.$refs.content).filter(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["isVisible"]).filter(function (i) {
+      return Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["selectAll"])(TABABLE_SELECTOR, this.$refs.content).filter(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["isVisible"]).filter(function (i) {
         return i.tabIndex > -1 && !i.disabled;
       });
     },
@@ -13562,13 +13569,13 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       var _this = this;
 
       /* istanbul ignore next: commenting out for now until we can test stacking */
-      if (_helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__["modalManager"].modalsAreOpen && this.noStacking) {
+      if (_helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__["modalManager"].modalsAreOpen && this.noStacking) {
         // If another modal(s) is already open, wait for it(them) to close
         this.listenOnRootOnce('bv::modal::hidden', this.doShow);
         return;
       }
 
-      _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__["modalManager"].registerModal(this); // Place modal in DOM
+      _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__["modalManager"].registerModal(this); // Place modal in DOM
 
       this.isHidden = false;
       this.$nextTick(function () {
@@ -13582,7 +13589,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         _this.$nextTick(function () {
           // In a nextTick in case modal content is lazy
           // Observe changes in modal content and adjust if necessary
-          _this._observer = Object(_utils_observe_dom__WEBPACK_IMPORTED_MODULE_3__["default"])(_this.$refs.content, _this.checkModalOverflow.bind(_this), OBSERVER_CONFIG);
+          _this._observer = Object(_utils_observe_dom__WEBPACK_IMPORTED_MODULE_4__["default"])(_this.$refs.content, _this.checkModalOverflow.bind(_this), OBSERVER_CONFIG);
         });
       });
     },
@@ -13604,7 +13611,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       // This will allow users to not have to use `$nextTick()` or `requestAF()`
       // when trying to pre-focus an element
 
-      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["requestAF"])(function () {
+      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["requestAF"])(function () {
         _this2.emitEvent(_this2.buildEvent('shown'));
 
         _this2.setEnforceFocus(true);
@@ -13634,7 +13641,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       this.isHidden = true;
       this.$nextTick(function () {
         _this3.isClosing = false;
-        _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_20__["modalManager"].unregisterModal(_this3);
+        _helpers_modal_manager__WEBPACK_IMPORTED_MODULE_21__["modalManager"].unregisterModal(_this3);
 
         _this3.returnFocusTo(); // TODO: Need to find a way to pass the `trigger` property
         //       to the `hidden` event, not just only the `hide` event
@@ -13646,7 +13653,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     // Event emitter
     emitEvent: function emitEvent(bvModalEvt) {
       var type = bvModalEvt.type; // We emit on root first incase a global listener wants to cancel
-      // the event first before the instance emits it's event
+      // the event first before the instance emits its event
 
       this.emitOnRoot("bv::modal::".concat(type), bvModalEvt, bvModalEvt.componentId);
       this.$emit(type, bvModalEvt);
@@ -13660,14 +13667,14 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       var modal = this.$refs.modal;
 
       var onceModalMouseup = function onceModalMouseup(evt) {
-        Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["eventOff"])(modal, 'mouseup', onceModalMouseup, EVT_OPTIONS);
+        Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["eventOff"])(modal, 'mouseup', onceModalMouseup, EVT_OPTIONS);
 
         if (evt.target === modal) {
           _this4.ignoreBackdropClick = true;
         }
       };
 
-      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["eventOn"])(modal, 'mouseup', onceModalMouseup, EVT_OPTIONS);
+      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["eventOn"])(modal, 'mouseup', onceModalMouseup, EVT_OPTIONS);
     },
     onClickOut: function onClickOut(evt) {
       if (this.ignoreBackdropClick) {
@@ -13679,12 +13686,12 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       // that generated click event is no longer in document body
 
 
-      if (!this.isVisible || this.noCloseOnBackdrop || !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["contains"])(document.body, evt.target)) {
+      if (!this.isVisible || this.noCloseOnBackdrop || !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["contains"])(document.body, evt.target)) {
         return;
       } // If backdrop clicked, hide modal
 
 
-      if (!Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["contains"])(this.$refs.content, evt.target)) {
+      if (!Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["contains"])(this.$refs.content, evt.target)) {
         this.hide('backdrop');
       }
     },
@@ -13709,30 +13716,35 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       var content = this.$refs.content;
       var target = evt.target;
 
-      if (!this.noEnforceFocus && this.isTop && this.isVisible && content && document !== target && !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["contains"])(content, target)) {
-        var tabables = this.getTabables();
-
-        if (this.$refs.bottomTrap && target === this.$refs.bottomTrap) {
-          // If user pressed TAB out of modal into our bottom trab trap element
-          // Find the first tabable element in the modal content and focus it
-          if (attemptFocus(tabables[0])) {
-            // Focus was successful
-            return;
-          }
-        } else if (this.$refs.topTrap && target === this.$refs.topTrap) {
-          // If user pressed CTRL-TAB out of modal and into our top tab trap element
-          // Find the last tabable element in the modal content and focus it
-          if (attemptFocus(tabables[tabables.length - 1])) {
-            // Focus was successful
-            return;
-          }
-        } // Otherwise focus the modal content container
-
-
-        content.focus({
-          preventScroll: true
-        });
+      if (this.noEnforceFocus || !this.isTop || !this.isVisible || !content || document === target || Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["contains"])(content, target) || this.computeIgnoreEnforceFocusSelector && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["closest"])(this.computeIgnoreEnforceFocusSelector, target, true)) {
+        return;
       }
+
+      var tabables = this.getTabables();
+      var _this$$refs = this.$refs,
+          bottomTrap = _this$$refs.bottomTrap,
+          topTrap = _this$$refs.topTrap;
+
+      if (bottomTrap && target === bottomTrap) {
+        // If user pressed TAB out of modal into our bottom trab trap element
+        // Find the first tabable element in the modal content and focus it
+        if (attemptFocus(tabables[0])) {
+          // Focus was successful
+          return;
+        }
+      } else if (topTrap && target === topTrap) {
+        // If user pressed CTRL-TAB out of modal and into our top tab trap element
+        // Find the last tabable element in the modal content and focus it
+        if (attemptFocus(tabables[tabables.length - 1])) {
+          // Focus was successful
+          return;
+        }
+      } // Otherwise focus the modal content container
+
+
+      content.focus({
+        preventScroll: true
+      });
     },
     // Turn on/off focusin listener
     setEnforceFocus: function setEnforceFocus(on) {
@@ -13771,15 +13783,15 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       var _this5 = this;
 
       // Don't try and focus if we are SSR
-      if (_utils_env__WEBPACK_IMPORTED_MODULE_7__["isBrowser"]) {
-        Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["requestAF"])(function () {
+      if (_utils_env__WEBPACK_IMPORTED_MODULE_8__["isBrowser"]) {
+        Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["requestAF"])(function () {
           var modal = _this5.$refs.modal;
           var content = _this5.$refs.content;
 
           var activeElement = _this5.getActiveElement(); // If the modal contains the activeElement, we don't do anything
 
 
-          if (modal && content && !(activeElement && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["contains"])(content, activeElement))) {
+          if (modal && content && !(activeElement && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["contains"])(content, activeElement))) {
             var ok = _this5.$refs['ok-button'];
             var cancel = _this5.$refs['cancel-button'];
             var close = _this5.$refs['close-button']; // Focus the appropriate button or modal content wrapper
@@ -13806,7 +13818,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       this.return_focus = null;
       this.$nextTick(function () {
         // Is el a string CSS selector?
-        el = Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_9__["isString"])(el) ? Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__["select"])(el) : el;
+        el = Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_10__["isString"])(el) ? Object(_utils_dom__WEBPACK_IMPORTED_MODULE_7__["select"])(el) : el;
 
         if (el) {
           // Possibly could be a component reference
@@ -13832,9 +13844,10 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
           var closeButton = h();
 
           if (!this.hideHeaderClose) {
-            closeButton = h(_button_button_close__WEBPACK_IMPORTED_MODULE_19__["BButtonClose"], {
+            closeButton = h(_button_button_close__WEBPACK_IMPORTED_MODULE_20__["BButtonClose"], {
               ref: 'close-button',
               props: {
+                content: this.headerCloseContent,
                 disabled: this.isTransitioning,
                 ariaLabel: this.headerCloseLabel,
                 textVariant: this.headerCloseVariant || this.headerTextVariant
@@ -13855,7 +13868,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
               id: this.safeId('__BV_modal_title_')
             },
             domProps: domProps
-          }, [this.normalizeSlot('modal-title', this.slotScope) || Object(_utils_html__WEBPACK_IMPORTED_MODULE_8__["stripTags"])(this.title)]), closeButton];
+          }, [this.normalizeSlot('modal-title', this.slotScope) || Object(_utils_html__WEBPACK_IMPORTED_MODULE_9__["stripTags"])(this.title)]), closeButton];
         }
 
         header = h('header', {
@@ -13890,7 +13903,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
             var cancelHtml = this.cancelTitleHtml ? {
               innerHTML: this.cancelTitleHtml
             } : null;
-            cancelButton = h(_button_button__WEBPACK_IMPORTED_MODULE_18__["BButton"], {
+            cancelButton = h(_button_button__WEBPACK_IMPORTED_MODULE_19__["BButton"], {
               ref: 'cancel-button',
               props: {
                 variant: this.cancelVariant,
@@ -13902,13 +13915,13 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
               }
             }, [this.normalizeSlot('modal-cancel') || (cancelHtml ? h('span', {
               domProps: cancelHtml
-            }) : Object(_utils_html__WEBPACK_IMPORTED_MODULE_8__["stripTags"])(this.cancelTitle))]);
+            }) : Object(_utils_html__WEBPACK_IMPORTED_MODULE_9__["stripTags"])(this.cancelTitle))]);
           }
 
           var okHtml = this.okTitleHtml ? {
             innerHTML: this.okTitleHtml
           } : null;
-          var okButton = h(_button_button__WEBPACK_IMPORTED_MODULE_18__["BButton"], {
+          var okButton = h(_button_button__WEBPACK_IMPORTED_MODULE_19__["BButton"], {
             ref: 'ok-button',
             props: {
               variant: this.okVariant,
@@ -13920,7 +13933,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
             }
           }, [this.normalizeSlot('modal-ok') || (okHtml ? h('span', {
             domProps: okHtml
-          }) : Object(_utils_html__WEBPACK_IMPORTED_MODULE_8__["stripTags"])(this.okTitle))]);
+          }) : Object(_utils_html__WEBPACK_IMPORTED_MODULE_9__["stripTags"])(this.okTitle))]);
           modalFooter = [cancelButton, okButton];
         }
 
@@ -14056,7 +14069,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     if (this.static) {
       return this.lazy && this.isHidden ? h() : this.makeModal(h);
     } else {
-      return this.isHidden ? h() : h(_utils_transporter__WEBPACK_IMPORTED_MODULE_11__["BTransporterSingle"], {}, [this.makeModal(h)]);
+      return this.isHidden ? h() : h(_utils_transporter__WEBPACK_IMPORTED_MODULE_12__["BTransporterSingle"], {}, [this.makeModal(h)]);
     }
   }
 });
@@ -14256,8 +14269,9 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         'aria-expanded': this.visible ? 'true' : 'false'
       },
       on: {
+        mousedown: this.onMousedown,
         click: this.toggle,
-        keydown: this.toggle // space, enter, down
+        keydown: this.toggle // Handle ENTER, SPACE and DOWN
 
       }
     }, [this.$slots['button-content'] || this.$slots.text || h('span', {
@@ -14272,7 +14286,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         'aria-labelledby': this.safeId('_BV_button_')
       },
       on: {
-        keydown: this.onKeydown // up, down, esc
+        keydown: this.onKeydown // Handle UP, DOWN and ESC
 
       }
     }, !this.lazy || this.visible ? this.normalizeSlot('default', {
@@ -14744,9 +14758,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "props", function() { return props; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BNavbar", function() { return BNavbar; });
 /* harmony import */ var _utils_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/esm/utils/vue.js");
-/* harmony import */ var vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
-/* harmony import */ var _utils_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/esm/utils/config.js");
-/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
+/* harmony import */ var _utils_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/esm/utils/config.js");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
+/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
@@ -14766,7 +14780,7 @@ var props = {
   variant: {
     type: String,
     default: function _default() {
-      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_2__["getComponentConfig"])(NAME, 'variant');
+      return Object(_utils_config__WEBPACK_IMPORTED_MODULE_1__["getComponentConfig"])(NAME, 'variant');
     }
   },
   toggleable: {
@@ -14790,33 +14804,41 @@ var BNavbar =
 /*#__PURE__*/
 _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   name: NAME,
-  functional: true,
+  mixins: [_mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_3__["default"]],
   props: props,
-  render: function render(h, _ref) {
-    var _class;
+  provide: function provide() {
+    return {
+      bvNavbar: this
+    };
+  },
+  computed: {
+    breakpointClass: function breakpointClass() {
+      var breakpoint = null;
+      var xs = Object(_utils_config__WEBPACK_IMPORTED_MODULE_1__["getBreakpoints"])()[0];
+      var toggleable = this.toggleable;
 
-    var props = _ref.props,
-        data = _ref.data,
-        children = _ref.children;
-    var breakpoint = '';
-    var xs = Object(_utils_config__WEBPACK_IMPORTED_MODULE_2__["getBreakpoints"])()[0];
-
-    if (props.toggleable && Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_3__["isString"])(props.toggleable) && props.toggleable !== xs) {
-      breakpoint = "navbar-expand-".concat(props.toggleable);
-    } else if (props.toggleable === false) {
-      breakpoint = 'navbar-expand';
-    }
-
-    return h(props.tag, Object(vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__["mergeData"])(data, {
-      staticClass: 'navbar',
-      class: (_class = {
-        'd-print': props.print,
-        'sticky-top': props.sticky
-      }, _defineProperty(_class, "navbar-".concat(props.type), props.type), _defineProperty(_class, "bg-".concat(props.variant), props.variant), _defineProperty(_class, "fixed-".concat(props.fixed), props.fixed), _defineProperty(_class, "".concat(breakpoint), breakpoint), _class),
-      attrs: {
-        role: props.tag === 'nav' ? null : 'navigation'
+      if (toggleable && Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_2__["isString"])(toggleable) && toggleable !== xs) {
+        breakpoint = "navbar-expand-".concat(toggleable);
+      } else if (toggleable === false) {
+        breakpoint = 'navbar-expand';
       }
-    }), children);
+
+      return breakpoint;
+    }
+  },
+  render: function render(h) {
+    var _ref;
+
+    return h(this.tag, {
+      staticClass: 'navbar',
+      class: [(_ref = {
+        'd-print': this.print,
+        'sticky-top': this.sticky
+      }, _defineProperty(_ref, "navbar-".concat(this.type), this.type), _defineProperty(_ref, "bg-".concat(this.variant), this.variant), _defineProperty(_ref, "fixed-".concat(this.fixed), this.fixed), _ref), this.breakpointClass],
+      attrs: {
+        role: this.tag === 'nav' ? null : 'navigation'
+      }
+    }, [this.normalizeSlot('default')]);
   }
 });
 
@@ -20917,7 +20939,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
         return btn.tab === tab;
       });
     },
-    // Force a button to re-render it's content, given a <b-tab> instance
+    // Force a button to re-render its content, given a <b-tab> instance
     // Called by <b-tab> on `update()`
     updateButton: function updateButton(tab) {
       var button = this.getButtonForTab(tab);
@@ -20973,7 +20995,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
 
       return false;
     },
-    // Focus a tab button given it's <b-tab> instance
+    // Focus a tab button given its <b-tab> instance
     focusButton: function focusButton(tab) {
       var _this8 = this;
 
@@ -23305,7 +23327,7 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
 
       if (!target || !this.$root || !this.isDropdown) {
         return;
-      } // We can listen for dropdown shown events on it's instance
+      } // We can listen for dropdown shown events on its instance
       // TODO:
       //   We could grab the ID from the dropdown, and listen for
       //   $root events for that particular dropdown id
@@ -24000,7 +24022,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var EVENT_SHOW = 'bv::show::modal'; // Prop name we use to store info on root element
 
-var HANDLER = '__bv_modal_directive__';
+var PROPERTY = '__bv_modal_directive__';
 var EVENT_OPTS = {
   passive: true
 };
@@ -24054,7 +24076,11 @@ var bind = function bind(el, binding, vnode) {
       }
     };
 
-    el[HANDLER] = handler; // If element is not a button, we add `role="button"` for accessibility
+    el[PROPERTY] = {
+      handler: handler,
+      target: target,
+      trigger: trigger
+    }; // If element is not a button, we add `role="button"` for accessibility
 
     setRole(trigger); // Listen for click events
 
@@ -24069,21 +24095,34 @@ var bind = function bind(el, binding, vnode) {
 };
 
 var unbind = function unbind(el) {
-  var trigger = getTriggerElement(el);
-  var handler = el ? el[HANDLER] : null;
+  var oldProp = el[PROPERTY] || {};
+  var trigger = oldProp.trigger;
+  var handler = oldProp.handler;
 
   if (trigger && handler) {
     Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["eventOff"])(trigger, 'click', handler, EVENT_OPTS);
     Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["eventOff"])(trigger, 'keydown', handler, EVENT_OPTS);
+    Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["eventOff"])(el, 'click', handler, EVENT_OPTS);
+    Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["eventOff"])(el, 'keydown', handler, EVENT_OPTS);
   }
 
-  delete el[HANDLER];
+  delete el[PROPERTY];
 };
 
 var componentUpdated = function componentUpdated(el, binding, vnode) {
-  // We bind and rebind just in case target changes
-  unbind(el, binding, vnode);
-  bind(el, binding, vnode);
+  var oldProp = el[PROPERTY] || {};
+  var target = getTarget(binding);
+  var trigger = getTriggerElement(el);
+
+  if (target !== oldProp.target || trigger !== oldProp.trigger) {
+    // We bind and rebind if the target or trigger changes
+    unbind(el, binding, vnode);
+    bind(el, binding, vnode);
+  } // If trigger element is not a button, ensure `role="button"`
+  // is still set for accessibility
+
+
+  setRole(trigger);
 };
 
 var updated = function updated() {};
@@ -24894,7 +24933,7 @@ function () {
       .join(','), this.$el);
       links.forEach(function (link) {
         if (Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["hasClass"])(link, ClassName.DROPDOWN_ITEM)) {
-          // This is a dropdown item, so find the .dropdown-toggle and set it's state
+          // This is a dropdown item, so find the .dropdown-toggle and set its state
           var dropdown = Object(_utils_dom__WEBPACK_IMPORTED_MODULE_1__["closest"])(Selector.DROPDOWN, link);
 
           if (dropdown) {
@@ -25228,7 +25267,7 @@ var handleUpdate = function handleUpdate(el, binding, vnode) {
     });
   } // Ensure the collapse class and aria-* attributes persist
   // after element is updated (either by parent re-rendering
-  // or changes to this element or it's contents
+  // or changes to this element or its contents
 
 
   if (el[BV_TOGGLE_STATE] === true) {
@@ -25891,21 +25930,21 @@ var VBVisible = {
 
 /***/ }),
 
-/***/ "./node_modules/bootstrap-vue/esm/icons/helpers/make-icon.js":
+/***/ "./node_modules/bootstrap-vue/esm/icons/helpers/icon-base.js":
 /*!*******************************************************************!*\
-  !*** ./node_modules/bootstrap-vue/esm/icons/helpers/make-icon.js ***!
+  !*** ./node_modules/bootstrap-vue/esm/icons/helpers/icon-base.js ***!
   \*******************************************************************/
-/*! exports provided: commonIconProps, makeIcon */
+/*! exports provided: commonIconProps, BVIconBase */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "commonIconProps", function() { return commonIconProps; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeIcon", function() { return makeIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BVIconBase", function() { return BVIconBase; });
 /* harmony import */ var _utils_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/esm/utils/vue.js");
 /* harmony import */ var vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
 /* harmony import */ var _utils_identity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/identity */ "./node_modules/bootstrap-vue/esm/utils/identity.js");
-/* harmony import */ var _utils_string__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/string */ "./node_modules/bootstrap-vue/esm/utils/string.js");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
 /* harmony import */ var _utils_number__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/number */ "./node_modules/bootstrap-vue/esm/utils/number.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -25964,86 +26003,151 @@ var baseAttrs = {
 }; // Shared private base component to reduce bundle/runtime size
 // @vue/component
 
-var BVIconBase = {
+var BVIconBase =
+/*#__PURE__*/
+_utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
   name: 'BVIconBase',
   functional: true,
   props: _objectSpread({
     content: {
       type: String
+    },
+    stacked: {
+      type: Boolean,
+      default: false
     }
   }, commonIconProps),
   render: function render(h, _ref) {
     var data = _ref.data,
-        props = _ref.props;
-    var fontScale = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.fontScale) || 1;
-    var scale = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.scale) || 1;
+        props = _ref.props,
+        children = _ref.children;
+    var fontScale = Math.max(Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.fontScale) || 1, 0) || 1;
+    var scale = Math.max(Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.scale) || 1, 0) || 1;
     var rotate = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.rotate) || 0;
     var shiftH = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.shiftH) || 0;
     var shiftV = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toFloat"])(props.shiftV) || 0;
     var flipH = props.flipH;
-    var flipV = props.flipV; // Compute the transforms. Note that order is important
-    // CSS transforms are applied in order from right to left
-    // and we want flipping to occur before rotation, and
-    // shifting is applied last
+    var flipV = props.flipV; // Compute the transforms
+    // Note that order is important as SVG transforms are applied in order from
+    // left to right and we want flipping/scale to occur before rotation
+    // Note shifting is applied separately
+    // Assumes that the viewbox is `0 0 20 20` (`10 10` is the center)
 
-    var transforms = [shiftH ? "translateX(".concat(100 * shiftH / 16, "%)") : null, shiftV ? "translateY(".concat(-100 * shiftV / 16, "%)") : null, rotate ? "rotate(".concat(rotate, "deg)") : null, flipH || flipV || scale !== 1 ? "scale(".concat((flipH ? -1 : 1) * scale, ", ").concat((flipV ? -1 : 1) * scale, ")") : null].filter(_utils_identity__WEBPACK_IMPORTED_MODULE_2__["default"]); // We wrap the content in a `<g>` for handling the transforms
+    var hasScale = flipH || flipV || scale !== 1;
+    var hasTransforms = hasScale || rotate;
+    var hasShift = shiftH || shiftV;
+    var transforms = [hasTransforms ? 'translate(10 10)' : null, hasScale ? "scale(".concat((flipH ? -1 : 1) * scale, " ").concat((flipV ? -1 : 1) * scale, ")") : null, rotate ? "rotate(".concat(rotate, ")") : null, hasTransforms ? 'translate(-10 -10)' : null].filter(_utils_identity__WEBPACK_IMPORTED_MODULE_2__["default"]); // Handling stacked icons
+
+    var isStacked = props.stacked;
+    var hasContent = !Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_3__["isUndefinedOrNull"])(props.content); // We wrap the content in a `<g>` for handling the transforms (except shift)
 
     var $inner = h('g', {
-      style: {
-        transform: transforms.join(' ') || null,
-        transformOrigin: transforms.length > 0 ? 'center' : null
+      attrs: {
+        transform: transforms.join(' ') || null
       },
-      domProps: {
+      domProps: hasContent ? {
         innerHTML: props.content || ''
-      }
-    });
+      } : {}
+    }, children); // If needed, we wrap in an additional `<g>` in order to handle the shifting
+
+    if (hasShift) {
+      $inner = h('g', {
+        attrs: {
+          transform: "translate(".concat(20 * shiftH / 16, " ").concat(-20 * shiftV / 16, ")")
+        }
+      }, [$inner]);
+    }
+
     return h('svg', Object(vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__["mergeData"])({
+      staticClass: 'b-icon bi',
       class: _defineProperty({}, "text-".concat(props.variant), !!props.variant),
       attrs: baseAttrs,
-      style: {
+      style: isStacked ? {} : {
         fontSize: fontScale === 1 ? null : "".concat(fontScale * 100, "%")
       }
     }, // Merge in user supplied data
-    data, // These cannot be overridden by users
-    {
-      staticClass: 'b-icon bi',
+    data, // If icon is stacked, null out some attrs
+    isStacked ? {
       attrs: {
-        xmlns: 'http://www.w3.org/2000/svg',
+        width: null,
+        height: null,
+        role: null,
+        alt: null
+      }
+    } : {}, // These cannot be overridden by users
+    {
+      attrs: {
+        xmlns: isStacked ? null : 'http://www.w3.org/2000/svg',
         fill: 'currentColor'
       }
     }), [$inner]);
   }
-};
+});
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-vue/esm/icons/helpers/make-icon.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/esm/icons/helpers/make-icon.js ***!
+  \*******************************************************************/
+/*! exports provided: makeIcon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeIcon", function() { return makeIcon; });
+/* harmony import */ var _utils_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/esm/utils/vue.js");
+/* harmony import */ var vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
+/* harmony import */ var _utils_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/string */ "./node_modules/bootstrap-vue/esm/utils/string.js");
+/* harmony import */ var _icon_base__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./icon-base */ "./node_modules/bootstrap-vue/esm/icons/helpers/icon-base.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
 /**
  * Icon component generator function
  *
  * @param {string} icon name (minus the leading `BIcon`)
- * @param {string} raw innerHTML for SVG
+ * @param {string} raw `innerHTML` for SVG
  * @return {VueComponent}
  */
 
 var makeIcon = function makeIcon(name, content) {
   // For performance reason we pre-compute some values, so that
   // they are not computed on each render of the icon component
-  var iconName = "BIcon".concat(Object(_utils_string__WEBPACK_IMPORTED_MODULE_3__["pascalCase"])(name));
-  var iconNameClass = "bi-".concat(Object(_utils_string__WEBPACK_IMPORTED_MODULE_3__["kebabCase"])(name));
-  var svgContent = Object(_utils_string__WEBPACK_IMPORTED_MODULE_3__["trim"])(content || ''); // Return the icon component definition
+  var iconName = "BIcon".concat(Object(_utils_string__WEBPACK_IMPORTED_MODULE_2__["pascalCase"])(name));
+  var iconNameClass = "bi-".concat(Object(_utils_string__WEBPACK_IMPORTED_MODULE_2__["kebabCase"])(name));
+  var svgContent = Object(_utils_string__WEBPACK_IMPORTED_MODULE_2__["trim"])(content || ''); // Return the icon component definition
 
-  return _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
-    name: iconName,
-    functional: true,
-    props: _objectSpread({}, commonIconProps),
-    render: function render(h, _ref2) {
-      var data = _ref2.data,
-          props = _ref2.props;
-      return h(BVIconBase, Object(vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__["mergeData"])(data, {
-        staticClass: iconNameClass,
-        props: _objectSpread({}, props, {
-          content: svgContent
-        })
-      }));
-    }
-  });
+  return (
+    /*#__PURE__*/
+    _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
+      name: iconName,
+      functional: true,
+      props: _objectSpread({}, _icon_base__WEBPACK_IMPORTED_MODULE_3__["commonIconProps"], {
+        stacked: {
+          type: Boolean,
+          default: false
+        }
+      }),
+      render: function render(h, _ref) {
+        var data = _ref.data,
+            props = _ref.props;
+        return h(_icon_base__WEBPACK_IMPORTED_MODULE_3__["BVIconBase"], Object(vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__["mergeData"])(data, {
+          staticClass: iconNameClass,
+          props: _objectSpread({}, props, {
+            content: svgContent
+          })
+        }));
+      }
+    })
+  );
 };
 
 /***/ }),
@@ -26062,7 +26166,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
 /* harmony import */ var _utils_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/string */ "./node_modules/bootstrap-vue/esm/utils/string.js");
 /* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
-/* harmony import */ var _helpers_make_icon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/make-icon */ "./node_modules/bootstrap-vue/esm/icons/helpers/make-icon.js");
+/* harmony import */ var _helpers_icon_base__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/icon-base */ "./node_modules/bootstrap-vue/esm/icons/helpers/icon-base.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -26087,7 +26191,12 @@ _utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
       type: String,
       default: null
     }
-  }, _helpers_make_icon__WEBPACK_IMPORTED_MODULE_4__["commonIconProps"]),
+  }, _helpers_icon_base__WEBPACK_IMPORTED_MODULE_4__["commonIconProps"], {
+    stacked: {
+      type: Boolean,
+      default: false
+    }
+  }),
   render: function render(h, _ref) {
     var data = _ref.data,
         props = _ref.props,
@@ -26438,10 +26547,9 @@ __webpack_require__.r(__webpack_exports__);
 // --- BEGIN AUTO-GENERATED FILE ---
 //
 // @IconsVersion: 1.0.0-alpha2
-// @Generated: 2020-01-09T00:13:31.356Z
+// @Generated: 2020-02-01T18:38:07.347Z
 //
-// This file is generated on each build. Do not edit this file.
-//
+// This file is generated on each build. Do not edit this file!
 
 /*!
  * BootstrapVue Icons, generated from Bootstrap Icons 1.0.0-alpha2
@@ -27404,668 +27512,47 @@ Object(_helpers_make_icon__WEBPACK_IMPORTED_MODULE_0__["makeIcon"])('XSquareFill
 
 /***/ }),
 
-/***/ "./node_modules/bootstrap-vue/esm/icons/index.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/bootstrap-vue/esm/icons/index.js ***!
-  \*******************************************************/
-/*! exports provided: BIconBlank, BIconAlarm, BIconAlarmFill, BIconAlertCircle, BIconAlertCircleFill, BIconAlertOctagon, BIconAlertOctagonFill, BIconAlertSquare, BIconAlertSquareFill, BIconAlertTriangle, BIconAlertTriangleFill, BIconArchive, BIconArchiveFill, BIconArrowBarBottom, BIconArrowBarLeft, BIconArrowBarRight, BIconArrowBarUp, BIconArrowClockwise, BIconArrowCounterclockwise, BIconArrowDown, BIconArrowDownLeft, BIconArrowDownRight, BIconArrowDownShort, BIconArrowLeft, BIconArrowLeftRight, BIconArrowLeftShort, BIconArrowRepeat, BIconArrowRight, BIconArrowRightShort, BIconArrowUp, BIconArrowUpDown, BIconArrowUpLeft, BIconArrowUpRight, BIconArrowUpShort, BIconArrowsAngleContract, BIconArrowsAngleExpand, BIconArrowsCollapse, BIconArrowsExpand, BIconArrowsFullscreen, BIconAt, BIconAward, BIconBackspace, BIconBackspaceFill, BIconBackspaceReverse, BIconBackspaceReverseFill, BIconBarChart, BIconBarChartFill, BIconBattery, BIconBatteryCharging, BIconBatteryFull, BIconBell, BIconBellFill, BIconBlockquoteLeft, BIconBlockquoteRight, BIconBook, BIconBookHalfFill, BIconBookmark, BIconBookmarkFill, BIconBootstrap, BIconBootstrapFill, BIconBootstrapReboot, BIconBoxArrowBottomLeft, BIconBoxArrowBottomRight, BIconBoxArrowDown, BIconBoxArrowLeft, BIconBoxArrowRight, BIconBoxArrowUp, BIconBoxArrowUpLeft, BIconBoxArrowUpRight, BIconBraces, BIconBrightnessFillHigh, BIconBrightnessFillLow, BIconBrightnessHigh, BIconBrightnessLow, BIconBrush, BIconBucket, BIconBucketFill, BIconBuilding, BIconBullseye, BIconCalendar, BIconCalendarFill, BIconCamera, BIconCameraVideo, BIconCameraVideoFill, BIconCapslock, BIconCapslockFill, BIconChat, BIconChatFill, BIconCheck, BIconCheckBox, BIconCheckCircle, BIconChevronCompactDown, BIconChevronCompactLeft, BIconChevronCompactRight, BIconChevronCompactUp, BIconChevronDown, BIconChevronLeft, BIconChevronRight, BIconChevronUp, BIconCircle, BIconCircleFill, BIconCircleHalf, BIconCircleSlash, BIconClock, BIconClockFill, BIconCloud, BIconCloudDownload, BIconCloudFill, BIconCloudUpload, BIconCode, BIconCodeSlash, BIconColumns, BIconColumnsGutters, BIconCommand, BIconCompass, BIconCone, BIconConeStriped, BIconController, BIconCreditCard, BIconCursor, BIconCursorFill, BIconDash, BIconDiamond, BIconDiamondHalf, BIconDisplay, BIconDisplayFill, BIconDocument, BIconDocumentCode, BIconDocumentDiff, BIconDocumentRichtext, BIconDocumentSpreadsheet, BIconDocumentText, BIconDocuments, BIconDocumentsAlt, BIconDot, BIconDownload, BIconEggFried, BIconEject, BIconEjectFill, BIconEnvelope, BIconEnvelopeFill, BIconEnvelopeOpen, BIconEnvelopeOpenFill, BIconEye, BIconEyeFill, BIconEyeSlash, BIconEyeSlashFill, BIconFilter, BIconFlag, BIconFlagFill, BIconFolder, BIconFolderFill, BIconFolderSymlink, BIconFolderSymlinkFill, BIconFonts, BIconForward, BIconForwardFill, BIconGear, BIconGearFill, BIconGearWide, BIconGearWideConnected, BIconGeo, BIconGraphDown, BIconGraphUp, BIconGrid, BIconGridFill, BIconHammer, BIconHash, BIconHeart, BIconHeartFill, BIconHouse, BIconHouseFill, BIconImage, BIconImageAlt, BIconImageFill, BIconImages, BIconInbox, BIconInboxFill, BIconInboxes, BIconInboxesFill, BIconInfo, BIconInfoFill, BIconInfoSquare, BIconInfoSquareFill, BIconJustify, BIconJustifyLeft, BIconJustifyRight, BIconKanban, BIconKanbanFill, BIconLaptop, BIconLayoutSidebar, BIconLayoutSidebarReverse, BIconLayoutSplit, BIconList, BIconListCheck, BIconListOl, BIconListTask, BIconListUl, BIconLock, BIconLockFill, BIconMap, BIconMic, BIconMoon, BIconMusicPlayer, BIconMusicPlayerFill, BIconOption, BIconOutlet, BIconPause, BIconPauseFill, BIconPen, BIconPencil, BIconPeople, BIconPeopleFill, BIconPerson, BIconPersonFill, BIconPhone, BIconPhoneLandscape, BIconPieChart, BIconPieChartFill, BIconPlay, BIconPlayFill, BIconPlug, BIconPlus, BIconPower, BIconQuestion, BIconQuestionFill, BIconQuestionSquare, BIconQuestionSquareFill, BIconReply, BIconReplyAll, BIconReplyAllFill, BIconReplyFill, BIconScrewdriver, BIconSearch, BIconShield, BIconShieldFill, BIconShieldLock, BIconShieldLockFill, BIconShieldShaded, BIconShift, BIconShiftFill, BIconSkipBackward, BIconSkipBackwardFill, BIconSkipEnd, BIconSkipEndFill, BIconSkipForward, BIconSkipForwardFill, BIconSkipStart, BIconSkipStartFill, BIconSpeaker, BIconSquare, BIconSquareFill, BIconSquareHalf, BIconStar, BIconStarFill, BIconStarHalf, BIconStop, BIconStopFill, BIconStopwatch, BIconStopwatchFill, BIconSun, BIconTable, BIconTablet, BIconTabletLandscape, BIconTag, BIconTagFill, BIconTerminal, BIconTerminalFill, BIconTextCenter, BIconTextIndentLeft, BIconTextIndentRight, BIconTextLeft, BIconTextRight, BIconThreeDots, BIconThreeDotsVertical, BIconToggleOff, BIconToggleOn, BIconToggles, BIconTools, BIconTrash, BIconTrashFill, BIconTriangle, BIconTriangleFill, BIconTriangleHalf, BIconTrophy, BIconTv, BIconTvFill, BIconType, BIconTypeBold, BIconTypeH1, BIconTypeH2, BIconTypeH3, BIconTypeItalic, BIconTypeStrikethrough, BIconTypeUnderline, BIconUnlock, BIconUnlockFill, BIconUpload, BIconVolumeDown, BIconVolumeDownFill, BIconVolumeMute, BIconVolumeMuteFill, BIconVolumeUp, BIconVolumeUpFill, BIconWallet, BIconWatch, BIconWifi, BIconWindow, BIconWrench, BIconX, BIconXCircle, BIconXCircleFill, BIconXOctagon, BIconXOctagonFill, BIconXSquare, BIconXSquareFill, BIcon, IconsPlugin, BootstrapVueIcons, iconNames */
+/***/ "./node_modules/bootstrap-vue/esm/icons/iconstack.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/bootstrap-vue/esm/icons/iconstack.js ***!
+  \***********************************************************/
+/*! exports provided: BIconstack */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlank", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBlank"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarm", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlarm"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarmFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlarmFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertCircle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertCircleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagon", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertOctagon"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagonFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertOctagonFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquare", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertSquare"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquareFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertSquareFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertTriangle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAlertTriangleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchive", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArchive"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchiveFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArchiveFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarBottom", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowBarBottom"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowBarLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowBarRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowBarUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowClockwise", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowClockwise"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowCounterclockwise", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowCounterclockwise"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowDownLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowDownRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownShort", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowDownShort"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowLeftRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftShort", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowLeftShort"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRepeat", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowRepeat"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRightShort", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowRightShort"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowUpDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowUpLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowUpRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpShort", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowUpShort"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleContract", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowsAngleContract"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleExpand", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowsAngleExpand"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsCollapse", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowsCollapse"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsExpand", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowsExpand"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsFullscreen", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconArrowsFullscreen"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAt", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAward", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconAward"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspace", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBackspace"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBackspaceFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverse", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBackspaceReverse"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverseFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBackspaceReverseFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChart", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBarChart"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChartFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBarChartFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBattery", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBattery"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryCharging", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBatteryCharging"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryFull", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBatteryFull"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBell", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBell"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBellFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBellFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBlockquoteLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBlockquoteRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBook", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBook"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookHalfFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBookHalfFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmark", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBookmark"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmarkFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBookmarkFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrap", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBootstrap"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBootstrapFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapReboot", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBootstrapReboot"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowBottomLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowBottomRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowUpLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBoxArrowUpRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBraces", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBraces"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillHigh", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBrightnessFillHigh"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillLow", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBrightnessFillLow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessHigh", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBrightnessHigh"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessLow", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBrightnessLow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrush", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBrush"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucket", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBucket"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucketFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBucketFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBuilding", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBuilding"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBullseye", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconBullseye"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendar", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCalendar"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendarFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCalendarFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCamera", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCamera"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideo", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCameraVideo"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideoFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCameraVideoFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslock", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCapslock"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslockFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCapslockFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChat", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChat"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChatFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChatFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheck", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCheck"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckBox", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCheckBox"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckCircle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCheckCircle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronCompactDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronCompactLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronCompactRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronCompactUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconChevronUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCircle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCircleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleHalf", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCircleHalf"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleSlash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCircleSlash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClock", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconClock"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClockFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconClockFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloud", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCloud"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudDownload", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCloudDownload"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCloudFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudUpload", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCloudUpload"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCode", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCode"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCodeSlash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCodeSlash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumns", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconColumns"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumnsGutters", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconColumnsGutters"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCommand", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCommand"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCompass", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCompass"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCone", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCone"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconConeStriped", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconConeStriped"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconController", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconController"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCreditCard", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCreditCard"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursor", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCursor"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursorFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconCursorFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamond", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDiamond"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamondHalf", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDiamondHalf"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplay", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDisplay"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplayFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDisplayFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocument", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocument"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentCode", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentCode"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentDiff", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentDiff"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentRichtext", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentRichtext"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentSpreadsheet", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentSpreadsheet"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentText", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentText"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocuments", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocuments"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentsAlt", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDocumentsAlt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDot", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDot"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDownload", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconDownload"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEggFried", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEggFried"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEject", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEject"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEjectFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEjectFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelope", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEnvelope"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEnvelopeFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpen", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEnvelopeOpen"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpenFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEnvelopeOpenFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEye", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEye"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEyeFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEyeSlash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlashFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconEyeSlashFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFilter", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFilter"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlag", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFlag"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlagFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFlagFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolder", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFolder"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFolderFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlink", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFolderSymlink"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlinkFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFolderSymlinkFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFonts", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconFonts"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForward", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconForward"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForwardFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconForwardFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGear", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGear"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGearFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWide", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGearWide"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWideConnected", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGearWideConnected"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGeo", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGeo"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGraphDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGraphUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGrid", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGrid"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGridFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconGridFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHammer", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHammer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeart", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHeart"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeartFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHeartFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouse", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHouse"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouseFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconHouseFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImage", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconImage"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageAlt", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconImageAlt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconImageFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImages", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconImages"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInbox", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInbox"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInboxFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxes", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInboxes"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxesFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInboxesFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfo", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInfo"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInfoFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquare", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInfoSquare"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquareFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconInfoSquareFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustify", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconJustify"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconJustifyLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconJustifyRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanban", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconKanban"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanbanFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconKanbanFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLaptop", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLaptop"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebar", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLayoutSidebar"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebarReverse", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLayoutSidebarReverse"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSplit", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLayoutSplit"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconList", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconList"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListCheck", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconListCheck"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListOl", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconListOl"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListTask", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconListTask"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListUl", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconListUl"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLock", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLock"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLockFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconLockFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMap", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconMap"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMic", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconMic"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMoon", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconMoon"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayer", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconMusicPlayer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayerFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconMusicPlayerFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOption", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconOption"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOutlet", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconOutlet"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPause", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPause"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPauseFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPauseFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPen", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPen"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPencil", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPencil"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeople", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPeople"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeopleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPeopleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPerson", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPerson"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPersonFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPersonFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhone", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPhone"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhoneLandscape", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPhoneLandscape"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChart", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPieChart"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChartFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPieChartFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlay", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPlay"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlayFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPlayFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlug", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPlug"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlus", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPlus"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPower", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconPower"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestion", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconQuestion"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconQuestionFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquare", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconQuestionSquare"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquareFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconQuestionSquareFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReply", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconReply"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAll", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconReplyAll"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAllFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconReplyAllFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconReplyFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconScrewdriver", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconScrewdriver"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSearch", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSearch"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShield", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShield"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShieldFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLock", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShieldLock"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLockFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShieldLockFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldShaded", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShieldShaded"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShift", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShift"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShiftFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconShiftFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackward", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipBackward"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackwardFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipBackwardFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEnd", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipEnd"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEndFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipEndFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForward", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipForward"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForwardFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipForwardFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStart", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipStart"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStartFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSkipStartFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSpeaker", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSpeaker"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquare", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSquare"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSquareFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareHalf", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSquareHalf"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStar", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStar"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStarFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarHalf", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStarHalf"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStop", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStop"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStopFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatch", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStopwatch"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatchFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconStopwatchFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSun", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconSun"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTable", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTable"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTablet", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTablet"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTabletLandscape", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTabletLandscape"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTag", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTag"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTagFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTagFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminal", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTerminal"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminalFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTerminalFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextCenter", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTextCenter"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTextIndentLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTextIndentRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextLeft", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTextLeft"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextRight", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTextRight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDots", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconThreeDots"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDotsVertical", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconThreeDotsVertical"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOff", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconToggleOff"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOn", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconToggleOn"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggles", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconToggles"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTools", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTools"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrash", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTrash"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrashFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTrashFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTriangle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTriangleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleHalf", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTriangleHalf"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrophy", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTrophy"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTv", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTv"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTvFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTvFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconType", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconType"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeBold", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeBold"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH1", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeH1"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH2", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeH2"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH3", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeH3"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeItalic", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeItalic"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeStrikethrough", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeStrikethrough"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeUnderline", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconTypeUnderline"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlock", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconUnlock"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlockFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconUnlockFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUpload", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconUpload"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDown", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeDown"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDownFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeDownFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMute", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeMute"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMuteFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeMuteFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUp", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeUp"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUpFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconVolumeUpFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWallet", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconWallet"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWatch", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconWatch"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWifi", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconWifi"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWindow", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconWindow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWrench", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconWrench"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconX", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconX"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircle", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXCircle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircleFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXCircleFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagon", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXOctagon"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagonFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXOctagonFill"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquare", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXSquare"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquareFill", function() { return _icons__WEBPACK_IMPORTED_MODULE_0__["BIconXSquareFill"]; });
-
-/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icon */ "./node_modules/bootstrap-vue/esm/icons/icon.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIcon", function() { return _icon__WEBPACK_IMPORTED_MODULE_1__["BIcon"]; });
-
-/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugin */ "./node_modules/bootstrap-vue/esm/icons/plugin.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "IconsPlugin", function() { return _plugin__WEBPACK_IMPORTED_MODULE_2__["IconsPlugin"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BootstrapVueIcons", function() { return _plugin__WEBPACK_IMPORTED_MODULE_2__["BootstrapVueIcons"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "iconNames", function() { return _plugin__WEBPACK_IMPORTED_MODULE_2__["iconNames"]; });
-
-// Icons Plugin
-// These re-exports are not currently used, as Webpack 4 has
-// issues with tree shaking re-exports of re-exports
-// `/src/index.js` does a single level re-export `* from './icons/icons/icons'`
-// Export all icons
- // Export helper component
-
- // Plugin (an iconNames for docs)
-
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BIconstack", function() { return BIconstack; });
+/* harmony import */ var _utils_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vue */ "./node_modules/bootstrap-vue/esm/utils/vue.js");
+/* harmony import */ var vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
+/* harmony import */ var _helpers_icon_base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers/icon-base */ "./node_modules/bootstrap-vue/esm/icons/helpers/icon-base.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+ // @vue/component
+
+var BIconstack =
+/*#__PURE__*/
+_utils_vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
+  name: 'BIconstack',
+  functional: true,
+  props: _objectSpread({}, _helpers_icon_base__WEBPACK_IMPORTED_MODULE_2__["commonIconProps"]),
+  render: function render(h, _ref) {
+    var data = _ref.data,
+        props = _ref.props,
+        children = _ref.children;
+    return h(_helpers_icon_base__WEBPACK_IMPORTED_MODULE_2__["BVIconBase"], Object(vue_functional_data_merge__WEBPACK_IMPORTED_MODULE_1__["mergeData"])(data, {
+      staticClass: 'b-iconstack',
+      props: _objectSpread({}, props, {
+        stacked: false
+      })
+    }), children);
+  }
+});
 
 /***/ }),
 
@@ -28083,15 +27570,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BootstrapVueIcons", function() { return BootstrapVueIcons; });
 /* harmony import */ var _utils_plugins__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/plugins */ "./node_modules/bootstrap-vue/esm/utils/plugins.js");
 /* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icon */ "./node_modules/bootstrap-vue/esm/icons/icon.js");
-/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
+/* harmony import */ var _iconstack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./iconstack */ "./node_modules/bootstrap-vue/esm/icons/iconstack.js");
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
 // --- BEGIN AUTO-GENERATED FILE ---
 //
 // @IconsVersion: 1.0.0-alpha2
-// @Generated: 2020-01-09T00:13:31.356Z
+// @Generated: 2020-02-01T18:38:07.347Z
 //
-// This file is generated on each build. Do not edit this file.
-//
+// This file is generated on each build. Do not edit this file!
  // Icon helper component
+
+ // Icon stacking component
 
 
  // Icon component names for used in the docs
@@ -28106,324 +27595,326 @@ Object(_utils_plugins__WEBPACK_IMPORTED_MODULE_0__["pluginFactoryNoConfig"])({
   components: {
     // Icon helper component
     BIcon: _icon__WEBPACK_IMPORTED_MODULE_1__["BIcon"],
+    // Icon stacking component
+    BIconstack: _iconstack__WEBPACK_IMPORTED_MODULE_2__["BIconstack"],
     // BootstrapVue custom icon components
-    BIconBlank: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBlank"],
+    BIconBlank: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBlank"],
     // Bootstrap icon components
-    BIconAlarm: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlarm"],
-    BIconAlarmFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlarmFill"],
-    BIconAlertCircle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertCircle"],
-    BIconAlertCircleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertCircleFill"],
-    BIconAlertOctagon: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertOctagon"],
-    BIconAlertOctagonFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertOctagonFill"],
-    BIconAlertSquare: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertSquare"],
-    BIconAlertSquareFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertSquareFill"],
-    BIconAlertTriangle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertTriangle"],
-    BIconAlertTriangleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAlertTriangleFill"],
-    BIconArchive: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArchive"],
-    BIconArchiveFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArchiveFill"],
-    BIconArrowBarBottom: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowBarBottom"],
-    BIconArrowBarLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowBarLeft"],
-    BIconArrowBarRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowBarRight"],
-    BIconArrowBarUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowBarUp"],
-    BIconArrowClockwise: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowClockwise"],
-    BIconArrowCounterclockwise: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowCounterclockwise"],
-    BIconArrowDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowDown"],
-    BIconArrowDownLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowDownLeft"],
-    BIconArrowDownRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowDownRight"],
-    BIconArrowDownShort: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowDownShort"],
-    BIconArrowLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowLeft"],
-    BIconArrowLeftRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowLeftRight"],
-    BIconArrowLeftShort: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowLeftShort"],
-    BIconArrowRepeat: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowRepeat"],
-    BIconArrowRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowRight"],
-    BIconArrowRightShort: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowRightShort"],
-    BIconArrowUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowUp"],
-    BIconArrowUpDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowUpDown"],
-    BIconArrowUpLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowUpLeft"],
-    BIconArrowUpRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowUpRight"],
-    BIconArrowUpShort: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowUpShort"],
-    BIconArrowsAngleContract: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowsAngleContract"],
-    BIconArrowsAngleExpand: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowsAngleExpand"],
-    BIconArrowsCollapse: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowsCollapse"],
-    BIconArrowsExpand: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowsExpand"],
-    BIconArrowsFullscreen: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconArrowsFullscreen"],
-    BIconAt: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAt"],
-    BIconAward: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconAward"],
-    BIconBackspace: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBackspace"],
-    BIconBackspaceFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBackspaceFill"],
-    BIconBackspaceReverse: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBackspaceReverse"],
-    BIconBackspaceReverseFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBackspaceReverseFill"],
-    BIconBarChart: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBarChart"],
-    BIconBarChartFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBarChartFill"],
-    BIconBattery: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBattery"],
-    BIconBatteryCharging: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBatteryCharging"],
-    BIconBatteryFull: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBatteryFull"],
-    BIconBell: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBell"],
-    BIconBellFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBellFill"],
-    BIconBlockquoteLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBlockquoteLeft"],
-    BIconBlockquoteRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBlockquoteRight"],
-    BIconBook: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBook"],
-    BIconBookHalfFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBookHalfFill"],
-    BIconBookmark: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBookmark"],
-    BIconBookmarkFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBookmarkFill"],
-    BIconBootstrap: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBootstrap"],
-    BIconBootstrapFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBootstrapFill"],
-    BIconBootstrapReboot: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBootstrapReboot"],
-    BIconBoxArrowBottomLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowBottomLeft"],
-    BIconBoxArrowBottomRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowBottomRight"],
-    BIconBoxArrowDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowDown"],
-    BIconBoxArrowLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowLeft"],
-    BIconBoxArrowRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowRight"],
-    BIconBoxArrowUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowUp"],
-    BIconBoxArrowUpLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowUpLeft"],
-    BIconBoxArrowUpRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBoxArrowUpRight"],
-    BIconBraces: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBraces"],
-    BIconBrightnessFillHigh: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBrightnessFillHigh"],
-    BIconBrightnessFillLow: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBrightnessFillLow"],
-    BIconBrightnessHigh: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBrightnessHigh"],
-    BIconBrightnessLow: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBrightnessLow"],
-    BIconBrush: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBrush"],
-    BIconBucket: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBucket"],
-    BIconBucketFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBucketFill"],
-    BIconBuilding: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBuilding"],
-    BIconBullseye: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconBullseye"],
-    BIconCalendar: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCalendar"],
-    BIconCalendarFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCalendarFill"],
-    BIconCamera: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCamera"],
-    BIconCameraVideo: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCameraVideo"],
-    BIconCameraVideoFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCameraVideoFill"],
-    BIconCapslock: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCapslock"],
-    BIconCapslockFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCapslockFill"],
-    BIconChat: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChat"],
-    BIconChatFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChatFill"],
-    BIconCheck: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCheck"],
-    BIconCheckBox: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCheckBox"],
-    BIconCheckCircle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCheckCircle"],
-    BIconChevronCompactDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronCompactDown"],
-    BIconChevronCompactLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronCompactLeft"],
-    BIconChevronCompactRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronCompactRight"],
-    BIconChevronCompactUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronCompactUp"],
-    BIconChevronDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronDown"],
-    BIconChevronLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronLeft"],
-    BIconChevronRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronRight"],
-    BIconChevronUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconChevronUp"],
-    BIconCircle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCircle"],
-    BIconCircleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCircleFill"],
-    BIconCircleHalf: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCircleHalf"],
-    BIconCircleSlash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCircleSlash"],
-    BIconClock: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconClock"],
-    BIconClockFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconClockFill"],
-    BIconCloud: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCloud"],
-    BIconCloudDownload: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCloudDownload"],
-    BIconCloudFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCloudFill"],
-    BIconCloudUpload: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCloudUpload"],
-    BIconCode: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCode"],
-    BIconCodeSlash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCodeSlash"],
-    BIconColumns: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconColumns"],
-    BIconColumnsGutters: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconColumnsGutters"],
-    BIconCommand: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCommand"],
-    BIconCompass: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCompass"],
-    BIconCone: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCone"],
-    BIconConeStriped: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconConeStriped"],
-    BIconController: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconController"],
-    BIconCreditCard: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCreditCard"],
-    BIconCursor: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCursor"],
-    BIconCursorFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconCursorFill"],
-    BIconDash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDash"],
-    BIconDiamond: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDiamond"],
-    BIconDiamondHalf: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDiamondHalf"],
-    BIconDisplay: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDisplay"],
-    BIconDisplayFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDisplayFill"],
-    BIconDocument: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocument"],
-    BIconDocumentCode: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentCode"],
-    BIconDocumentDiff: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentDiff"],
-    BIconDocumentRichtext: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentRichtext"],
-    BIconDocumentSpreadsheet: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentSpreadsheet"],
-    BIconDocumentText: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentText"],
-    BIconDocuments: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocuments"],
-    BIconDocumentsAlt: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDocumentsAlt"],
-    BIconDot: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDot"],
-    BIconDownload: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconDownload"],
-    BIconEggFried: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEggFried"],
-    BIconEject: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEject"],
-    BIconEjectFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEjectFill"],
-    BIconEnvelope: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEnvelope"],
-    BIconEnvelopeFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEnvelopeFill"],
-    BIconEnvelopeOpen: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEnvelopeOpen"],
-    BIconEnvelopeOpenFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEnvelopeOpenFill"],
-    BIconEye: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEye"],
-    BIconEyeFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEyeFill"],
-    BIconEyeSlash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEyeSlash"],
-    BIconEyeSlashFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconEyeSlashFill"],
-    BIconFilter: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFilter"],
-    BIconFlag: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFlag"],
-    BIconFlagFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFlagFill"],
-    BIconFolder: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFolder"],
-    BIconFolderFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFolderFill"],
-    BIconFolderSymlink: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFolderSymlink"],
-    BIconFolderSymlinkFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFolderSymlinkFill"],
-    BIconFonts: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconFonts"],
-    BIconForward: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconForward"],
-    BIconForwardFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconForwardFill"],
-    BIconGear: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGear"],
-    BIconGearFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGearFill"],
-    BIconGearWide: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGearWide"],
-    BIconGearWideConnected: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGearWideConnected"],
-    BIconGeo: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGeo"],
-    BIconGraphDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGraphDown"],
-    BIconGraphUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGraphUp"],
-    BIconGrid: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGrid"],
-    BIconGridFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconGridFill"],
-    BIconHammer: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHammer"],
-    BIconHash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHash"],
-    BIconHeart: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHeart"],
-    BIconHeartFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHeartFill"],
-    BIconHouse: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHouse"],
-    BIconHouseFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconHouseFill"],
-    BIconImage: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconImage"],
-    BIconImageAlt: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconImageAlt"],
-    BIconImageFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconImageFill"],
-    BIconImages: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconImages"],
-    BIconInbox: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInbox"],
-    BIconInboxFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInboxFill"],
-    BIconInboxes: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInboxes"],
-    BIconInboxesFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInboxesFill"],
-    BIconInfo: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInfo"],
-    BIconInfoFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInfoFill"],
-    BIconInfoSquare: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInfoSquare"],
-    BIconInfoSquareFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconInfoSquareFill"],
-    BIconJustify: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconJustify"],
-    BIconJustifyLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconJustifyLeft"],
-    BIconJustifyRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconJustifyRight"],
-    BIconKanban: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconKanban"],
-    BIconKanbanFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconKanbanFill"],
-    BIconLaptop: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLaptop"],
-    BIconLayoutSidebar: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLayoutSidebar"],
-    BIconLayoutSidebarReverse: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLayoutSidebarReverse"],
-    BIconLayoutSplit: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLayoutSplit"],
-    BIconList: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconList"],
-    BIconListCheck: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconListCheck"],
-    BIconListOl: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconListOl"],
-    BIconListTask: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconListTask"],
-    BIconListUl: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconListUl"],
-    BIconLock: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLock"],
-    BIconLockFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconLockFill"],
-    BIconMap: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconMap"],
-    BIconMic: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconMic"],
-    BIconMoon: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconMoon"],
-    BIconMusicPlayer: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconMusicPlayer"],
-    BIconMusicPlayerFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconMusicPlayerFill"],
-    BIconOption: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconOption"],
-    BIconOutlet: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconOutlet"],
-    BIconPause: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPause"],
-    BIconPauseFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPauseFill"],
-    BIconPen: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPen"],
-    BIconPencil: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPencil"],
-    BIconPeople: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPeople"],
-    BIconPeopleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPeopleFill"],
-    BIconPerson: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPerson"],
-    BIconPersonFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPersonFill"],
-    BIconPhone: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPhone"],
-    BIconPhoneLandscape: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPhoneLandscape"],
-    BIconPieChart: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPieChart"],
-    BIconPieChartFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPieChartFill"],
-    BIconPlay: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPlay"],
-    BIconPlayFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPlayFill"],
-    BIconPlug: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPlug"],
-    BIconPlus: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPlus"],
-    BIconPower: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconPower"],
-    BIconQuestion: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconQuestion"],
-    BIconQuestionFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconQuestionFill"],
-    BIconQuestionSquare: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconQuestionSquare"],
-    BIconQuestionSquareFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconQuestionSquareFill"],
-    BIconReply: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconReply"],
-    BIconReplyAll: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconReplyAll"],
-    BIconReplyAllFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconReplyAllFill"],
-    BIconReplyFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconReplyFill"],
-    BIconScrewdriver: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconScrewdriver"],
-    BIconSearch: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSearch"],
-    BIconShield: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShield"],
-    BIconShieldFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShieldFill"],
-    BIconShieldLock: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShieldLock"],
-    BIconShieldLockFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShieldLockFill"],
-    BIconShieldShaded: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShieldShaded"],
-    BIconShift: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShift"],
-    BIconShiftFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconShiftFill"],
-    BIconSkipBackward: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipBackward"],
-    BIconSkipBackwardFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipBackwardFill"],
-    BIconSkipEnd: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipEnd"],
-    BIconSkipEndFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipEndFill"],
-    BIconSkipForward: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipForward"],
-    BIconSkipForwardFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipForwardFill"],
-    BIconSkipStart: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipStart"],
-    BIconSkipStartFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSkipStartFill"],
-    BIconSpeaker: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSpeaker"],
-    BIconSquare: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSquare"],
-    BIconSquareFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSquareFill"],
-    BIconSquareHalf: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSquareHalf"],
-    BIconStar: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStar"],
-    BIconStarFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStarFill"],
-    BIconStarHalf: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStarHalf"],
-    BIconStop: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStop"],
-    BIconStopFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStopFill"],
-    BIconStopwatch: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStopwatch"],
-    BIconStopwatchFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconStopwatchFill"],
-    BIconSun: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconSun"],
-    BIconTable: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTable"],
-    BIconTablet: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTablet"],
-    BIconTabletLandscape: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTabletLandscape"],
-    BIconTag: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTag"],
-    BIconTagFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTagFill"],
-    BIconTerminal: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTerminal"],
-    BIconTerminalFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTerminalFill"],
-    BIconTextCenter: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTextCenter"],
-    BIconTextIndentLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTextIndentLeft"],
-    BIconTextIndentRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTextIndentRight"],
-    BIconTextLeft: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTextLeft"],
-    BIconTextRight: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTextRight"],
-    BIconThreeDots: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconThreeDots"],
-    BIconThreeDotsVertical: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconThreeDotsVertical"],
-    BIconToggleOff: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconToggleOff"],
-    BIconToggleOn: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconToggleOn"],
-    BIconToggles: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconToggles"],
-    BIconTools: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTools"],
-    BIconTrash: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTrash"],
-    BIconTrashFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTrashFill"],
-    BIconTriangle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTriangle"],
-    BIconTriangleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTriangleFill"],
-    BIconTriangleHalf: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTriangleHalf"],
-    BIconTrophy: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTrophy"],
-    BIconTv: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTv"],
-    BIconTvFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTvFill"],
-    BIconType: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconType"],
-    BIconTypeBold: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeBold"],
-    BIconTypeH1: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeH1"],
-    BIconTypeH2: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeH2"],
-    BIconTypeH3: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeH3"],
-    BIconTypeItalic: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeItalic"],
-    BIconTypeStrikethrough: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeStrikethrough"],
-    BIconTypeUnderline: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconTypeUnderline"],
-    BIconUnlock: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconUnlock"],
-    BIconUnlockFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconUnlockFill"],
-    BIconUpload: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconUpload"],
-    BIconVolumeDown: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeDown"],
-    BIconVolumeDownFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeDownFill"],
-    BIconVolumeMute: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeMute"],
-    BIconVolumeMuteFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeMuteFill"],
-    BIconVolumeUp: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeUp"],
-    BIconVolumeUpFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconVolumeUpFill"],
-    BIconWallet: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconWallet"],
-    BIconWatch: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconWatch"],
-    BIconWifi: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconWifi"],
-    BIconWindow: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconWindow"],
-    BIconWrench: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconWrench"],
-    BIconX: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconX"],
-    BIconXCircle: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXCircle"],
-    BIconXCircleFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXCircleFill"],
-    BIconXOctagon: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXOctagon"],
-    BIconXOctagonFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXOctagonFill"],
-    BIconXSquare: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXSquare"],
-    BIconXSquareFill: _icons__WEBPACK_IMPORTED_MODULE_2__["BIconXSquareFill"]
+    BIconAlarm: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlarm"],
+    BIconAlarmFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlarmFill"],
+    BIconAlertCircle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertCircle"],
+    BIconAlertCircleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertCircleFill"],
+    BIconAlertOctagon: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertOctagon"],
+    BIconAlertOctagonFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertOctagonFill"],
+    BIconAlertSquare: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertSquare"],
+    BIconAlertSquareFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertSquareFill"],
+    BIconAlertTriangle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertTriangle"],
+    BIconAlertTriangleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAlertTriangleFill"],
+    BIconArchive: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArchive"],
+    BIconArchiveFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArchiveFill"],
+    BIconArrowBarBottom: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowBarBottom"],
+    BIconArrowBarLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowBarLeft"],
+    BIconArrowBarRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowBarRight"],
+    BIconArrowBarUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowBarUp"],
+    BIconArrowClockwise: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowClockwise"],
+    BIconArrowCounterclockwise: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowCounterclockwise"],
+    BIconArrowDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowDown"],
+    BIconArrowDownLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowDownLeft"],
+    BIconArrowDownRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowDownRight"],
+    BIconArrowDownShort: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowDownShort"],
+    BIconArrowLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowLeft"],
+    BIconArrowLeftRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowLeftRight"],
+    BIconArrowLeftShort: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowLeftShort"],
+    BIconArrowRepeat: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowRepeat"],
+    BIconArrowRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowRight"],
+    BIconArrowRightShort: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowRightShort"],
+    BIconArrowUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowUp"],
+    BIconArrowUpDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowUpDown"],
+    BIconArrowUpLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowUpLeft"],
+    BIconArrowUpRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowUpRight"],
+    BIconArrowUpShort: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowUpShort"],
+    BIconArrowsAngleContract: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowsAngleContract"],
+    BIconArrowsAngleExpand: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowsAngleExpand"],
+    BIconArrowsCollapse: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowsCollapse"],
+    BIconArrowsExpand: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowsExpand"],
+    BIconArrowsFullscreen: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconArrowsFullscreen"],
+    BIconAt: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAt"],
+    BIconAward: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconAward"],
+    BIconBackspace: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBackspace"],
+    BIconBackspaceFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBackspaceFill"],
+    BIconBackspaceReverse: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBackspaceReverse"],
+    BIconBackspaceReverseFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBackspaceReverseFill"],
+    BIconBarChart: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBarChart"],
+    BIconBarChartFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBarChartFill"],
+    BIconBattery: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBattery"],
+    BIconBatteryCharging: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBatteryCharging"],
+    BIconBatteryFull: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBatteryFull"],
+    BIconBell: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBell"],
+    BIconBellFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBellFill"],
+    BIconBlockquoteLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBlockquoteLeft"],
+    BIconBlockquoteRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBlockquoteRight"],
+    BIconBook: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBook"],
+    BIconBookHalfFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBookHalfFill"],
+    BIconBookmark: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBookmark"],
+    BIconBookmarkFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBookmarkFill"],
+    BIconBootstrap: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBootstrap"],
+    BIconBootstrapFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBootstrapFill"],
+    BIconBootstrapReboot: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBootstrapReboot"],
+    BIconBoxArrowBottomLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowBottomLeft"],
+    BIconBoxArrowBottomRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowBottomRight"],
+    BIconBoxArrowDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowDown"],
+    BIconBoxArrowLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowLeft"],
+    BIconBoxArrowRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowRight"],
+    BIconBoxArrowUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowUp"],
+    BIconBoxArrowUpLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowUpLeft"],
+    BIconBoxArrowUpRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBoxArrowUpRight"],
+    BIconBraces: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBraces"],
+    BIconBrightnessFillHigh: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBrightnessFillHigh"],
+    BIconBrightnessFillLow: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBrightnessFillLow"],
+    BIconBrightnessHigh: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBrightnessHigh"],
+    BIconBrightnessLow: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBrightnessLow"],
+    BIconBrush: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBrush"],
+    BIconBucket: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBucket"],
+    BIconBucketFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBucketFill"],
+    BIconBuilding: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBuilding"],
+    BIconBullseye: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconBullseye"],
+    BIconCalendar: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCalendar"],
+    BIconCalendarFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCalendarFill"],
+    BIconCamera: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCamera"],
+    BIconCameraVideo: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCameraVideo"],
+    BIconCameraVideoFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCameraVideoFill"],
+    BIconCapslock: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCapslock"],
+    BIconCapslockFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCapslockFill"],
+    BIconChat: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChat"],
+    BIconChatFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChatFill"],
+    BIconCheck: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCheck"],
+    BIconCheckBox: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCheckBox"],
+    BIconCheckCircle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCheckCircle"],
+    BIconChevronCompactDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronCompactDown"],
+    BIconChevronCompactLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronCompactLeft"],
+    BIconChevronCompactRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronCompactRight"],
+    BIconChevronCompactUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronCompactUp"],
+    BIconChevronDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronDown"],
+    BIconChevronLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronLeft"],
+    BIconChevronRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronRight"],
+    BIconChevronUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconChevronUp"],
+    BIconCircle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCircle"],
+    BIconCircleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCircleFill"],
+    BIconCircleHalf: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCircleHalf"],
+    BIconCircleSlash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCircleSlash"],
+    BIconClock: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconClock"],
+    BIconClockFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconClockFill"],
+    BIconCloud: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCloud"],
+    BIconCloudDownload: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCloudDownload"],
+    BIconCloudFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCloudFill"],
+    BIconCloudUpload: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCloudUpload"],
+    BIconCode: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCode"],
+    BIconCodeSlash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCodeSlash"],
+    BIconColumns: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconColumns"],
+    BIconColumnsGutters: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconColumnsGutters"],
+    BIconCommand: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCommand"],
+    BIconCompass: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCompass"],
+    BIconCone: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCone"],
+    BIconConeStriped: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconConeStriped"],
+    BIconController: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconController"],
+    BIconCreditCard: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCreditCard"],
+    BIconCursor: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCursor"],
+    BIconCursorFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconCursorFill"],
+    BIconDash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDash"],
+    BIconDiamond: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDiamond"],
+    BIconDiamondHalf: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDiamondHalf"],
+    BIconDisplay: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDisplay"],
+    BIconDisplayFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDisplayFill"],
+    BIconDocument: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocument"],
+    BIconDocumentCode: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentCode"],
+    BIconDocumentDiff: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentDiff"],
+    BIconDocumentRichtext: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentRichtext"],
+    BIconDocumentSpreadsheet: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentSpreadsheet"],
+    BIconDocumentText: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentText"],
+    BIconDocuments: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocuments"],
+    BIconDocumentsAlt: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDocumentsAlt"],
+    BIconDot: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDot"],
+    BIconDownload: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconDownload"],
+    BIconEggFried: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEggFried"],
+    BIconEject: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEject"],
+    BIconEjectFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEjectFill"],
+    BIconEnvelope: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEnvelope"],
+    BIconEnvelopeFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEnvelopeFill"],
+    BIconEnvelopeOpen: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEnvelopeOpen"],
+    BIconEnvelopeOpenFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEnvelopeOpenFill"],
+    BIconEye: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEye"],
+    BIconEyeFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEyeFill"],
+    BIconEyeSlash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEyeSlash"],
+    BIconEyeSlashFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconEyeSlashFill"],
+    BIconFilter: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFilter"],
+    BIconFlag: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFlag"],
+    BIconFlagFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFlagFill"],
+    BIconFolder: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFolder"],
+    BIconFolderFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFolderFill"],
+    BIconFolderSymlink: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFolderSymlink"],
+    BIconFolderSymlinkFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFolderSymlinkFill"],
+    BIconFonts: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconFonts"],
+    BIconForward: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconForward"],
+    BIconForwardFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconForwardFill"],
+    BIconGear: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGear"],
+    BIconGearFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGearFill"],
+    BIconGearWide: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGearWide"],
+    BIconGearWideConnected: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGearWideConnected"],
+    BIconGeo: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGeo"],
+    BIconGraphDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGraphDown"],
+    BIconGraphUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGraphUp"],
+    BIconGrid: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGrid"],
+    BIconGridFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconGridFill"],
+    BIconHammer: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHammer"],
+    BIconHash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHash"],
+    BIconHeart: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHeart"],
+    BIconHeartFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHeartFill"],
+    BIconHouse: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHouse"],
+    BIconHouseFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconHouseFill"],
+    BIconImage: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconImage"],
+    BIconImageAlt: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconImageAlt"],
+    BIconImageFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconImageFill"],
+    BIconImages: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconImages"],
+    BIconInbox: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInbox"],
+    BIconInboxFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInboxFill"],
+    BIconInboxes: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInboxes"],
+    BIconInboxesFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInboxesFill"],
+    BIconInfo: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInfo"],
+    BIconInfoFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInfoFill"],
+    BIconInfoSquare: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInfoSquare"],
+    BIconInfoSquareFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconInfoSquareFill"],
+    BIconJustify: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconJustify"],
+    BIconJustifyLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconJustifyLeft"],
+    BIconJustifyRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconJustifyRight"],
+    BIconKanban: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconKanban"],
+    BIconKanbanFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconKanbanFill"],
+    BIconLaptop: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLaptop"],
+    BIconLayoutSidebar: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLayoutSidebar"],
+    BIconLayoutSidebarReverse: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLayoutSidebarReverse"],
+    BIconLayoutSplit: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLayoutSplit"],
+    BIconList: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconList"],
+    BIconListCheck: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconListCheck"],
+    BIconListOl: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconListOl"],
+    BIconListTask: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconListTask"],
+    BIconListUl: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconListUl"],
+    BIconLock: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLock"],
+    BIconLockFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconLockFill"],
+    BIconMap: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconMap"],
+    BIconMic: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconMic"],
+    BIconMoon: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconMoon"],
+    BIconMusicPlayer: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconMusicPlayer"],
+    BIconMusicPlayerFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconMusicPlayerFill"],
+    BIconOption: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconOption"],
+    BIconOutlet: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconOutlet"],
+    BIconPause: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPause"],
+    BIconPauseFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPauseFill"],
+    BIconPen: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPen"],
+    BIconPencil: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPencil"],
+    BIconPeople: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPeople"],
+    BIconPeopleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPeopleFill"],
+    BIconPerson: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPerson"],
+    BIconPersonFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPersonFill"],
+    BIconPhone: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPhone"],
+    BIconPhoneLandscape: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPhoneLandscape"],
+    BIconPieChart: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPieChart"],
+    BIconPieChartFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPieChartFill"],
+    BIconPlay: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPlay"],
+    BIconPlayFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPlayFill"],
+    BIconPlug: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPlug"],
+    BIconPlus: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPlus"],
+    BIconPower: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconPower"],
+    BIconQuestion: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconQuestion"],
+    BIconQuestionFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconQuestionFill"],
+    BIconQuestionSquare: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconQuestionSquare"],
+    BIconQuestionSquareFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconQuestionSquareFill"],
+    BIconReply: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconReply"],
+    BIconReplyAll: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconReplyAll"],
+    BIconReplyAllFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconReplyAllFill"],
+    BIconReplyFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconReplyFill"],
+    BIconScrewdriver: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconScrewdriver"],
+    BIconSearch: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSearch"],
+    BIconShield: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShield"],
+    BIconShieldFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShieldFill"],
+    BIconShieldLock: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShieldLock"],
+    BIconShieldLockFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShieldLockFill"],
+    BIconShieldShaded: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShieldShaded"],
+    BIconShift: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShift"],
+    BIconShiftFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconShiftFill"],
+    BIconSkipBackward: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipBackward"],
+    BIconSkipBackwardFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipBackwardFill"],
+    BIconSkipEnd: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipEnd"],
+    BIconSkipEndFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipEndFill"],
+    BIconSkipForward: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipForward"],
+    BIconSkipForwardFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipForwardFill"],
+    BIconSkipStart: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipStart"],
+    BIconSkipStartFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSkipStartFill"],
+    BIconSpeaker: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSpeaker"],
+    BIconSquare: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSquare"],
+    BIconSquareFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSquareFill"],
+    BIconSquareHalf: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSquareHalf"],
+    BIconStar: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStar"],
+    BIconStarFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStarFill"],
+    BIconStarHalf: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStarHalf"],
+    BIconStop: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStop"],
+    BIconStopFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStopFill"],
+    BIconStopwatch: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStopwatch"],
+    BIconStopwatchFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconStopwatchFill"],
+    BIconSun: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconSun"],
+    BIconTable: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTable"],
+    BIconTablet: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTablet"],
+    BIconTabletLandscape: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTabletLandscape"],
+    BIconTag: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTag"],
+    BIconTagFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTagFill"],
+    BIconTerminal: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTerminal"],
+    BIconTerminalFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTerminalFill"],
+    BIconTextCenter: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTextCenter"],
+    BIconTextIndentLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTextIndentLeft"],
+    BIconTextIndentRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTextIndentRight"],
+    BIconTextLeft: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTextLeft"],
+    BIconTextRight: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTextRight"],
+    BIconThreeDots: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconThreeDots"],
+    BIconThreeDotsVertical: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconThreeDotsVertical"],
+    BIconToggleOff: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconToggleOff"],
+    BIconToggleOn: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconToggleOn"],
+    BIconToggles: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconToggles"],
+    BIconTools: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTools"],
+    BIconTrash: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTrash"],
+    BIconTrashFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTrashFill"],
+    BIconTriangle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTriangle"],
+    BIconTriangleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTriangleFill"],
+    BIconTriangleHalf: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTriangleHalf"],
+    BIconTrophy: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTrophy"],
+    BIconTv: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTv"],
+    BIconTvFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTvFill"],
+    BIconType: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconType"],
+    BIconTypeBold: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeBold"],
+    BIconTypeH1: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeH1"],
+    BIconTypeH2: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeH2"],
+    BIconTypeH3: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeH3"],
+    BIconTypeItalic: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeItalic"],
+    BIconTypeStrikethrough: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeStrikethrough"],
+    BIconTypeUnderline: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconTypeUnderline"],
+    BIconUnlock: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconUnlock"],
+    BIconUnlockFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconUnlockFill"],
+    BIconUpload: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconUpload"],
+    BIconVolumeDown: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeDown"],
+    BIconVolumeDownFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeDownFill"],
+    BIconVolumeMute: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeMute"],
+    BIconVolumeMuteFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeMuteFill"],
+    BIconVolumeUp: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeUp"],
+    BIconVolumeUpFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconVolumeUpFill"],
+    BIconWallet: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconWallet"],
+    BIconWatch: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconWatch"],
+    BIconWifi: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconWifi"],
+    BIconWindow: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconWindow"],
+    BIconWrench: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconWrench"],
+    BIconX: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconX"],
+    BIconXCircle: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXCircle"],
+    BIconXCircleFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXCircleFill"],
+    BIconXOctagon: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXOctagon"],
+    BIconXOctagonFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXOctagonFill"],
+    BIconXSquare: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXSquare"],
+    BIconXSquareFill: _icons__WEBPACK_IMPORTED_MODULE_3__["BIconXSquareFill"]
   }
 }); // Export the BootstrapVueIcons plugin installer
 // Mainly for the stand-alone bootstrap-vue-icons.xxx.js builds
@@ -28444,7 +27935,7 @@ Object(_utils_plugins__WEBPACK_IMPORTED_MODULE_0__["pluginFactoryNoConfig"])({
 /*!*************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/index.js ***!
   \*************************************************/
-/*! exports provided: install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, BVModalPlugin, BVToastPlugin, IconsPlugin, BootstrapVueIcons, BIcon, BIconBlank, BIconAlarm, BIconAlarmFill, BIconAlertCircle, BIconAlertCircleFill, BIconAlertOctagon, BIconAlertOctagonFill, BIconAlertSquare, BIconAlertSquareFill, BIconAlertTriangle, BIconAlertTriangleFill, BIconArchive, BIconArchiveFill, BIconArrowBarBottom, BIconArrowBarLeft, BIconArrowBarRight, BIconArrowBarUp, BIconArrowClockwise, BIconArrowCounterclockwise, BIconArrowDown, BIconArrowDownLeft, BIconArrowDownRight, BIconArrowDownShort, BIconArrowLeft, BIconArrowLeftRight, BIconArrowLeftShort, BIconArrowRepeat, BIconArrowRight, BIconArrowRightShort, BIconArrowUp, BIconArrowUpDown, BIconArrowUpLeft, BIconArrowUpRight, BIconArrowUpShort, BIconArrowsAngleContract, BIconArrowsAngleExpand, BIconArrowsCollapse, BIconArrowsExpand, BIconArrowsFullscreen, BIconAt, BIconAward, BIconBackspace, BIconBackspaceFill, BIconBackspaceReverse, BIconBackspaceReverseFill, BIconBarChart, BIconBarChartFill, BIconBattery, BIconBatteryCharging, BIconBatteryFull, BIconBell, BIconBellFill, BIconBlockquoteLeft, BIconBlockquoteRight, BIconBook, BIconBookHalfFill, BIconBookmark, BIconBookmarkFill, BIconBootstrap, BIconBootstrapFill, BIconBootstrapReboot, BIconBoxArrowBottomLeft, BIconBoxArrowBottomRight, BIconBoxArrowDown, BIconBoxArrowLeft, BIconBoxArrowRight, BIconBoxArrowUp, BIconBoxArrowUpLeft, BIconBoxArrowUpRight, BIconBraces, BIconBrightnessFillHigh, BIconBrightnessFillLow, BIconBrightnessHigh, BIconBrightnessLow, BIconBrush, BIconBucket, BIconBucketFill, BIconBuilding, BIconBullseye, BIconCalendar, BIconCalendarFill, BIconCamera, BIconCameraVideo, BIconCameraVideoFill, BIconCapslock, BIconCapslockFill, BIconChat, BIconChatFill, BIconCheck, BIconCheckBox, BIconCheckCircle, BIconChevronCompactDown, BIconChevronCompactLeft, BIconChevronCompactRight, BIconChevronCompactUp, BIconChevronDown, BIconChevronLeft, BIconChevronRight, BIconChevronUp, BIconCircle, BIconCircleFill, BIconCircleHalf, BIconCircleSlash, BIconClock, BIconClockFill, BIconCloud, BIconCloudDownload, BIconCloudFill, BIconCloudUpload, BIconCode, BIconCodeSlash, BIconColumns, BIconColumnsGutters, BIconCommand, BIconCompass, BIconCone, BIconConeStriped, BIconController, BIconCreditCard, BIconCursor, BIconCursorFill, BIconDash, BIconDiamond, BIconDiamondHalf, BIconDisplay, BIconDisplayFill, BIconDocument, BIconDocumentCode, BIconDocumentDiff, BIconDocumentRichtext, BIconDocumentSpreadsheet, BIconDocumentText, BIconDocuments, BIconDocumentsAlt, BIconDot, BIconDownload, BIconEggFried, BIconEject, BIconEjectFill, BIconEnvelope, BIconEnvelopeFill, BIconEnvelopeOpen, BIconEnvelopeOpenFill, BIconEye, BIconEyeFill, BIconEyeSlash, BIconEyeSlashFill, BIconFilter, BIconFlag, BIconFlagFill, BIconFolder, BIconFolderFill, BIconFolderSymlink, BIconFolderSymlinkFill, BIconFonts, BIconForward, BIconForwardFill, BIconGear, BIconGearFill, BIconGearWide, BIconGearWideConnected, BIconGeo, BIconGraphDown, BIconGraphUp, BIconGrid, BIconGridFill, BIconHammer, BIconHash, BIconHeart, BIconHeartFill, BIconHouse, BIconHouseFill, BIconImage, BIconImageAlt, BIconImageFill, BIconImages, BIconInbox, BIconInboxFill, BIconInboxes, BIconInboxesFill, BIconInfo, BIconInfoFill, BIconInfoSquare, BIconInfoSquareFill, BIconJustify, BIconJustifyLeft, BIconJustifyRight, BIconKanban, BIconKanbanFill, BIconLaptop, BIconLayoutSidebar, BIconLayoutSidebarReverse, BIconLayoutSplit, BIconList, BIconListCheck, BIconListOl, BIconListTask, BIconListUl, BIconLock, BIconLockFill, BIconMap, BIconMic, BIconMoon, BIconMusicPlayer, BIconMusicPlayerFill, BIconOption, BIconOutlet, BIconPause, BIconPauseFill, BIconPen, BIconPencil, BIconPeople, BIconPeopleFill, BIconPerson, BIconPersonFill, BIconPhone, BIconPhoneLandscape, BIconPieChart, BIconPieChartFill, BIconPlay, BIconPlayFill, BIconPlug, BIconPlus, BIconPower, BIconQuestion, BIconQuestionFill, BIconQuestionSquare, BIconQuestionSquareFill, BIconReply, BIconReplyAll, BIconReplyAllFill, BIconReplyFill, BIconScrewdriver, BIconSearch, BIconShield, BIconShieldFill, BIconShieldLock, BIconShieldLockFill, BIconShieldShaded, BIconShift, BIconShiftFill, BIconSkipBackward, BIconSkipBackwardFill, BIconSkipEnd, BIconSkipEndFill, BIconSkipForward, BIconSkipForwardFill, BIconSkipStart, BIconSkipStartFill, BIconSpeaker, BIconSquare, BIconSquareFill, BIconSquareHalf, BIconStar, BIconStarFill, BIconStarHalf, BIconStop, BIconStopFill, BIconStopwatch, BIconStopwatchFill, BIconSun, BIconTable, BIconTablet, BIconTabletLandscape, BIconTag, BIconTagFill, BIconTerminal, BIconTerminalFill, BIconTextCenter, BIconTextIndentLeft, BIconTextIndentRight, BIconTextLeft, BIconTextRight, BIconThreeDots, BIconThreeDotsVertical, BIconToggleOff, BIconToggleOn, BIconToggles, BIconTools, BIconTrash, BIconTrashFill, BIconTriangle, BIconTriangleFill, BIconTriangleHalf, BIconTrophy, BIconTv, BIconTvFill, BIconType, BIconTypeBold, BIconTypeH1, BIconTypeH2, BIconTypeH3, BIconTypeItalic, BIconTypeStrikethrough, BIconTypeUnderline, BIconUnlock, BIconUnlockFill, BIconUpload, BIconVolumeDown, BIconVolumeDownFill, BIconVolumeMute, BIconVolumeMuteFill, BIconVolumeUp, BIconVolumeUpFill, BIconWallet, BIconWatch, BIconWifi, BIconWindow, BIconWrench, BIconX, BIconXCircle, BIconXCircleFill, BIconXOctagon, BIconXOctagonFill, BIconXSquare, BIconXSquareFill, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormTagsPlugin, BFormTags, BFormTag, FormSelectPlugin, BFormSelect, BFormSelectOption, BFormSelectOptionGroup, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip, VBVisiblePlugin, VBVisible, default */
+/*! exports provided: install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, BVModalPlugin, BVToastPlugin, IconsPlugin, BootstrapVueIcons, BIcon, BIconstack, BIconBlank, BIconAlarm, BIconAlarmFill, BIconAlertCircle, BIconAlertCircleFill, BIconAlertOctagon, BIconAlertOctagonFill, BIconAlertSquare, BIconAlertSquareFill, BIconAlertTriangle, BIconAlertTriangleFill, BIconArchive, BIconArchiveFill, BIconArrowBarBottom, BIconArrowBarLeft, BIconArrowBarRight, BIconArrowBarUp, BIconArrowClockwise, BIconArrowCounterclockwise, BIconArrowDown, BIconArrowDownLeft, BIconArrowDownRight, BIconArrowDownShort, BIconArrowLeft, BIconArrowLeftRight, BIconArrowLeftShort, BIconArrowRepeat, BIconArrowRight, BIconArrowRightShort, BIconArrowUp, BIconArrowUpDown, BIconArrowUpLeft, BIconArrowUpRight, BIconArrowUpShort, BIconArrowsAngleContract, BIconArrowsAngleExpand, BIconArrowsCollapse, BIconArrowsExpand, BIconArrowsFullscreen, BIconAt, BIconAward, BIconBackspace, BIconBackspaceFill, BIconBackspaceReverse, BIconBackspaceReverseFill, BIconBarChart, BIconBarChartFill, BIconBattery, BIconBatteryCharging, BIconBatteryFull, BIconBell, BIconBellFill, BIconBlockquoteLeft, BIconBlockquoteRight, BIconBook, BIconBookHalfFill, BIconBookmark, BIconBookmarkFill, BIconBootstrap, BIconBootstrapFill, BIconBootstrapReboot, BIconBoxArrowBottomLeft, BIconBoxArrowBottomRight, BIconBoxArrowDown, BIconBoxArrowLeft, BIconBoxArrowRight, BIconBoxArrowUp, BIconBoxArrowUpLeft, BIconBoxArrowUpRight, BIconBraces, BIconBrightnessFillHigh, BIconBrightnessFillLow, BIconBrightnessHigh, BIconBrightnessLow, BIconBrush, BIconBucket, BIconBucketFill, BIconBuilding, BIconBullseye, BIconCalendar, BIconCalendarFill, BIconCamera, BIconCameraVideo, BIconCameraVideoFill, BIconCapslock, BIconCapslockFill, BIconChat, BIconChatFill, BIconCheck, BIconCheckBox, BIconCheckCircle, BIconChevronCompactDown, BIconChevronCompactLeft, BIconChevronCompactRight, BIconChevronCompactUp, BIconChevronDown, BIconChevronLeft, BIconChevronRight, BIconChevronUp, BIconCircle, BIconCircleFill, BIconCircleHalf, BIconCircleSlash, BIconClock, BIconClockFill, BIconCloud, BIconCloudDownload, BIconCloudFill, BIconCloudUpload, BIconCode, BIconCodeSlash, BIconColumns, BIconColumnsGutters, BIconCommand, BIconCompass, BIconCone, BIconConeStriped, BIconController, BIconCreditCard, BIconCursor, BIconCursorFill, BIconDash, BIconDiamond, BIconDiamondHalf, BIconDisplay, BIconDisplayFill, BIconDocument, BIconDocumentCode, BIconDocumentDiff, BIconDocumentRichtext, BIconDocumentSpreadsheet, BIconDocumentText, BIconDocuments, BIconDocumentsAlt, BIconDot, BIconDownload, BIconEggFried, BIconEject, BIconEjectFill, BIconEnvelope, BIconEnvelopeFill, BIconEnvelopeOpen, BIconEnvelopeOpenFill, BIconEye, BIconEyeFill, BIconEyeSlash, BIconEyeSlashFill, BIconFilter, BIconFlag, BIconFlagFill, BIconFolder, BIconFolderFill, BIconFolderSymlink, BIconFolderSymlinkFill, BIconFonts, BIconForward, BIconForwardFill, BIconGear, BIconGearFill, BIconGearWide, BIconGearWideConnected, BIconGeo, BIconGraphDown, BIconGraphUp, BIconGrid, BIconGridFill, BIconHammer, BIconHash, BIconHeart, BIconHeartFill, BIconHouse, BIconHouseFill, BIconImage, BIconImageAlt, BIconImageFill, BIconImages, BIconInbox, BIconInboxFill, BIconInboxes, BIconInboxesFill, BIconInfo, BIconInfoFill, BIconInfoSquare, BIconInfoSquareFill, BIconJustify, BIconJustifyLeft, BIconJustifyRight, BIconKanban, BIconKanbanFill, BIconLaptop, BIconLayoutSidebar, BIconLayoutSidebarReverse, BIconLayoutSplit, BIconList, BIconListCheck, BIconListOl, BIconListTask, BIconListUl, BIconLock, BIconLockFill, BIconMap, BIconMic, BIconMoon, BIconMusicPlayer, BIconMusicPlayerFill, BIconOption, BIconOutlet, BIconPause, BIconPauseFill, BIconPen, BIconPencil, BIconPeople, BIconPeopleFill, BIconPerson, BIconPersonFill, BIconPhone, BIconPhoneLandscape, BIconPieChart, BIconPieChartFill, BIconPlay, BIconPlayFill, BIconPlug, BIconPlus, BIconPower, BIconQuestion, BIconQuestionFill, BIconQuestionSquare, BIconQuestionSquareFill, BIconReply, BIconReplyAll, BIconReplyAllFill, BIconReplyFill, BIconScrewdriver, BIconSearch, BIconShield, BIconShieldFill, BIconShieldLock, BIconShieldLockFill, BIconShieldShaded, BIconShift, BIconShiftFill, BIconSkipBackward, BIconSkipBackwardFill, BIconSkipEnd, BIconSkipEndFill, BIconSkipForward, BIconSkipForwardFill, BIconSkipStart, BIconSkipStartFill, BIconSpeaker, BIconSquare, BIconSquareFill, BIconSquareHalf, BIconStar, BIconStarFill, BIconStarHalf, BIconStop, BIconStopFill, BIconStopwatch, BIconStopwatchFill, BIconSun, BIconTable, BIconTablet, BIconTabletLandscape, BIconTag, BIconTagFill, BIconTerminal, BIconTerminalFill, BIconTextCenter, BIconTextIndentLeft, BIconTextIndentRight, BIconTextLeft, BIconTextRight, BIconThreeDots, BIconThreeDotsVertical, BIconToggleOff, BIconToggleOn, BIconToggles, BIconTools, BIconTrash, BIconTrashFill, BIconTriangle, BIconTriangleFill, BIconTriangleHalf, BIconTrophy, BIconTv, BIconTvFill, BIconType, BIconTypeBold, BIconTypeH1, BIconTypeH2, BIconTypeH3, BIconTypeItalic, BIconTypeStrikethrough, BIconTypeUnderline, BIconUnlock, BIconUnlockFill, BIconUpload, BIconVolumeDown, BIconVolumeDownFill, BIconVolumeMute, BIconVolumeMuteFill, BIconVolumeUp, BIconVolumeUpFill, BIconWallet, BIconWatch, BIconWifi, BIconWindow, BIconWrench, BIconX, BIconXCircle, BIconXCircleFill, BIconXOctagon, BIconXOctagonFill, BIconXSquare, BIconXSquareFill, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormTagsPlugin, BFormTags, BFormTag, FormSelectPlugin, BFormSelect, BFormSelectOption, BFormSelectOptionGroup, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip, VBVisiblePlugin, VBVisible, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28466,1094 +27957,1097 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_toast_helpers_bv_toast__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/toast/helpers/bv-toast */ "./node_modules/bootstrap-vue/esm/components/toast/helpers/bv-toast.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BVToastPlugin", function() { return _components_toast_helpers_bv_toast__WEBPACK_IMPORTED_MODULE_5__["BVToastPlugin"]; });
 
-/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./icons */ "./node_modules/bootstrap-vue/esm/icons/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "IconsPlugin", function() { return _icons__WEBPACK_IMPORTED_MODULE_6__["IconsPlugin"]; });
+/* harmony import */ var _icons_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./icons/plugin */ "./node_modules/bootstrap-vue/esm/icons/plugin.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "IconsPlugin", function() { return _icons_plugin__WEBPACK_IMPORTED_MODULE_6__["IconsPlugin"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BootstrapVueIcons", function() { return _icons__WEBPACK_IMPORTED_MODULE_6__["BootstrapVueIcons"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BootstrapVueIcons", function() { return _icons_plugin__WEBPACK_IMPORTED_MODULE_6__["BootstrapVueIcons"]; });
 
 /* harmony import */ var _icons_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./icons/icon */ "./node_modules/bootstrap-vue/esm/icons/icon.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIcon", function() { return _icons_icon__WEBPACK_IMPORTED_MODULE_7__["BIcon"]; });
 
-/* harmony import */ var _icons_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./icons/icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlank", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBlank"]; });
+/* harmony import */ var _icons_iconstack__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./icons/iconstack */ "./node_modules/bootstrap-vue/esm/icons/iconstack.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconstack", function() { return _icons_iconstack__WEBPACK_IMPORTED_MODULE_8__["BIconstack"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarm", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlarm"]; });
+/* harmony import */ var _icons_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./icons/icons */ "./node_modules/bootstrap-vue/esm/icons/icons.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlank", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBlank"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarmFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlarmFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarm", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlarm"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertCircle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlarmFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlarmFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertCircleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertCircle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertOctagon"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertCircleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertOctagonFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertOctagon"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertSquare"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertOctagonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertOctagonFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertSquareFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertSquare"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertTriangle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertSquareFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAlertTriangleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertTriangle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchive", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArchive"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAlertTriangleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAlertTriangleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchiveFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArchiveFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchive", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArchive"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarBottom", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowBarBottom"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArchiveFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArchiveFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowBarLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarBottom", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowBarBottom"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowBarRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowBarLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowBarUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowBarRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowClockwise", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowClockwise"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowBarUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowBarUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowCounterclockwise", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowCounterclockwise"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowClockwise", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowClockwise"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowCounterclockwise", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowCounterclockwise"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowDownLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowDownRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowDownLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowDownShort"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowDownRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowDownShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowDownShort"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowLeftRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowLeftShort"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowLeftRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRepeat", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowRepeat"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowLeftShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowLeftShort"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRepeat", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowRepeat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRightShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowRightShort"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowRightShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowRightShort"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowUpDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowUpLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowUpDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowUpRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowUpLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowUpShort"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowUpRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleContract", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowsAngleContract"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowUpShort", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowUpShort"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleExpand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowsAngleExpand"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleContract", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowsAngleContract"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsCollapse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowsCollapse"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsAngleExpand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowsAngleExpand"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsExpand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowsExpand"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsCollapse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowsCollapse"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsFullscreen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconArrowsFullscreen"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsExpand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowsExpand"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAt"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconArrowsFullscreen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconArrowsFullscreen"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconAward"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAt"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspace", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBackspace"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconAward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconAward"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBackspaceFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspace", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBackspace"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBackspaceReverse"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBackspaceFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBackspaceReverseFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBackspaceReverse"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBarChart"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBackspaceReverseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBackspaceReverseFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBarChartFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBarChart"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBattery", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBattery"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBarChartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBarChartFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryCharging", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBatteryCharging"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBattery", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBattery"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryFull", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBatteryFull"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryCharging", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBatteryCharging"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBell", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBell"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBatteryFull", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBatteryFull"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBellFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBellFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBell", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBell"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBlockquoteLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBellFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBellFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBlockquoteRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBlockquoteLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBook", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBook"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBlockquoteRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBlockquoteRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookHalfFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBookHalfFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBook", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBook"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmark", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBookmark"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookHalfFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBookHalfFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmarkFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBookmarkFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmark", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBookmark"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrap", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBootstrap"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBookmarkFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBookmarkFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBootstrapFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrap", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBootstrap"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapReboot", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBootstrapReboot"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBootstrapFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowBottomLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBootstrapReboot", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBootstrapReboot"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowBottomRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowBottomLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowBottomRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowBottomRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowUpLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBoxArrowUpRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowUpLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBraces", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBraces"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBoxArrowUpRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBoxArrowUpRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillHigh", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBrightnessFillHigh"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBraces", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBraces"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillLow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBrightnessFillLow"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillHigh", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBrightnessFillHigh"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessHigh", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBrightnessHigh"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessFillLow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBrightnessFillLow"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessLow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBrightnessLow"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessHigh", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBrightnessHigh"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrush", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBrush"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrightnessLow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBrightnessLow"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucket", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBucket"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBrush", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBrush"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucketFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBucketFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucket", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBucket"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBuilding", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBuilding"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBucketFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBucketFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBullseye", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconBullseye"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBuilding", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBuilding"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCalendar"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconBullseye", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconBullseye"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendarFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCalendarFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCalendar"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCamera", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCamera"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCalendarFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCalendarFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCameraVideo"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCamera", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCamera"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideoFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCameraVideoFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCameraVideo"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCapslock"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCameraVideoFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCameraVideoFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCapslockFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCapslock"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChat", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChat"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCapslockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCapslockFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChatFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChatFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChat", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheck", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCheck"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChatFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChatFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckBox", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCheckBox"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheck", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCheck"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCheckCircle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckBox", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCheckBox"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronCompactDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCheckCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCheckCircle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronCompactLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronCompactDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronCompactRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronCompactLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronCompactUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronCompactRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronCompactUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronCompactUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconChevronUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCircle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconChevronUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconChevronUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCircleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCircle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCircleHalf"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCircleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCircleSlash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCircleHalf"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconClock"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCircleSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCircleSlash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconClockFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconClock"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloud", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCloud"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconClockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconClockFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudDownload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCloudDownload"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloud", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCloud"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCloudFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudDownload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCloudDownload"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudUpload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCloudUpload"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCloudFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCode", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCode"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCloudUpload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCloudUpload"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCodeSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCodeSlash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCode", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCode"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumns", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconColumns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCodeSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCodeSlash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumnsGutters", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconColumnsGutters"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumns", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconColumns"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCommand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCommand"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconColumnsGutters", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconColumnsGutters"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCompass", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCompass"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCommand", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCommand"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCone", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCone"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCompass", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCompass"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconConeStriped", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconConeStriped"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCone", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCone"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconController", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconController"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconConeStriped", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconConeStriped"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCreditCard", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCreditCard"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconController", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconController"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursor", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCursor"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCreditCard", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCreditCard"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursorFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconCursorFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursor", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCursor"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconCursorFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconCursorFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamond", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDiamond"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamondHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDiamondHalf"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamond", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDiamond"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplay", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDisplay"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDiamondHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDiamondHalf"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplayFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDisplayFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplay", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDisplay"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocument", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocument"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDisplayFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDisplayFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentCode", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentCode"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocument", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocument"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentDiff", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentDiff"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentCode", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentCode"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentRichtext", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentRichtext"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentDiff", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentDiff"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentSpreadsheet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentSpreadsheet"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentRichtext", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentRichtext"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentText", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentText"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentSpreadsheet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentSpreadsheet"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocuments", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocuments"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentText", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentText"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentsAlt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDocumentsAlt"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocuments", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocuments"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDot", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDot"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDocumentsAlt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDocumentsAlt"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDownload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconDownload"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDot", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDot"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEggFried", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEggFried"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconDownload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconDownload"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEject", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEject"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEggFried", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEggFried"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEjectFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEjectFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEject", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEject"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelope", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEnvelope"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEjectFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEjectFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEnvelopeFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelope", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEnvelope"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEnvelopeOpen"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEnvelopeFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpenFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEnvelopeOpenFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEnvelopeOpen"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEye", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEye"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEnvelopeOpenFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEnvelopeOpenFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEyeFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEye", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEye"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEyeSlash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEyeFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlashFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconEyeSlashFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEyeSlash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFilter", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFilter"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconEyeSlashFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconEyeSlashFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlag", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFlag"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFilter", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFilter"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlagFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFlagFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlag", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFlag"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolder", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFolder"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFlagFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFlagFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFolderFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolder", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFolder"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlink", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFolderSymlink"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFolderFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlinkFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFolderSymlinkFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlink", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFolderSymlink"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFonts", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconFonts"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFolderSymlinkFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFolderSymlinkFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconForward"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconFonts", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconFonts"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconForwardFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconForward"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGear", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGear"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconForwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconForwardFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGearFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGear", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGear"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWide", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGearWide"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGearFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWideConnected", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGearWideConnected"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWide", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGearWide"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGeo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGeo"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGearWideConnected", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGearWideConnected"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGraphDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGeo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGeo"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGraphUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGraphDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGrid", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGrid"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGraphUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGraphUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGridFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconGridFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGrid", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGrid"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHammer", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHammer"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconGridFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconGridFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHammer", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHammer"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHeart"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHeartFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHeart"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHouse"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHeartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHeartFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconHouseFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHouse"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImage", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconImage"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconHouseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconHouseFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageAlt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconImageAlt"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImage", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconImage"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconImageFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageAlt", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconImageAlt"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImages", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconImages"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImageFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconImageFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInbox", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInbox"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconImages", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconImages"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInboxFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInbox", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInbox"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxes", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInboxes"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInboxFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxesFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInboxesFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxes", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInboxes"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInfo"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInboxesFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInboxesFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInfoFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfo", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInfo"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInfoSquare"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInfoFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconInfoSquareFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInfoSquare"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustify", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconJustify"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconInfoSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconInfoSquareFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconJustifyLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustify", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconJustify"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconJustifyRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconJustifyLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanban", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconKanban"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconJustifyRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconJustifyRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanbanFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconKanbanFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanban", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconKanban"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLaptop", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLaptop"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconKanbanFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconKanbanFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLayoutSidebar"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLaptop", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLaptop"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebarReverse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLayoutSidebarReverse"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLayoutSidebar"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSplit", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLayoutSplit"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSidebarReverse", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLayoutSidebarReverse"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconList", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconList"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLayoutSplit", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLayoutSplit"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListCheck", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconListCheck"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconList", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconList"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListOl", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconListOl"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListCheck", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconListCheck"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListTask", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconListTask"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListOl", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconListOl"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListUl", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconListUl"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListTask", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconListTask"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLock"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconListUl", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconListUl"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconLockFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLock"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMap", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconMap"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconLockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconLockFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMic", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconMic"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMap", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconMap"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMoon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconMoon"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMic", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconMic"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayer", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconMusicPlayer"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMoon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconMoon"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayerFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconMusicPlayerFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayer", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconMusicPlayer"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOption", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconOption"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconMusicPlayerFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconMusicPlayerFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOutlet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconOutlet"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOption", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconOption"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPause", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPause"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconOutlet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconOutlet"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPauseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPauseFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPause", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPause"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPen"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPauseFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPauseFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPencil", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPencil"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPen", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPen"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeople", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPeople"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPencil", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPencil"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeopleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPeopleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeople", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPeople"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPerson", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPerson"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPeopleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPeopleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPersonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPersonFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPerson", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPerson"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhone", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPhone"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPersonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPersonFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhoneLandscape", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPhoneLandscape"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhone", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPhone"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPieChart"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPhoneLandscape", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPhoneLandscape"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPieChartFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPieChart"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlay", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPlay"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPieChartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPieChartFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlayFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPlayFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlay", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPlay"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlug", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPlug"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlayFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPlayFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlus", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPlus"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlug", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPlug"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPower", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconPower"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPlus", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPlus"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestion", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconQuestion"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconPower", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconPower"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconQuestionFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestion", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconQuestion"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconQuestionSquare"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconQuestionFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconQuestionSquareFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconQuestionSquare"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReply", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconReply"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconQuestionSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconQuestionSquareFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAll", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconReplyAll"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReply", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconReply"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAllFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconReplyAllFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAll", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconReplyAll"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconReplyFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyAllFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconReplyAllFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconScrewdriver", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconScrewdriver"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconReplyFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconReplyFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSearch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSearch"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconScrewdriver", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconScrewdriver"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShield", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShield"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSearch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSearch"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShieldFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShield", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShield"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShieldLock"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShieldFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShieldLockFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShieldLock"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldShaded", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShieldShaded"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldLockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShieldLockFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShift", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShift"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShieldShaded", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShieldShaded"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShiftFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconShiftFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShift", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShift"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipBackward"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconShiftFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconShiftFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipBackwardFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipBackward"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEnd", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipEnd"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipBackwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipBackwardFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEndFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipEndFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEnd", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipEnd"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipForward"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipEndFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipEndFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipForwardFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForward", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipForward"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipStart"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipForwardFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipForwardFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSkipStartFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStart", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipStart"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSpeaker", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSpeaker"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSkipStartFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSkipStartFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSquare"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSpeaker", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSpeaker"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSquareFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSquare"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSquareHalf"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSquareFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStar"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSquareHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSquareHalf"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStarFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStar", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStar"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStarHalf"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStarFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStop", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStop"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStarHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStarHalf"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStopFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStop", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStop"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStopwatch"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStopFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatchFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconStopwatchFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStopwatch"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSun", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconSun"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconStopwatchFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconStopwatchFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTable", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTable"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconSun", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconSun"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTablet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTablet"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTable", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTable"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTabletLandscape", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTabletLandscape"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTablet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTablet"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTag", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTag"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTabletLandscape", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTabletLandscape"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTagFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTagFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTag", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTag"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminal", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTerminal"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTagFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTagFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminalFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTerminalFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminal", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTerminal"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextCenter", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTextCenter"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTerminalFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTerminalFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTextIndentLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextCenter", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTextCenter"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTextIndentRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTextIndentLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTextLeft"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextIndentRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTextIndentRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTextRight"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextLeft", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTextLeft"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDots", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconThreeDots"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTextRight", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTextRight"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDotsVertical", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconThreeDotsVertical"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDots", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconThreeDots"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOff", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconToggleOff"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconThreeDotsVertical", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconThreeDotsVertical"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOn", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconToggleOn"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOff", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconToggleOff"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggles", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconToggles"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggleOn", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconToggleOn"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTools", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTools"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconToggles", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconToggles"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTrash"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTools", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTools"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrashFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTrashFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrash", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTrash"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTriangle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrashFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTrashFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTriangleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTriangle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTriangleHalf"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTriangleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrophy", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTrophy"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTriangleHalf", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTriangleHalf"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTv", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTv"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTrophy", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTrophy"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTvFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTvFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTv", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTv"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconType", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconType"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTvFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTvFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeBold", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeBold"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconType", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconType"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH1", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeH1"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeBold", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeBold"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH2", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeH2"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH1", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeH1"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH3", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeH3"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH2", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeH2"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeItalic", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeItalic"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeH3", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeH3"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeStrikethrough", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeStrikethrough"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeItalic", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeItalic"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeUnderline", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconTypeUnderline"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeStrikethrough", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeStrikethrough"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconUnlock"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconTypeUnderline", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconTypeUnderline"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconUnlockFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlock", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconUnlock"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUpload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconUpload"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUnlockFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconUnlockFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeDown"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconUpload", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconUpload"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDownFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeDownFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDown", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeDown"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMute", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeMute"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeDownFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeDownFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMuteFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeMuteFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMute", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeMute"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeUp"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeMuteFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeMuteFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUpFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconVolumeUpFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUp", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeUp"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWallet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconWallet"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconVolumeUpFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconVolumeUpFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWatch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconWatch"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWallet", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconWallet"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWifi", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconWifi"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWatch", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconWatch"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWindow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconWindow"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWifi", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconWifi"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWrench", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconWrench"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWindow", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconWindow"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconX", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconX"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconWrench", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconWrench"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXCircle"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconX", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconX"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXCircleFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircle", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXCircle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXOctagon"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXCircleFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXCircleFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXOctagonFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagon", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXOctagon"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXSquare"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXOctagonFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXOctagonFill"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_8__["BIconXSquareFill"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquare", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXSquare"]; });
 
-/* harmony import */ var _components_alert__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/alert */ "./node_modules/bootstrap-vue/esm/components/alert/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AlertPlugin", function() { return _components_alert__WEBPACK_IMPORTED_MODULE_9__["AlertPlugin"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BIconXSquareFill", function() { return _icons_icons__WEBPACK_IMPORTED_MODULE_9__["BIconXSquareFill"]; });
 
-/* harmony import */ var _components_alert_alert__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/alert/alert */ "./node_modules/bootstrap-vue/esm/components/alert/alert.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BAlert", function() { return _components_alert_alert__WEBPACK_IMPORTED_MODULE_10__["BAlert"]; });
+/* harmony import */ var _components_alert__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/alert */ "./node_modules/bootstrap-vue/esm/components/alert/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AlertPlugin", function() { return _components_alert__WEBPACK_IMPORTED_MODULE_10__["AlertPlugin"]; });
 
-/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/badge */ "./node_modules/bootstrap-vue/esm/components/badge/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BadgePlugin", function() { return _components_badge__WEBPACK_IMPORTED_MODULE_11__["BadgePlugin"]; });
+/* harmony import */ var _components_alert_alert__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/alert/alert */ "./node_modules/bootstrap-vue/esm/components/alert/alert.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BAlert", function() { return _components_alert_alert__WEBPACK_IMPORTED_MODULE_11__["BAlert"]; });
 
-/* harmony import */ var _components_badge_badge__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/badge/badge */ "./node_modules/bootstrap-vue/esm/components/badge/badge.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBadge", function() { return _components_badge_badge__WEBPACK_IMPORTED_MODULE_12__["BBadge"]; });
+/* harmony import */ var _components_badge__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/badge */ "./node_modules/bootstrap-vue/esm/components/badge/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BadgePlugin", function() { return _components_badge__WEBPACK_IMPORTED_MODULE_12__["BadgePlugin"]; });
 
-/* harmony import */ var _components_breadcrumb__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/breadcrumb */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BreadcrumbPlugin", function() { return _components_breadcrumb__WEBPACK_IMPORTED_MODULE_13__["BreadcrumbPlugin"]; });
+/* harmony import */ var _components_badge_badge__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/badge/badge */ "./node_modules/bootstrap-vue/esm/components/badge/badge.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBadge", function() { return _components_badge_badge__WEBPACK_IMPORTED_MODULE_13__["BBadge"]; });
 
-/* harmony import */ var _components_breadcrumb_breadcrumb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/breadcrumb/breadcrumb */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/breadcrumb.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBreadcrumb", function() { return _components_breadcrumb_breadcrumb__WEBPACK_IMPORTED_MODULE_14__["BBreadcrumb"]; });
+/* harmony import */ var _components_breadcrumb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/breadcrumb */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BreadcrumbPlugin", function() { return _components_breadcrumb__WEBPACK_IMPORTED_MODULE_14__["BreadcrumbPlugin"]; });
 
-/* harmony import */ var _components_breadcrumb_breadcrumb_item__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/breadcrumb/breadcrumb-item */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/breadcrumb-item.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBreadcrumbItem", function() { return _components_breadcrumb_breadcrumb_item__WEBPACK_IMPORTED_MODULE_15__["BBreadcrumbItem"]; });
+/* harmony import */ var _components_breadcrumb_breadcrumb__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/breadcrumb/breadcrumb */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/breadcrumb.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBreadcrumb", function() { return _components_breadcrumb_breadcrumb__WEBPACK_IMPORTED_MODULE_15__["BBreadcrumb"]; });
 
-/* harmony import */ var _components_button__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/button */ "./node_modules/bootstrap-vue/esm/components/button/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonPlugin", function() { return _components_button__WEBPACK_IMPORTED_MODULE_16__["ButtonPlugin"]; });
+/* harmony import */ var _components_breadcrumb_breadcrumb_item__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/breadcrumb/breadcrumb-item */ "./node_modules/bootstrap-vue/esm/components/breadcrumb/breadcrumb-item.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BBreadcrumbItem", function() { return _components_breadcrumb_breadcrumb_item__WEBPACK_IMPORTED_MODULE_16__["BBreadcrumbItem"]; });
 
-/* harmony import */ var _components_button_button__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButton", function() { return _components_button_button__WEBPACK_IMPORTED_MODULE_17__["BButton"]; });
+/* harmony import */ var _components_button__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/button */ "./node_modules/bootstrap-vue/esm/components/button/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonPlugin", function() { return _components_button__WEBPACK_IMPORTED_MODULE_17__["ButtonPlugin"]; });
 
-/* harmony import */ var _components_button_button_close__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/button/button-close */ "./node_modules/bootstrap-vue/esm/components/button/button-close.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonClose", function() { return _components_button_button_close__WEBPACK_IMPORTED_MODULE_18__["BButtonClose"]; });
+/* harmony import */ var _components_button_button__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/button/button */ "./node_modules/bootstrap-vue/esm/components/button/button.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButton", function() { return _components_button_button__WEBPACK_IMPORTED_MODULE_18__["BButton"]; });
 
-/* harmony import */ var _components_button_group__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/button-group */ "./node_modules/bootstrap-vue/esm/components/button-group/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupPlugin", function() { return _components_button_group__WEBPACK_IMPORTED_MODULE_19__["ButtonGroupPlugin"]; });
+/* harmony import */ var _components_button_button_close__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/button/button-close */ "./node_modules/bootstrap-vue/esm/components/button/button-close.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonClose", function() { return _components_button_button_close__WEBPACK_IMPORTED_MODULE_19__["BButtonClose"]; });
 
-/* harmony import */ var _components_button_group_button_group__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/button-group/button-group */ "./node_modules/bootstrap-vue/esm/components/button-group/button-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonGroup", function() { return _components_button_group_button_group__WEBPACK_IMPORTED_MODULE_20__["BButtonGroup"]; });
+/* harmony import */ var _components_button_group__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/button-group */ "./node_modules/bootstrap-vue/esm/components/button-group/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupPlugin", function() { return _components_button_group__WEBPACK_IMPORTED_MODULE_20__["ButtonGroupPlugin"]; });
 
-/* harmony import */ var _components_button_toolbar__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/button-toolbar */ "./node_modules/bootstrap-vue/esm/components/button-toolbar/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonToolbarPlugin", function() { return _components_button_toolbar__WEBPACK_IMPORTED_MODULE_21__["ButtonToolbarPlugin"]; });
+/* harmony import */ var _components_button_group_button_group__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/button-group/button-group */ "./node_modules/bootstrap-vue/esm/components/button-group/button-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonGroup", function() { return _components_button_group_button_group__WEBPACK_IMPORTED_MODULE_21__["BButtonGroup"]; });
 
-/* harmony import */ var _components_button_toolbar_button_toolbar__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/button-toolbar/button-toolbar */ "./node_modules/bootstrap-vue/esm/components/button-toolbar/button-toolbar.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonToolbar", function() { return _components_button_toolbar_button_toolbar__WEBPACK_IMPORTED_MODULE_22__["BButtonToolbar"]; });
+/* harmony import */ var _components_button_toolbar__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/button-toolbar */ "./node_modules/bootstrap-vue/esm/components/button-toolbar/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ButtonToolbarPlugin", function() { return _components_button_toolbar__WEBPACK_IMPORTED_MODULE_22__["ButtonToolbarPlugin"]; });
 
-/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/card */ "./node_modules/bootstrap-vue/esm/components/card/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CardPlugin", function() { return _components_card__WEBPACK_IMPORTED_MODULE_23__["CardPlugin"]; });
+/* harmony import */ var _components_button_toolbar_button_toolbar__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/button-toolbar/button-toolbar */ "./node_modules/bootstrap-vue/esm/components/button-toolbar/button-toolbar.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BButtonToolbar", function() { return _components_button_toolbar_button_toolbar__WEBPACK_IMPORTED_MODULE_23__["BButtonToolbar"]; });
 
-/* harmony import */ var _components_card_card__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/card/card */ "./node_modules/bootstrap-vue/esm/components/card/card.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCard", function() { return _components_card_card__WEBPACK_IMPORTED_MODULE_24__["BCard"]; });
+/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/card */ "./node_modules/bootstrap-vue/esm/components/card/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CardPlugin", function() { return _components_card__WEBPACK_IMPORTED_MODULE_24__["CardPlugin"]; });
 
-/* harmony import */ var _components_card_card_body__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/card/card-body */ "./node_modules/bootstrap-vue/esm/components/card/card-body.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardBody", function() { return _components_card_card_body__WEBPACK_IMPORTED_MODULE_25__["BCardBody"]; });
+/* harmony import */ var _components_card_card__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/card/card */ "./node_modules/bootstrap-vue/esm/components/card/card.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCard", function() { return _components_card_card__WEBPACK_IMPORTED_MODULE_25__["BCard"]; });
 
-/* harmony import */ var _components_card_card_footer__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/card/card-footer */ "./node_modules/bootstrap-vue/esm/components/card/card-footer.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardFooter", function() { return _components_card_card_footer__WEBPACK_IMPORTED_MODULE_26__["BCardFooter"]; });
+/* harmony import */ var _components_card_card_body__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/card/card-body */ "./node_modules/bootstrap-vue/esm/components/card/card-body.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardBody", function() { return _components_card_card_body__WEBPACK_IMPORTED_MODULE_26__["BCardBody"]; });
 
-/* harmony import */ var _components_card_card_group__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/card/card-group */ "./node_modules/bootstrap-vue/esm/components/card/card-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardGroup", function() { return _components_card_card_group__WEBPACK_IMPORTED_MODULE_27__["BCardGroup"]; });
+/* harmony import */ var _components_card_card_footer__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/card/card-footer */ "./node_modules/bootstrap-vue/esm/components/card/card-footer.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardFooter", function() { return _components_card_card_footer__WEBPACK_IMPORTED_MODULE_27__["BCardFooter"]; });
 
-/* harmony import */ var _components_card_card_header__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/card/card-header */ "./node_modules/bootstrap-vue/esm/components/card/card-header.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardHeader", function() { return _components_card_card_header__WEBPACK_IMPORTED_MODULE_28__["BCardHeader"]; });
+/* harmony import */ var _components_card_card_group__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/card/card-group */ "./node_modules/bootstrap-vue/esm/components/card/card-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardGroup", function() { return _components_card_card_group__WEBPACK_IMPORTED_MODULE_28__["BCardGroup"]; });
 
-/* harmony import */ var _components_card_card_img__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/card/card-img */ "./node_modules/bootstrap-vue/esm/components/card/card-img.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardImg", function() { return _components_card_card_img__WEBPACK_IMPORTED_MODULE_29__["BCardImg"]; });
+/* harmony import */ var _components_card_card_header__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/card/card-header */ "./node_modules/bootstrap-vue/esm/components/card/card-header.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardHeader", function() { return _components_card_card_header__WEBPACK_IMPORTED_MODULE_29__["BCardHeader"]; });
 
-/* harmony import */ var _components_card_card_img_lazy__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/card/card-img-lazy */ "./node_modules/bootstrap-vue/esm/components/card/card-img-lazy.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardImgLazy", function() { return _components_card_card_img_lazy__WEBPACK_IMPORTED_MODULE_30__["BCardImgLazy"]; });
+/* harmony import */ var _components_card_card_img__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/card/card-img */ "./node_modules/bootstrap-vue/esm/components/card/card-img.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardImg", function() { return _components_card_card_img__WEBPACK_IMPORTED_MODULE_30__["BCardImg"]; });
 
-/* harmony import */ var _components_card_card_sub_title__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/card/card-sub-title */ "./node_modules/bootstrap-vue/esm/components/card/card-sub-title.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardSubTitle", function() { return _components_card_card_sub_title__WEBPACK_IMPORTED_MODULE_31__["BCardSubTitle"]; });
+/* harmony import */ var _components_card_card_img_lazy__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/card/card-img-lazy */ "./node_modules/bootstrap-vue/esm/components/card/card-img-lazy.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardImgLazy", function() { return _components_card_card_img_lazy__WEBPACK_IMPORTED_MODULE_31__["BCardImgLazy"]; });
 
-/* harmony import */ var _components_card_card_text__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/card/card-text */ "./node_modules/bootstrap-vue/esm/components/card/card-text.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardText", function() { return _components_card_card_text__WEBPACK_IMPORTED_MODULE_32__["BCardText"]; });
+/* harmony import */ var _components_card_card_sub_title__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/card/card-sub-title */ "./node_modules/bootstrap-vue/esm/components/card/card-sub-title.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardSubTitle", function() { return _components_card_card_sub_title__WEBPACK_IMPORTED_MODULE_32__["BCardSubTitle"]; });
 
-/* harmony import */ var _components_card_card_title__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/card/card-title */ "./node_modules/bootstrap-vue/esm/components/card/card-title.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardTitle", function() { return _components_card_card_title__WEBPACK_IMPORTED_MODULE_33__["BCardTitle"]; });
+/* harmony import */ var _components_card_card_text__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/card/card-text */ "./node_modules/bootstrap-vue/esm/components/card/card-text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardText", function() { return _components_card_card_text__WEBPACK_IMPORTED_MODULE_33__["BCardText"]; });
 
-/* harmony import */ var _components_carousel__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/carousel */ "./node_modules/bootstrap-vue/esm/components/carousel/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CarouselPlugin", function() { return _components_carousel__WEBPACK_IMPORTED_MODULE_34__["CarouselPlugin"]; });
+/* harmony import */ var _components_card_card_title__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/card/card-title */ "./node_modules/bootstrap-vue/esm/components/card/card-title.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCardTitle", function() { return _components_card_card_title__WEBPACK_IMPORTED_MODULE_34__["BCardTitle"]; });
 
-/* harmony import */ var _components_carousel_carousel__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/carousel/carousel */ "./node_modules/bootstrap-vue/esm/components/carousel/carousel.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCarousel", function() { return _components_carousel_carousel__WEBPACK_IMPORTED_MODULE_35__["BCarousel"]; });
+/* harmony import */ var _components_carousel__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/carousel */ "./node_modules/bootstrap-vue/esm/components/carousel/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CarouselPlugin", function() { return _components_carousel__WEBPACK_IMPORTED_MODULE_35__["CarouselPlugin"]; });
 
-/* harmony import */ var _components_carousel_carousel_slide__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/carousel/carousel-slide */ "./node_modules/bootstrap-vue/esm/components/carousel/carousel-slide.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCarouselSlide", function() { return _components_carousel_carousel_slide__WEBPACK_IMPORTED_MODULE_36__["BCarouselSlide"]; });
+/* harmony import */ var _components_carousel_carousel__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/carousel/carousel */ "./node_modules/bootstrap-vue/esm/components/carousel/carousel.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCarousel", function() { return _components_carousel_carousel__WEBPACK_IMPORTED_MODULE_36__["BCarousel"]; });
 
-/* harmony import */ var _components_collapse__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/collapse */ "./node_modules/bootstrap-vue/esm/components/collapse/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CollapsePlugin", function() { return _components_collapse__WEBPACK_IMPORTED_MODULE_37__["CollapsePlugin"]; });
+/* harmony import */ var _components_carousel_carousel_slide__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/carousel/carousel-slide */ "./node_modules/bootstrap-vue/esm/components/carousel/carousel-slide.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCarouselSlide", function() { return _components_carousel_carousel_slide__WEBPACK_IMPORTED_MODULE_37__["BCarouselSlide"]; });
 
-/* harmony import */ var _components_collapse_collapse__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/collapse/collapse */ "./node_modules/bootstrap-vue/esm/components/collapse/collapse.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCollapse", function() { return _components_collapse_collapse__WEBPACK_IMPORTED_MODULE_38__["BCollapse"]; });
+/* harmony import */ var _components_collapse__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/collapse */ "./node_modules/bootstrap-vue/esm/components/collapse/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CollapsePlugin", function() { return _components_collapse__WEBPACK_IMPORTED_MODULE_38__["CollapsePlugin"]; });
 
-/* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/dropdown */ "./node_modules/bootstrap-vue/esm/components/dropdown/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DropdownPlugin", function() { return _components_dropdown__WEBPACK_IMPORTED_MODULE_39__["DropdownPlugin"]; });
+/* harmony import */ var _components_collapse_collapse__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/collapse/collapse */ "./node_modules/bootstrap-vue/esm/components/collapse/collapse.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCollapse", function() { return _components_collapse_collapse__WEBPACK_IMPORTED_MODULE_39__["BCollapse"]; });
 
-/* harmony import */ var _components_dropdown_dropdown__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/dropdown/dropdown */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdown", function() { return _components_dropdown_dropdown__WEBPACK_IMPORTED_MODULE_40__["BDropdown"]; });
+/* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/dropdown */ "./node_modules/bootstrap-vue/esm/components/dropdown/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DropdownPlugin", function() { return _components_dropdown__WEBPACK_IMPORTED_MODULE_40__["DropdownPlugin"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_item__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/dropdown/dropdown-item */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-item.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownItem", function() { return _components_dropdown_dropdown_item__WEBPACK_IMPORTED_MODULE_41__["BDropdownItem"]; });
+/* harmony import */ var _components_dropdown_dropdown__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/dropdown/dropdown */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdown", function() { return _components_dropdown_dropdown__WEBPACK_IMPORTED_MODULE_41__["BDropdown"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_item_button__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/dropdown/dropdown-item-button */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-item-button.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownItemButton", function() { return _components_dropdown_dropdown_item_button__WEBPACK_IMPORTED_MODULE_42__["BDropdownItemButton"]; });
+/* harmony import */ var _components_dropdown_dropdown_item__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/dropdown/dropdown-item */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-item.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownItem", function() { return _components_dropdown_dropdown_item__WEBPACK_IMPORTED_MODULE_42__["BDropdownItem"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_divider__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/dropdown/dropdown-divider */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-divider.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownDivider", function() { return _components_dropdown_dropdown_divider__WEBPACK_IMPORTED_MODULE_43__["BDropdownDivider"]; });
+/* harmony import */ var _components_dropdown_dropdown_item_button__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/dropdown/dropdown-item-button */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-item-button.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownItemButton", function() { return _components_dropdown_dropdown_item_button__WEBPACK_IMPORTED_MODULE_43__["BDropdownItemButton"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_form__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/dropdown/dropdown-form */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-form.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownForm", function() { return _components_dropdown_dropdown_form__WEBPACK_IMPORTED_MODULE_44__["BDropdownForm"]; });
+/* harmony import */ var _components_dropdown_dropdown_divider__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/dropdown/dropdown-divider */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-divider.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownDivider", function() { return _components_dropdown_dropdown_divider__WEBPACK_IMPORTED_MODULE_44__["BDropdownDivider"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_group__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/dropdown/dropdown-group */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownGroup", function() { return _components_dropdown_dropdown_group__WEBPACK_IMPORTED_MODULE_45__["BDropdownGroup"]; });
+/* harmony import */ var _components_dropdown_dropdown_form__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/dropdown/dropdown-form */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-form.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownForm", function() { return _components_dropdown_dropdown_form__WEBPACK_IMPORTED_MODULE_45__["BDropdownForm"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_header__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/dropdown/dropdown-header */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-header.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownHeader", function() { return _components_dropdown_dropdown_header__WEBPACK_IMPORTED_MODULE_46__["BDropdownHeader"]; });
+/* harmony import */ var _components_dropdown_dropdown_group__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/dropdown/dropdown-group */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownGroup", function() { return _components_dropdown_dropdown_group__WEBPACK_IMPORTED_MODULE_46__["BDropdownGroup"]; });
 
-/* harmony import */ var _components_dropdown_dropdown_text__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/dropdown/dropdown-text */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-text.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownText", function() { return _components_dropdown_dropdown_text__WEBPACK_IMPORTED_MODULE_47__["BDropdownText"]; });
+/* harmony import */ var _components_dropdown_dropdown_header__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/dropdown/dropdown-header */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-header.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownHeader", function() { return _components_dropdown_dropdown_header__WEBPACK_IMPORTED_MODULE_47__["BDropdownHeader"]; });
 
-/* harmony import */ var _components_embed__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/embed */ "./node_modules/bootstrap-vue/esm/components/embed/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "EmbedPlugin", function() { return _components_embed__WEBPACK_IMPORTED_MODULE_48__["EmbedPlugin"]; });
+/* harmony import */ var _components_dropdown_dropdown_text__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/dropdown/dropdown-text */ "./node_modules/bootstrap-vue/esm/components/dropdown/dropdown-text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BDropdownText", function() { return _components_dropdown_dropdown_text__WEBPACK_IMPORTED_MODULE_48__["BDropdownText"]; });
 
-/* harmony import */ var _components_embed_embed__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/embed/embed */ "./node_modules/bootstrap-vue/esm/components/embed/embed.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BEmbed", function() { return _components_embed_embed__WEBPACK_IMPORTED_MODULE_49__["BEmbed"]; });
+/* harmony import */ var _components_embed__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/embed */ "./node_modules/bootstrap-vue/esm/components/embed/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "EmbedPlugin", function() { return _components_embed__WEBPACK_IMPORTED_MODULE_49__["EmbedPlugin"]; });
 
-/* harmony import */ var _components_form__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/form */ "./node_modules/bootstrap-vue/esm/components/form/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormPlugin", function() { return _components_form__WEBPACK_IMPORTED_MODULE_50__["FormPlugin"]; });
+/* harmony import */ var _components_embed_embed__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/embed/embed */ "./node_modules/bootstrap-vue/esm/components/embed/embed.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BEmbed", function() { return _components_embed_embed__WEBPACK_IMPORTED_MODULE_50__["BEmbed"]; });
 
-/* harmony import */ var _components_form_form__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/form/form */ "./node_modules/bootstrap-vue/esm/components/form/form.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BForm", function() { return _components_form_form__WEBPACK_IMPORTED_MODULE_51__["BForm"]; });
+/* harmony import */ var _components_form__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/form */ "./node_modules/bootstrap-vue/esm/components/form/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormPlugin", function() { return _components_form__WEBPACK_IMPORTED_MODULE_51__["FormPlugin"]; });
 
-/* harmony import */ var _components_form_form_datalist__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/form/form-datalist */ "./node_modules/bootstrap-vue/esm/components/form/form-datalist.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormDatalist", function() { return _components_form_form_datalist__WEBPACK_IMPORTED_MODULE_52__["BFormDatalist"]; });
+/* harmony import */ var _components_form_form__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/form/form */ "./node_modules/bootstrap-vue/esm/components/form/form.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BForm", function() { return _components_form_form__WEBPACK_IMPORTED_MODULE_52__["BForm"]; });
 
-/* harmony import */ var _components_form_form_text__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/form/form-text */ "./node_modules/bootstrap-vue/esm/components/form/form-text.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormText", function() { return _components_form_form_text__WEBPACK_IMPORTED_MODULE_53__["BFormText"]; });
+/* harmony import */ var _components_form_form_datalist__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/form/form-datalist */ "./node_modules/bootstrap-vue/esm/components/form/form-datalist.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormDatalist", function() { return _components_form_form_datalist__WEBPACK_IMPORTED_MODULE_53__["BFormDatalist"]; });
 
-/* harmony import */ var _components_form_form_invalid_feedback__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/form/form-invalid-feedback */ "./node_modules/bootstrap-vue/esm/components/form/form-invalid-feedback.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormInvalidFeedback", function() { return _components_form_form_invalid_feedback__WEBPACK_IMPORTED_MODULE_54__["BFormInvalidFeedback"]; });
+/* harmony import */ var _components_form_form_text__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/form/form-text */ "./node_modules/bootstrap-vue/esm/components/form/form-text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormText", function() { return _components_form_form_text__WEBPACK_IMPORTED_MODULE_54__["BFormText"]; });
 
-/* harmony import */ var _components_form_form_valid_feedback__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/form/form-valid-feedback */ "./node_modules/bootstrap-vue/esm/components/form/form-valid-feedback.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormValidFeedback", function() { return _components_form_form_valid_feedback__WEBPACK_IMPORTED_MODULE_55__["BFormValidFeedback"]; });
+/* harmony import */ var _components_form_form_invalid_feedback__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/form/form-invalid-feedback */ "./node_modules/bootstrap-vue/esm/components/form/form-invalid-feedback.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormInvalidFeedback", function() { return _components_form_form_invalid_feedback__WEBPACK_IMPORTED_MODULE_55__["BFormInvalidFeedback"]; });
 
-/* harmony import */ var _components_form_checkbox__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/form-checkbox */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormCheckboxPlugin", function() { return _components_form_checkbox__WEBPACK_IMPORTED_MODULE_56__["FormCheckboxPlugin"]; });
+/* harmony import */ var _components_form_form_valid_feedback__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/form/form-valid-feedback */ "./node_modules/bootstrap-vue/esm/components/form/form-valid-feedback.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormValidFeedback", function() { return _components_form_form_valid_feedback__WEBPACK_IMPORTED_MODULE_56__["BFormValidFeedback"]; });
 
-/* harmony import */ var _components_form_checkbox_form_checkbox__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/form-checkbox/form-checkbox */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/form-checkbox.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormCheckbox", function() { return _components_form_checkbox_form_checkbox__WEBPACK_IMPORTED_MODULE_57__["BFormCheckbox"]; });
+/* harmony import */ var _components_form_checkbox__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/form-checkbox */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormCheckboxPlugin", function() { return _components_form_checkbox__WEBPACK_IMPORTED_MODULE_57__["FormCheckboxPlugin"]; });
 
-/* harmony import */ var _components_form_checkbox_form_checkbox_group__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/form-checkbox/form-checkbox-group */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/form-checkbox-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormCheckboxGroup", function() { return _components_form_checkbox_form_checkbox_group__WEBPACK_IMPORTED_MODULE_58__["BFormCheckboxGroup"]; });
+/* harmony import */ var _components_form_checkbox_form_checkbox__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/form-checkbox/form-checkbox */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/form-checkbox.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormCheckbox", function() { return _components_form_checkbox_form_checkbox__WEBPACK_IMPORTED_MODULE_58__["BFormCheckbox"]; });
 
-/* harmony import */ var _components_form_file__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/form-file */ "./node_modules/bootstrap-vue/esm/components/form-file/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormFilePlugin", function() { return _components_form_file__WEBPACK_IMPORTED_MODULE_59__["FormFilePlugin"]; });
+/* harmony import */ var _components_form_checkbox_form_checkbox_group__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/form-checkbox/form-checkbox-group */ "./node_modules/bootstrap-vue/esm/components/form-checkbox/form-checkbox-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormCheckboxGroup", function() { return _components_form_checkbox_form_checkbox_group__WEBPACK_IMPORTED_MODULE_59__["BFormCheckboxGroup"]; });
 
-/* harmony import */ var _components_form_file_form_file__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/form-file/form-file */ "./node_modules/bootstrap-vue/esm/components/form-file/form-file.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormFile", function() { return _components_form_file_form_file__WEBPACK_IMPORTED_MODULE_60__["BFormFile"]; });
+/* harmony import */ var _components_form_file__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/form-file */ "./node_modules/bootstrap-vue/esm/components/form-file/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormFilePlugin", function() { return _components_form_file__WEBPACK_IMPORTED_MODULE_60__["FormFilePlugin"]; });
 
-/* harmony import */ var _components_form_group__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/form-group */ "./node_modules/bootstrap-vue/esm/components/form-group/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormGroupPlugin", function() { return _components_form_group__WEBPACK_IMPORTED_MODULE_61__["FormGroupPlugin"]; });
+/* harmony import */ var _components_form_file_form_file__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/form-file/form-file */ "./node_modules/bootstrap-vue/esm/components/form-file/form-file.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormFile", function() { return _components_form_file_form_file__WEBPACK_IMPORTED_MODULE_61__["BFormFile"]; });
 
-/* harmony import */ var _components_form_group_form_group__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/form-group/form-group */ "./node_modules/bootstrap-vue/esm/components/form-group/form-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormGroup", function() { return _components_form_group_form_group__WEBPACK_IMPORTED_MODULE_62__["BFormGroup"]; });
+/* harmony import */ var _components_form_group__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/form-group */ "./node_modules/bootstrap-vue/esm/components/form-group/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormGroupPlugin", function() { return _components_form_group__WEBPACK_IMPORTED_MODULE_62__["FormGroupPlugin"]; });
 
-/* harmony import */ var _components_form_input__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/form-input */ "./node_modules/bootstrap-vue/esm/components/form-input/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormInputPlugin", function() { return _components_form_input__WEBPACK_IMPORTED_MODULE_63__["FormInputPlugin"]; });
+/* harmony import */ var _components_form_group_form_group__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/form-group/form-group */ "./node_modules/bootstrap-vue/esm/components/form-group/form-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormGroup", function() { return _components_form_group_form_group__WEBPACK_IMPORTED_MODULE_63__["BFormGroup"]; });
 
-/* harmony import */ var _components_form_input_form_input__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/form-input/form-input */ "./node_modules/bootstrap-vue/esm/components/form-input/form-input.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormInput", function() { return _components_form_input_form_input__WEBPACK_IMPORTED_MODULE_64__["BFormInput"]; });
+/* harmony import */ var _components_form_input__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/form-input */ "./node_modules/bootstrap-vue/esm/components/form-input/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormInputPlugin", function() { return _components_form_input__WEBPACK_IMPORTED_MODULE_64__["FormInputPlugin"]; });
 
-/* harmony import */ var _components_form_radio__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/form-radio */ "./node_modules/bootstrap-vue/esm/components/form-radio/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormRadioPlugin", function() { return _components_form_radio__WEBPACK_IMPORTED_MODULE_65__["FormRadioPlugin"]; });
+/* harmony import */ var _components_form_input_form_input__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/form-input/form-input */ "./node_modules/bootstrap-vue/esm/components/form-input/form-input.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormInput", function() { return _components_form_input_form_input__WEBPACK_IMPORTED_MODULE_65__["BFormInput"]; });
 
-/* harmony import */ var _components_form_radio_form_radio__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./components/form-radio/form-radio */ "./node_modules/bootstrap-vue/esm/components/form-radio/form-radio.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRadio", function() { return _components_form_radio_form_radio__WEBPACK_IMPORTED_MODULE_66__["BFormRadio"]; });
+/* harmony import */ var _components_form_radio__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./components/form-radio */ "./node_modules/bootstrap-vue/esm/components/form-radio/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormRadioPlugin", function() { return _components_form_radio__WEBPACK_IMPORTED_MODULE_66__["FormRadioPlugin"]; });
 
-/* harmony import */ var _components_form_radio_form_radio_group__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./components/form-radio/form-radio-group */ "./node_modules/bootstrap-vue/esm/components/form-radio/form-radio-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRadioGroup", function() { return _components_form_radio_form_radio_group__WEBPACK_IMPORTED_MODULE_67__["BFormRadioGroup"]; });
+/* harmony import */ var _components_form_radio_form_radio__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./components/form-radio/form-radio */ "./node_modules/bootstrap-vue/esm/components/form-radio/form-radio.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRadio", function() { return _components_form_radio_form_radio__WEBPACK_IMPORTED_MODULE_67__["BFormRadio"]; });
 
-/* harmony import */ var _components_form_tags__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./components/form-tags */ "./node_modules/bootstrap-vue/esm/components/form-tags/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormTagsPlugin", function() { return _components_form_tags__WEBPACK_IMPORTED_MODULE_68__["FormTagsPlugin"]; });
+/* harmony import */ var _components_form_radio_form_radio_group__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./components/form-radio/form-radio-group */ "./node_modules/bootstrap-vue/esm/components/form-radio/form-radio-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRadioGroup", function() { return _components_form_radio_form_radio_group__WEBPACK_IMPORTED_MODULE_68__["BFormRadioGroup"]; });
 
-/* harmony import */ var _components_form_tags_form_tags__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./components/form-tags/form-tags */ "./node_modules/bootstrap-vue/esm/components/form-tags/form-tags.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTags", function() { return _components_form_tags_form_tags__WEBPACK_IMPORTED_MODULE_69__["BFormTags"]; });
+/* harmony import */ var _components_form_tags__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./components/form-tags */ "./node_modules/bootstrap-vue/esm/components/form-tags/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormTagsPlugin", function() { return _components_form_tags__WEBPACK_IMPORTED_MODULE_69__["FormTagsPlugin"]; });
 
-/* harmony import */ var _components_form_tags_form_tag__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./components/form-tags/form-tag */ "./node_modules/bootstrap-vue/esm/components/form-tags/form-tag.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTag", function() { return _components_form_tags_form_tag__WEBPACK_IMPORTED_MODULE_70__["BFormTag"]; });
+/* harmony import */ var _components_form_tags_form_tags__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./components/form-tags/form-tags */ "./node_modules/bootstrap-vue/esm/components/form-tags/form-tags.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTags", function() { return _components_form_tags_form_tags__WEBPACK_IMPORTED_MODULE_70__["BFormTags"]; });
 
-/* harmony import */ var _components_form_select__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./components/form-select */ "./node_modules/bootstrap-vue/esm/components/form-select/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormSelectPlugin", function() { return _components_form_select__WEBPACK_IMPORTED_MODULE_71__["FormSelectPlugin"]; });
+/* harmony import */ var _components_form_tags_form_tag__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./components/form-tags/form-tag */ "./node_modules/bootstrap-vue/esm/components/form-tags/form-tag.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTag", function() { return _components_form_tags_form_tag__WEBPACK_IMPORTED_MODULE_71__["BFormTag"]; });
 
-/* harmony import */ var _components_form_select_form_select__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./components/form-select/form-select */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelect", function() { return _components_form_select_form_select__WEBPACK_IMPORTED_MODULE_72__["BFormSelect"]; });
+/* harmony import */ var _components_form_select__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./components/form-select */ "./node_modules/bootstrap-vue/esm/components/form-select/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormSelectPlugin", function() { return _components_form_select__WEBPACK_IMPORTED_MODULE_72__["FormSelectPlugin"]; });
 
-/* harmony import */ var _components_form_select_form_select_option__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ./components/form-select/form-select-option */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select-option.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelectOption", function() { return _components_form_select_form_select_option__WEBPACK_IMPORTED_MODULE_73__["BFormSelectOption"]; });
+/* harmony import */ var _components_form_select_form_select__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ./components/form-select/form-select */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelect", function() { return _components_form_select_form_select__WEBPACK_IMPORTED_MODULE_73__["BFormSelect"]; });
 
-/* harmony import */ var _components_form_select_form_select_option_group__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ./components/form-select/form-select-option-group */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select-option-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelectOptionGroup", function() { return _components_form_select_form_select_option_group__WEBPACK_IMPORTED_MODULE_74__["BFormSelectOptionGroup"]; });
+/* harmony import */ var _components_form_select_form_select_option__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ./components/form-select/form-select-option */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select-option.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelectOption", function() { return _components_form_select_form_select_option__WEBPACK_IMPORTED_MODULE_74__["BFormSelectOption"]; });
 
-/* harmony import */ var _components_form_textarea__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ./components/form-textarea */ "./node_modules/bootstrap-vue/esm/components/form-textarea/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormTextareaPlugin", function() { return _components_form_textarea__WEBPACK_IMPORTED_MODULE_75__["FormTextareaPlugin"]; });
+/* harmony import */ var _components_form_select_form_select_option_group__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ./components/form-select/form-select-option-group */ "./node_modules/bootstrap-vue/esm/components/form-select/form-select-option-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormSelectOptionGroup", function() { return _components_form_select_form_select_option_group__WEBPACK_IMPORTED_MODULE_75__["BFormSelectOptionGroup"]; });
 
-/* harmony import */ var _components_form_textarea_form_textarea__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ./components/form-textarea/form-textarea */ "./node_modules/bootstrap-vue/esm/components/form-textarea/form-textarea.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTextarea", function() { return _components_form_textarea_form_textarea__WEBPACK_IMPORTED_MODULE_76__["BFormTextarea"]; });
+/* harmony import */ var _components_form_textarea__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ./components/form-textarea */ "./node_modules/bootstrap-vue/esm/components/form-textarea/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FormTextareaPlugin", function() { return _components_form_textarea__WEBPACK_IMPORTED_MODULE_76__["FormTextareaPlugin"]; });
 
-/* harmony import */ var _components_image__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ./components/image */ "./node_modules/bootstrap-vue/esm/components/image/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ImagePlugin", function() { return _components_image__WEBPACK_IMPORTED_MODULE_77__["ImagePlugin"]; });
+/* harmony import */ var _components_form_textarea_form_textarea__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ./components/form-textarea/form-textarea */ "./node_modules/bootstrap-vue/esm/components/form-textarea/form-textarea.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormTextarea", function() { return _components_form_textarea_form_textarea__WEBPACK_IMPORTED_MODULE_77__["BFormTextarea"]; });
 
-/* harmony import */ var _components_image_img__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ./components/image/img */ "./node_modules/bootstrap-vue/esm/components/image/img.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BImg", function() { return _components_image_img__WEBPACK_IMPORTED_MODULE_78__["BImg"]; });
+/* harmony import */ var _components_image__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ./components/image */ "./node_modules/bootstrap-vue/esm/components/image/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ImagePlugin", function() { return _components_image__WEBPACK_IMPORTED_MODULE_78__["ImagePlugin"]; });
 
-/* harmony import */ var _components_image_img_lazy__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ./components/image/img-lazy */ "./node_modules/bootstrap-vue/esm/components/image/img-lazy.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BImgLazy", function() { return _components_image_img_lazy__WEBPACK_IMPORTED_MODULE_79__["BImgLazy"]; });
+/* harmony import */ var _components_image_img__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ./components/image/img */ "./node_modules/bootstrap-vue/esm/components/image/img.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BImg", function() { return _components_image_img__WEBPACK_IMPORTED_MODULE_79__["BImg"]; });
 
-/* harmony import */ var _components_input_group__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ./components/input-group */ "./node_modules/bootstrap-vue/esm/components/input-group/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "InputGroupPlugin", function() { return _components_input_group__WEBPACK_IMPORTED_MODULE_80__["InputGroupPlugin"]; });
+/* harmony import */ var _components_image_img_lazy__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ./components/image/img-lazy */ "./node_modules/bootstrap-vue/esm/components/image/img-lazy.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BImgLazy", function() { return _components_image_img_lazy__WEBPACK_IMPORTED_MODULE_80__["BImgLazy"]; });
 
-/* harmony import */ var _components_input_group_input_group__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ./components/input-group/input-group */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroup", function() { return _components_input_group_input_group__WEBPACK_IMPORTED_MODULE_81__["BInputGroup"]; });
+/* harmony import */ var _components_input_group__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ./components/input-group */ "./node_modules/bootstrap-vue/esm/components/input-group/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "InputGroupPlugin", function() { return _components_input_group__WEBPACK_IMPORTED_MODULE_81__["InputGroupPlugin"]; });
 
-/* harmony import */ var _components_input_group_input_group_addon__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ./components/input-group/input-group-addon */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-addon.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupAddon", function() { return _components_input_group_input_group_addon__WEBPACK_IMPORTED_MODULE_82__["BInputGroupAddon"]; });
+/* harmony import */ var _components_input_group_input_group__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ./components/input-group/input-group */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroup", function() { return _components_input_group_input_group__WEBPACK_IMPORTED_MODULE_82__["BInputGroup"]; });
 
-/* harmony import */ var _components_input_group_input_group_append__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./components/input-group/input-group-append */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-append.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupAppend", function() { return _components_input_group_input_group_append__WEBPACK_IMPORTED_MODULE_83__["BInputGroupAppend"]; });
+/* harmony import */ var _components_input_group_input_group_addon__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./components/input-group/input-group-addon */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-addon.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupAddon", function() { return _components_input_group_input_group_addon__WEBPACK_IMPORTED_MODULE_83__["BInputGroupAddon"]; });
 
-/* harmony import */ var _components_input_group_input_group_prepend__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./components/input-group/input-group-prepend */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-prepend.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupPrepend", function() { return _components_input_group_input_group_prepend__WEBPACK_IMPORTED_MODULE_84__["BInputGroupPrepend"]; });
+/* harmony import */ var _components_input_group_input_group_append__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./components/input-group/input-group-append */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-append.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupAppend", function() { return _components_input_group_input_group_append__WEBPACK_IMPORTED_MODULE_84__["BInputGroupAppend"]; });
 
-/* harmony import */ var _components_input_group_input_group_text__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./components/input-group/input-group-text */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-text.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupText", function() { return _components_input_group_input_group_text__WEBPACK_IMPORTED_MODULE_85__["BInputGroupText"]; });
+/* harmony import */ var _components_input_group_input_group_prepend__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./components/input-group/input-group-prepend */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-prepend.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupPrepend", function() { return _components_input_group_input_group_prepend__WEBPACK_IMPORTED_MODULE_85__["BInputGroupPrepend"]; });
 
-/* harmony import */ var _components_jumbotron__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./components/jumbotron */ "./node_modules/bootstrap-vue/esm/components/jumbotron/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JumbotronPlugin", function() { return _components_jumbotron__WEBPACK_IMPORTED_MODULE_86__["JumbotronPlugin"]; });
+/* harmony import */ var _components_input_group_input_group_text__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./components/input-group/input-group-text */ "./node_modules/bootstrap-vue/esm/components/input-group/input-group-text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BInputGroupText", function() { return _components_input_group_input_group_text__WEBPACK_IMPORTED_MODULE_86__["BInputGroupText"]; });
 
-/* harmony import */ var _components_jumbotron_jumbotron__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./components/jumbotron/jumbotron */ "./node_modules/bootstrap-vue/esm/components/jumbotron/jumbotron.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BJumbotron", function() { return _components_jumbotron_jumbotron__WEBPACK_IMPORTED_MODULE_87__["BJumbotron"]; });
+/* harmony import */ var _components_jumbotron__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./components/jumbotron */ "./node_modules/bootstrap-vue/esm/components/jumbotron/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JumbotronPlugin", function() { return _components_jumbotron__WEBPACK_IMPORTED_MODULE_87__["JumbotronPlugin"]; });
 
-/* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./components/layout */ "./node_modules/bootstrap-vue/esm/components/layout/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LayoutPlugin", function() { return _components_layout__WEBPACK_IMPORTED_MODULE_88__["LayoutPlugin"]; });
+/* harmony import */ var _components_jumbotron_jumbotron__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./components/jumbotron/jumbotron */ "./node_modules/bootstrap-vue/esm/components/jumbotron/jumbotron.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BJumbotron", function() { return _components_jumbotron_jumbotron__WEBPACK_IMPORTED_MODULE_88__["BJumbotron"]; });
 
-/* harmony import */ var _components_layout_container__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ./components/layout/container */ "./node_modules/bootstrap-vue/esm/components/layout/container.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BContainer", function() { return _components_layout_container__WEBPACK_IMPORTED_MODULE_89__["BContainer"]; });
+/* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ./components/layout */ "./node_modules/bootstrap-vue/esm/components/layout/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LayoutPlugin", function() { return _components_layout__WEBPACK_IMPORTED_MODULE_89__["LayoutPlugin"]; });
 
-/* harmony import */ var _components_layout_row__WEBPACK_IMPORTED_MODULE_90__ = __webpack_require__(/*! ./components/layout/row */ "./node_modules/bootstrap-vue/esm/components/layout/row.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BRow", function() { return _components_layout_row__WEBPACK_IMPORTED_MODULE_90__["BRow"]; });
+/* harmony import */ var _components_layout_container__WEBPACK_IMPORTED_MODULE_90__ = __webpack_require__(/*! ./components/layout/container */ "./node_modules/bootstrap-vue/esm/components/layout/container.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BContainer", function() { return _components_layout_container__WEBPACK_IMPORTED_MODULE_90__["BContainer"]; });
 
-/* harmony import */ var _components_layout_col__WEBPACK_IMPORTED_MODULE_91__ = __webpack_require__(/*! ./components/layout/col */ "./node_modules/bootstrap-vue/esm/components/layout/col.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCol", function() { return _components_layout_col__WEBPACK_IMPORTED_MODULE_91__["BCol"]; });
+/* harmony import */ var _components_layout_row__WEBPACK_IMPORTED_MODULE_91__ = __webpack_require__(/*! ./components/layout/row */ "./node_modules/bootstrap-vue/esm/components/layout/row.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BRow", function() { return _components_layout_row__WEBPACK_IMPORTED_MODULE_91__["BRow"]; });
 
-/* harmony import */ var _components_layout_form_row__WEBPACK_IMPORTED_MODULE_92__ = __webpack_require__(/*! ./components/layout/form-row */ "./node_modules/bootstrap-vue/esm/components/layout/form-row.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRow", function() { return _components_layout_form_row__WEBPACK_IMPORTED_MODULE_92__["BFormRow"]; });
+/* harmony import */ var _components_layout_col__WEBPACK_IMPORTED_MODULE_92__ = __webpack_require__(/*! ./components/layout/col */ "./node_modules/bootstrap-vue/esm/components/layout/col.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BCol", function() { return _components_layout_col__WEBPACK_IMPORTED_MODULE_92__["BCol"]; });
 
-/* harmony import */ var _components_link__WEBPACK_IMPORTED_MODULE_93__ = __webpack_require__(/*! ./components/link */ "./node_modules/bootstrap-vue/esm/components/link/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LinkPlugin", function() { return _components_link__WEBPACK_IMPORTED_MODULE_93__["LinkPlugin"]; });
+/* harmony import */ var _components_layout_form_row__WEBPACK_IMPORTED_MODULE_93__ = __webpack_require__(/*! ./components/layout/form-row */ "./node_modules/bootstrap-vue/esm/components/layout/form-row.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BFormRow", function() { return _components_layout_form_row__WEBPACK_IMPORTED_MODULE_93__["BFormRow"]; });
 
-/* harmony import */ var _components_link_link__WEBPACK_IMPORTED_MODULE_94__ = __webpack_require__(/*! ./components/link/link */ "./node_modules/bootstrap-vue/esm/components/link/link.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BLink", function() { return _components_link_link__WEBPACK_IMPORTED_MODULE_94__["BLink"]; });
+/* harmony import */ var _components_link__WEBPACK_IMPORTED_MODULE_94__ = __webpack_require__(/*! ./components/link */ "./node_modules/bootstrap-vue/esm/components/link/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LinkPlugin", function() { return _components_link__WEBPACK_IMPORTED_MODULE_94__["LinkPlugin"]; });
 
-/* harmony import */ var _components_list_group__WEBPACK_IMPORTED_MODULE_95__ = __webpack_require__(/*! ./components/list-group */ "./node_modules/bootstrap-vue/esm/components/list-group/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ListGroupPlugin", function() { return _components_list_group__WEBPACK_IMPORTED_MODULE_95__["ListGroupPlugin"]; });
+/* harmony import */ var _components_link_link__WEBPACK_IMPORTED_MODULE_95__ = __webpack_require__(/*! ./components/link/link */ "./node_modules/bootstrap-vue/esm/components/link/link.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BLink", function() { return _components_link_link__WEBPACK_IMPORTED_MODULE_95__["BLink"]; });
 
-/* harmony import */ var _components_list_group_list_group__WEBPACK_IMPORTED_MODULE_96__ = __webpack_require__(/*! ./components/list-group/list-group */ "./node_modules/bootstrap-vue/esm/components/list-group/list-group.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BListGroup", function() { return _components_list_group_list_group__WEBPACK_IMPORTED_MODULE_96__["BListGroup"]; });
+/* harmony import */ var _components_list_group__WEBPACK_IMPORTED_MODULE_96__ = __webpack_require__(/*! ./components/list-group */ "./node_modules/bootstrap-vue/esm/components/list-group/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ListGroupPlugin", function() { return _components_list_group__WEBPACK_IMPORTED_MODULE_96__["ListGroupPlugin"]; });
 
-/* harmony import */ var _components_list_group_list_group_item__WEBPACK_IMPORTED_MODULE_97__ = __webpack_require__(/*! ./components/list-group/list-group-item */ "./node_modules/bootstrap-vue/esm/components/list-group/list-group-item.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BListGroupItem", function() { return _components_list_group_list_group_item__WEBPACK_IMPORTED_MODULE_97__["BListGroupItem"]; });
+/* harmony import */ var _components_list_group_list_group__WEBPACK_IMPORTED_MODULE_97__ = __webpack_require__(/*! ./components/list-group/list-group */ "./node_modules/bootstrap-vue/esm/components/list-group/list-group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BListGroup", function() { return _components_list_group_list_group__WEBPACK_IMPORTED_MODULE_97__["BListGroup"]; });
 
-/* harmony import */ var _components_media__WEBPACK_IMPORTED_MODULE_98__ = __webpack_require__(/*! ./components/media */ "./node_modules/bootstrap-vue/esm/components/media/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MediaPlugin", function() { return _components_media__WEBPACK_IMPORTED_MODULE_98__["MediaPlugin"]; });
+/* harmony import */ var _components_list_group_list_group_item__WEBPACK_IMPORTED_MODULE_98__ = __webpack_require__(/*! ./components/list-group/list-group-item */ "./node_modules/bootstrap-vue/esm/components/list-group/list-group-item.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BListGroupItem", function() { return _components_list_group_list_group_item__WEBPACK_IMPORTED_MODULE_98__["BListGroupItem"]; });
 
-/* harmony import */ var _components_media_media__WEBPACK_IMPORTED_MODULE_99__ = __webpack_require__(/*! ./components/media/media */ "./node_modules/bootstrap-vue/esm/components/media/media.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMedia", function() { return _components_media_media__WEBPACK_IMPORTED_MODULE_99__["BMedia"]; });
+/* harmony import */ var _components_media__WEBPACK_IMPORTED_MODULE_99__ = __webpack_require__(/*! ./components/media */ "./node_modules/bootstrap-vue/esm/components/media/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MediaPlugin", function() { return _components_media__WEBPACK_IMPORTED_MODULE_99__["MediaPlugin"]; });
 
-/* harmony import */ var _components_media_media_aside__WEBPACK_IMPORTED_MODULE_100__ = __webpack_require__(/*! ./components/media/media-aside */ "./node_modules/bootstrap-vue/esm/components/media/media-aside.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMediaAside", function() { return _components_media_media_aside__WEBPACK_IMPORTED_MODULE_100__["BMediaAside"]; });
+/* harmony import */ var _components_media_media__WEBPACK_IMPORTED_MODULE_100__ = __webpack_require__(/*! ./components/media/media */ "./node_modules/bootstrap-vue/esm/components/media/media.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMedia", function() { return _components_media_media__WEBPACK_IMPORTED_MODULE_100__["BMedia"]; });
 
-/* harmony import */ var _components_media_media_body__WEBPACK_IMPORTED_MODULE_101__ = __webpack_require__(/*! ./components/media/media-body */ "./node_modules/bootstrap-vue/esm/components/media/media-body.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMediaBody", function() { return _components_media_media_body__WEBPACK_IMPORTED_MODULE_101__["BMediaBody"]; });
+/* harmony import */ var _components_media_media_aside__WEBPACK_IMPORTED_MODULE_101__ = __webpack_require__(/*! ./components/media/media-aside */ "./node_modules/bootstrap-vue/esm/components/media/media-aside.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMediaAside", function() { return _components_media_media_aside__WEBPACK_IMPORTED_MODULE_101__["BMediaAside"]; });
 
-/* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_102__ = __webpack_require__(/*! ./components/modal */ "./node_modules/bootstrap-vue/esm/components/modal/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ModalPlugin", function() { return _components_modal__WEBPACK_IMPORTED_MODULE_102__["ModalPlugin"]; });
+/* harmony import */ var _components_media_media_body__WEBPACK_IMPORTED_MODULE_102__ = __webpack_require__(/*! ./components/media/media-body */ "./node_modules/bootstrap-vue/esm/components/media/media-body.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BMediaBody", function() { return _components_media_media_body__WEBPACK_IMPORTED_MODULE_102__["BMediaBody"]; });
 
-/* harmony import */ var _components_modal_modal__WEBPACK_IMPORTED_MODULE_103__ = __webpack_require__(/*! ./components/modal/modal */ "./node_modules/bootstrap-vue/esm/components/modal/modal.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BModal", function() { return _components_modal_modal__WEBPACK_IMPORTED_MODULE_103__["BModal"]; });
+/* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_103__ = __webpack_require__(/*! ./components/modal */ "./node_modules/bootstrap-vue/esm/components/modal/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ModalPlugin", function() { return _components_modal__WEBPACK_IMPORTED_MODULE_103__["ModalPlugin"]; });
 
-/* harmony import */ var _components_nav__WEBPACK_IMPORTED_MODULE_104__ = __webpack_require__(/*! ./components/nav */ "./node_modules/bootstrap-vue/esm/components/nav/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "NavPlugin", function() { return _components_nav__WEBPACK_IMPORTED_MODULE_104__["NavPlugin"]; });
+/* harmony import */ var _components_modal_modal__WEBPACK_IMPORTED_MODULE_104__ = __webpack_require__(/*! ./components/modal/modal */ "./node_modules/bootstrap-vue/esm/components/modal/modal.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BModal", function() { return _components_modal_modal__WEBPACK_IMPORTED_MODULE_104__["BModal"]; });
 
-/* harmony import */ var _components_nav_nav__WEBPACK_IMPORTED_MODULE_105__ = __webpack_require__(/*! ./components/nav/nav */ "./node_modules/bootstrap-vue/esm/components/nav/nav.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNav", function() { return _components_nav_nav__WEBPACK_IMPORTED_MODULE_105__["BNav"]; });
+/* harmony import */ var _components_nav__WEBPACK_IMPORTED_MODULE_105__ = __webpack_require__(/*! ./components/nav */ "./node_modules/bootstrap-vue/esm/components/nav/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "NavPlugin", function() { return _components_nav__WEBPACK_IMPORTED_MODULE_105__["NavPlugin"]; });
 
-/* harmony import */ var _components_nav_nav_form__WEBPACK_IMPORTED_MODULE_106__ = __webpack_require__(/*! ./components/nav/nav-form */ "./node_modules/bootstrap-vue/esm/components/nav/nav-form.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavForm", function() { return _components_nav_nav_form__WEBPACK_IMPORTED_MODULE_106__["BNavForm"]; });
+/* harmony import */ var _components_nav_nav__WEBPACK_IMPORTED_MODULE_106__ = __webpack_require__(/*! ./components/nav/nav */ "./node_modules/bootstrap-vue/esm/components/nav/nav.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNav", function() { return _components_nav_nav__WEBPACK_IMPORTED_MODULE_106__["BNav"]; });
 
-/* harmony import */ var _components_nav_nav_item__WEBPACK_IMPORTED_MODULE_107__ = __webpack_require__(/*! ./components/nav/nav-item */ "./node_modules/bootstrap-vue/esm/components/nav/nav-item.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavItem", function() { return _components_nav_nav_item__WEBPACK_IMPORTED_MODULE_107__["BNavItem"]; });
+/* harmony import */ var _components_nav_nav_form__WEBPACK_IMPORTED_MODULE_107__ = __webpack_require__(/*! ./components/nav/nav-form */ "./node_modules/bootstrap-vue/esm/components/nav/nav-form.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavForm", function() { return _components_nav_nav_form__WEBPACK_IMPORTED_MODULE_107__["BNavForm"]; });
 
-/* harmony import */ var _components_nav_nav_item_dropdown__WEBPACK_IMPORTED_MODULE_108__ = __webpack_require__(/*! ./components/nav/nav-item-dropdown */ "./node_modules/bootstrap-vue/esm/components/nav/nav-item-dropdown.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavItemDropdown", function() { return _components_nav_nav_item_dropdown__WEBPACK_IMPORTED_MODULE_108__["BNavItemDropdown"]; });
+/* harmony import */ var _components_nav_nav_item__WEBPACK_IMPORTED_MODULE_108__ = __webpack_require__(/*! ./components/nav/nav-item */ "./node_modules/bootstrap-vue/esm/components/nav/nav-item.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavItem", function() { return _components_nav_nav_item__WEBPACK_IMPORTED_MODULE_108__["BNavItem"]; });
 
-/* harmony import */ var _components_nav_nav_text__WEBPACK_IMPORTED_MODULE_109__ = __webpack_require__(/*! ./components/nav/nav-text */ "./node_modules/bootstrap-vue/esm/components/nav/nav-text.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavText", function() { return _components_nav_nav_text__WEBPACK_IMPORTED_MODULE_109__["BNavText"]; });
+/* harmony import */ var _components_nav_nav_item_dropdown__WEBPACK_IMPORTED_MODULE_109__ = __webpack_require__(/*! ./components/nav/nav-item-dropdown */ "./node_modules/bootstrap-vue/esm/components/nav/nav-item-dropdown.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavItemDropdown", function() { return _components_nav_nav_item_dropdown__WEBPACK_IMPORTED_MODULE_109__["BNavItemDropdown"]; });
 
-/* harmony import */ var _components_navbar__WEBPACK_IMPORTED_MODULE_110__ = __webpack_require__(/*! ./components/navbar */ "./node_modules/bootstrap-vue/esm/components/navbar/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "NavbarPlugin", function() { return _components_navbar__WEBPACK_IMPORTED_MODULE_110__["NavbarPlugin"]; });
+/* harmony import */ var _components_nav_nav_text__WEBPACK_IMPORTED_MODULE_110__ = __webpack_require__(/*! ./components/nav/nav-text */ "./node_modules/bootstrap-vue/esm/components/nav/nav-text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavText", function() { return _components_nav_nav_text__WEBPACK_IMPORTED_MODULE_110__["BNavText"]; });
 
-/* harmony import */ var _components_navbar_navbar__WEBPACK_IMPORTED_MODULE_111__ = __webpack_require__(/*! ./components/navbar/navbar */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbar", function() { return _components_navbar_navbar__WEBPACK_IMPORTED_MODULE_111__["BNavbar"]; });
+/* harmony import */ var _components_navbar__WEBPACK_IMPORTED_MODULE_111__ = __webpack_require__(/*! ./components/navbar */ "./node_modules/bootstrap-vue/esm/components/navbar/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "NavbarPlugin", function() { return _components_navbar__WEBPACK_IMPORTED_MODULE_111__["NavbarPlugin"]; });
 
-/* harmony import */ var _components_navbar_navbar_brand__WEBPACK_IMPORTED_MODULE_112__ = __webpack_require__(/*! ./components/navbar/navbar-brand */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-brand.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarBrand", function() { return _components_navbar_navbar_brand__WEBPACK_IMPORTED_MODULE_112__["BNavbarBrand"]; });
+/* harmony import */ var _components_navbar_navbar__WEBPACK_IMPORTED_MODULE_112__ = __webpack_require__(/*! ./components/navbar/navbar */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbar", function() { return _components_navbar_navbar__WEBPACK_IMPORTED_MODULE_112__["BNavbar"]; });
 
-/* harmony import */ var _components_navbar_navbar_nav__WEBPACK_IMPORTED_MODULE_113__ = __webpack_require__(/*! ./components/navbar/navbar-nav */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-nav.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarNav", function() { return _components_navbar_navbar_nav__WEBPACK_IMPORTED_MODULE_113__["BNavbarNav"]; });
+/* harmony import */ var _components_navbar_navbar_brand__WEBPACK_IMPORTED_MODULE_113__ = __webpack_require__(/*! ./components/navbar/navbar-brand */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-brand.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarBrand", function() { return _components_navbar_navbar_brand__WEBPACK_IMPORTED_MODULE_113__["BNavbarBrand"]; });
 
-/* harmony import */ var _components_navbar_navbar_toggle__WEBPACK_IMPORTED_MODULE_114__ = __webpack_require__(/*! ./components/navbar/navbar-toggle */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-toggle.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarToggle", function() { return _components_navbar_navbar_toggle__WEBPACK_IMPORTED_MODULE_114__["BNavbarToggle"]; });
+/* harmony import */ var _components_navbar_navbar_nav__WEBPACK_IMPORTED_MODULE_114__ = __webpack_require__(/*! ./components/navbar/navbar-nav */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-nav.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarNav", function() { return _components_navbar_navbar_nav__WEBPACK_IMPORTED_MODULE_114__["BNavbarNav"]; });
 
-/* harmony import */ var _components_pagination__WEBPACK_IMPORTED_MODULE_115__ = __webpack_require__(/*! ./components/pagination */ "./node_modules/bootstrap-vue/esm/components/pagination/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PaginationPlugin", function() { return _components_pagination__WEBPACK_IMPORTED_MODULE_115__["PaginationPlugin"]; });
+/* harmony import */ var _components_navbar_navbar_toggle__WEBPACK_IMPORTED_MODULE_115__ = __webpack_require__(/*! ./components/navbar/navbar-toggle */ "./node_modules/bootstrap-vue/esm/components/navbar/navbar-toggle.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BNavbarToggle", function() { return _components_navbar_navbar_toggle__WEBPACK_IMPORTED_MODULE_115__["BNavbarToggle"]; });
 
-/* harmony import */ var _components_pagination_pagination__WEBPACK_IMPORTED_MODULE_116__ = __webpack_require__(/*! ./components/pagination/pagination */ "./node_modules/bootstrap-vue/esm/components/pagination/pagination.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPagination", function() { return _components_pagination_pagination__WEBPACK_IMPORTED_MODULE_116__["BPagination"]; });
+/* harmony import */ var _components_pagination__WEBPACK_IMPORTED_MODULE_116__ = __webpack_require__(/*! ./components/pagination */ "./node_modules/bootstrap-vue/esm/components/pagination/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PaginationPlugin", function() { return _components_pagination__WEBPACK_IMPORTED_MODULE_116__["PaginationPlugin"]; });
 
-/* harmony import */ var _components_pagination_nav__WEBPACK_IMPORTED_MODULE_117__ = __webpack_require__(/*! ./components/pagination-nav */ "./node_modules/bootstrap-vue/esm/components/pagination-nav/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PaginationNavPlugin", function() { return _components_pagination_nav__WEBPACK_IMPORTED_MODULE_117__["PaginationNavPlugin"]; });
+/* harmony import */ var _components_pagination_pagination__WEBPACK_IMPORTED_MODULE_117__ = __webpack_require__(/*! ./components/pagination/pagination */ "./node_modules/bootstrap-vue/esm/components/pagination/pagination.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPagination", function() { return _components_pagination_pagination__WEBPACK_IMPORTED_MODULE_117__["BPagination"]; });
 
-/* harmony import */ var _components_pagination_nav_pagination_nav__WEBPACK_IMPORTED_MODULE_118__ = __webpack_require__(/*! ./components/pagination-nav/pagination-nav */ "./node_modules/bootstrap-vue/esm/components/pagination-nav/pagination-nav.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPaginationNav", function() { return _components_pagination_nav_pagination_nav__WEBPACK_IMPORTED_MODULE_118__["BPaginationNav"]; });
+/* harmony import */ var _components_pagination_nav__WEBPACK_IMPORTED_MODULE_118__ = __webpack_require__(/*! ./components/pagination-nav */ "./node_modules/bootstrap-vue/esm/components/pagination-nav/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PaginationNavPlugin", function() { return _components_pagination_nav__WEBPACK_IMPORTED_MODULE_118__["PaginationNavPlugin"]; });
 
-/* harmony import */ var _components_popover__WEBPACK_IMPORTED_MODULE_119__ = __webpack_require__(/*! ./components/popover */ "./node_modules/bootstrap-vue/esm/components/popover/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PopoverPlugin", function() { return _components_popover__WEBPACK_IMPORTED_MODULE_119__["PopoverPlugin"]; });
+/* harmony import */ var _components_pagination_nav_pagination_nav__WEBPACK_IMPORTED_MODULE_119__ = __webpack_require__(/*! ./components/pagination-nav/pagination-nav */ "./node_modules/bootstrap-vue/esm/components/pagination-nav/pagination-nav.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPaginationNav", function() { return _components_pagination_nav_pagination_nav__WEBPACK_IMPORTED_MODULE_119__["BPaginationNav"]; });
 
-/* harmony import */ var _components_popover_popover__WEBPACK_IMPORTED_MODULE_120__ = __webpack_require__(/*! ./components/popover/popover */ "./node_modules/bootstrap-vue/esm/components/popover/popover.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPopover", function() { return _components_popover_popover__WEBPACK_IMPORTED_MODULE_120__["BPopover"]; });
+/* harmony import */ var _components_popover__WEBPACK_IMPORTED_MODULE_120__ = __webpack_require__(/*! ./components/popover */ "./node_modules/bootstrap-vue/esm/components/popover/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PopoverPlugin", function() { return _components_popover__WEBPACK_IMPORTED_MODULE_120__["PopoverPlugin"]; });
 
-/* harmony import */ var _components_progress__WEBPACK_IMPORTED_MODULE_121__ = __webpack_require__(/*! ./components/progress */ "./node_modules/bootstrap-vue/esm/components/progress/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ProgressPlugin", function() { return _components_progress__WEBPACK_IMPORTED_MODULE_121__["ProgressPlugin"]; });
+/* harmony import */ var _components_popover_popover__WEBPACK_IMPORTED_MODULE_121__ = __webpack_require__(/*! ./components/popover/popover */ "./node_modules/bootstrap-vue/esm/components/popover/popover.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BPopover", function() { return _components_popover_popover__WEBPACK_IMPORTED_MODULE_121__["BPopover"]; });
 
-/* harmony import */ var _components_progress_progress__WEBPACK_IMPORTED_MODULE_122__ = __webpack_require__(/*! ./components/progress/progress */ "./node_modules/bootstrap-vue/esm/components/progress/progress.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BProgress", function() { return _components_progress_progress__WEBPACK_IMPORTED_MODULE_122__["BProgress"]; });
+/* harmony import */ var _components_progress__WEBPACK_IMPORTED_MODULE_122__ = __webpack_require__(/*! ./components/progress */ "./node_modules/bootstrap-vue/esm/components/progress/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ProgressPlugin", function() { return _components_progress__WEBPACK_IMPORTED_MODULE_122__["ProgressPlugin"]; });
 
-/* harmony import */ var _components_progress_progress_bar__WEBPACK_IMPORTED_MODULE_123__ = __webpack_require__(/*! ./components/progress/progress-bar */ "./node_modules/bootstrap-vue/esm/components/progress/progress-bar.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BProgressBar", function() { return _components_progress_progress_bar__WEBPACK_IMPORTED_MODULE_123__["BProgressBar"]; });
+/* harmony import */ var _components_progress_progress__WEBPACK_IMPORTED_MODULE_123__ = __webpack_require__(/*! ./components/progress/progress */ "./node_modules/bootstrap-vue/esm/components/progress/progress.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BProgress", function() { return _components_progress_progress__WEBPACK_IMPORTED_MODULE_123__["BProgress"]; });
 
-/* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_124__ = __webpack_require__(/*! ./components/spinner */ "./node_modules/bootstrap-vue/esm/components/spinner/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SpinnerPlugin", function() { return _components_spinner__WEBPACK_IMPORTED_MODULE_124__["SpinnerPlugin"]; });
+/* harmony import */ var _components_progress_progress_bar__WEBPACK_IMPORTED_MODULE_124__ = __webpack_require__(/*! ./components/progress/progress-bar */ "./node_modules/bootstrap-vue/esm/components/progress/progress-bar.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BProgressBar", function() { return _components_progress_progress_bar__WEBPACK_IMPORTED_MODULE_124__["BProgressBar"]; });
 
-/* harmony import */ var _components_spinner_spinner__WEBPACK_IMPORTED_MODULE_125__ = __webpack_require__(/*! ./components/spinner/spinner */ "./node_modules/bootstrap-vue/esm/components/spinner/spinner.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BSpinner", function() { return _components_spinner_spinner__WEBPACK_IMPORTED_MODULE_125__["BSpinner"]; });
+/* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_125__ = __webpack_require__(/*! ./components/spinner */ "./node_modules/bootstrap-vue/esm/components/spinner/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SpinnerPlugin", function() { return _components_spinner__WEBPACK_IMPORTED_MODULE_125__["SpinnerPlugin"]; });
 
-/* harmony import */ var _components_table__WEBPACK_IMPORTED_MODULE_126__ = __webpack_require__(/*! ./components/table */ "./node_modules/bootstrap-vue/esm/components/table/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TablePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_126__["TablePlugin"]; });
+/* harmony import */ var _components_spinner_spinner__WEBPACK_IMPORTED_MODULE_126__ = __webpack_require__(/*! ./components/spinner/spinner */ "./node_modules/bootstrap-vue/esm/components/spinner/spinner.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BSpinner", function() { return _components_spinner_spinner__WEBPACK_IMPORTED_MODULE_126__["BSpinner"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TableLitePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_126__["TableLitePlugin"]; });
+/* harmony import */ var _components_table__WEBPACK_IMPORTED_MODULE_127__ = __webpack_require__(/*! ./components/table */ "./node_modules/bootstrap-vue/esm/components/table/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TablePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_127__["TablePlugin"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TableSimplePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_126__["TableSimplePlugin"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TableLitePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_127__["TableLitePlugin"]; });
 
-/* harmony import */ var _components_table_table__WEBPACK_IMPORTED_MODULE_127__ = __webpack_require__(/*! ./components/table/table */ "./node_modules/bootstrap-vue/esm/components/table/table.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTable", function() { return _components_table_table__WEBPACK_IMPORTED_MODULE_127__["BTable"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TableSimplePlugin", function() { return _components_table__WEBPACK_IMPORTED_MODULE_127__["TableSimplePlugin"]; });
 
-/* harmony import */ var _components_table_table_lite__WEBPACK_IMPORTED_MODULE_128__ = __webpack_require__(/*! ./components/table/table-lite */ "./node_modules/bootstrap-vue/esm/components/table/table-lite.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTableLite", function() { return _components_table_table_lite__WEBPACK_IMPORTED_MODULE_128__["BTableLite"]; });
+/* harmony import */ var _components_table_table__WEBPACK_IMPORTED_MODULE_128__ = __webpack_require__(/*! ./components/table/table */ "./node_modules/bootstrap-vue/esm/components/table/table.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTable", function() { return _components_table_table__WEBPACK_IMPORTED_MODULE_128__["BTable"]; });
 
-/* harmony import */ var _components_table_table_simple__WEBPACK_IMPORTED_MODULE_129__ = __webpack_require__(/*! ./components/table/table-simple */ "./node_modules/bootstrap-vue/esm/components/table/table-simple.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTableSimple", function() { return _components_table_table_simple__WEBPACK_IMPORTED_MODULE_129__["BTableSimple"]; });
+/* harmony import */ var _components_table_table_lite__WEBPACK_IMPORTED_MODULE_129__ = __webpack_require__(/*! ./components/table/table-lite */ "./node_modules/bootstrap-vue/esm/components/table/table-lite.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTableLite", function() { return _components_table_table_lite__WEBPACK_IMPORTED_MODULE_129__["BTableLite"]; });
 
-/* harmony import */ var _components_table_tbody__WEBPACK_IMPORTED_MODULE_130__ = __webpack_require__(/*! ./components/table/tbody */ "./node_modules/bootstrap-vue/esm/components/table/tbody.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTbody", function() { return _components_table_tbody__WEBPACK_IMPORTED_MODULE_130__["BTbody"]; });
+/* harmony import */ var _components_table_table_simple__WEBPACK_IMPORTED_MODULE_130__ = __webpack_require__(/*! ./components/table/table-simple */ "./node_modules/bootstrap-vue/esm/components/table/table-simple.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTableSimple", function() { return _components_table_table_simple__WEBPACK_IMPORTED_MODULE_130__["BTableSimple"]; });
 
-/* harmony import */ var _components_table_thead__WEBPACK_IMPORTED_MODULE_131__ = __webpack_require__(/*! ./components/table/thead */ "./node_modules/bootstrap-vue/esm/components/table/thead.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BThead", function() { return _components_table_thead__WEBPACK_IMPORTED_MODULE_131__["BThead"]; });
+/* harmony import */ var _components_table_tbody__WEBPACK_IMPORTED_MODULE_131__ = __webpack_require__(/*! ./components/table/tbody */ "./node_modules/bootstrap-vue/esm/components/table/tbody.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTbody", function() { return _components_table_tbody__WEBPACK_IMPORTED_MODULE_131__["BTbody"]; });
 
-/* harmony import */ var _components_table_tfoot__WEBPACK_IMPORTED_MODULE_132__ = __webpack_require__(/*! ./components/table/tfoot */ "./node_modules/bootstrap-vue/esm/components/table/tfoot.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTfoot", function() { return _components_table_tfoot__WEBPACK_IMPORTED_MODULE_132__["BTfoot"]; });
+/* harmony import */ var _components_table_thead__WEBPACK_IMPORTED_MODULE_132__ = __webpack_require__(/*! ./components/table/thead */ "./node_modules/bootstrap-vue/esm/components/table/thead.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BThead", function() { return _components_table_thead__WEBPACK_IMPORTED_MODULE_132__["BThead"]; });
 
-/* harmony import */ var _components_table_tr__WEBPACK_IMPORTED_MODULE_133__ = __webpack_require__(/*! ./components/table/tr */ "./node_modules/bootstrap-vue/esm/components/table/tr.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTr", function() { return _components_table_tr__WEBPACK_IMPORTED_MODULE_133__["BTr"]; });
+/* harmony import */ var _components_table_tfoot__WEBPACK_IMPORTED_MODULE_133__ = __webpack_require__(/*! ./components/table/tfoot */ "./node_modules/bootstrap-vue/esm/components/table/tfoot.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTfoot", function() { return _components_table_tfoot__WEBPACK_IMPORTED_MODULE_133__["BTfoot"]; });
 
-/* harmony import */ var _components_table_th__WEBPACK_IMPORTED_MODULE_134__ = __webpack_require__(/*! ./components/table/th */ "./node_modules/bootstrap-vue/esm/components/table/th.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTh", function() { return _components_table_th__WEBPACK_IMPORTED_MODULE_134__["BTh"]; });
+/* harmony import */ var _components_table_tr__WEBPACK_IMPORTED_MODULE_134__ = __webpack_require__(/*! ./components/table/tr */ "./node_modules/bootstrap-vue/esm/components/table/tr.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTr", function() { return _components_table_tr__WEBPACK_IMPORTED_MODULE_134__["BTr"]; });
 
-/* harmony import */ var _components_table_td__WEBPACK_IMPORTED_MODULE_135__ = __webpack_require__(/*! ./components/table/td */ "./node_modules/bootstrap-vue/esm/components/table/td.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTd", function() { return _components_table_td__WEBPACK_IMPORTED_MODULE_135__["BTd"]; });
+/* harmony import */ var _components_table_th__WEBPACK_IMPORTED_MODULE_135__ = __webpack_require__(/*! ./components/table/th */ "./node_modules/bootstrap-vue/esm/components/table/th.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTh", function() { return _components_table_th__WEBPACK_IMPORTED_MODULE_135__["BTh"]; });
 
-/* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_136__ = __webpack_require__(/*! ./components/tabs */ "./node_modules/bootstrap-vue/esm/components/tabs/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TabsPlugin", function() { return _components_tabs__WEBPACK_IMPORTED_MODULE_136__["TabsPlugin"]; });
+/* harmony import */ var _components_table_td__WEBPACK_IMPORTED_MODULE_136__ = __webpack_require__(/*! ./components/table/td */ "./node_modules/bootstrap-vue/esm/components/table/td.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTd", function() { return _components_table_td__WEBPACK_IMPORTED_MODULE_136__["BTd"]; });
 
-/* harmony import */ var _components_tabs_tabs__WEBPACK_IMPORTED_MODULE_137__ = __webpack_require__(/*! ./components/tabs/tabs */ "./node_modules/bootstrap-vue/esm/components/tabs/tabs.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTabs", function() { return _components_tabs_tabs__WEBPACK_IMPORTED_MODULE_137__["BTabs"]; });
+/* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_137__ = __webpack_require__(/*! ./components/tabs */ "./node_modules/bootstrap-vue/esm/components/tabs/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TabsPlugin", function() { return _components_tabs__WEBPACK_IMPORTED_MODULE_137__["TabsPlugin"]; });
 
-/* harmony import */ var _components_tabs_tab__WEBPACK_IMPORTED_MODULE_138__ = __webpack_require__(/*! ./components/tabs/tab */ "./node_modules/bootstrap-vue/esm/components/tabs/tab.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTab", function() { return _components_tabs_tab__WEBPACK_IMPORTED_MODULE_138__["BTab"]; });
+/* harmony import */ var _components_tabs_tabs__WEBPACK_IMPORTED_MODULE_138__ = __webpack_require__(/*! ./components/tabs/tabs */ "./node_modules/bootstrap-vue/esm/components/tabs/tabs.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTabs", function() { return _components_tabs_tabs__WEBPACK_IMPORTED_MODULE_138__["BTabs"]; });
 
-/* harmony import */ var _components_toast__WEBPACK_IMPORTED_MODULE_139__ = __webpack_require__(/*! ./components/toast */ "./node_modules/bootstrap-vue/esm/components/toast/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ToastPlugin", function() { return _components_toast__WEBPACK_IMPORTED_MODULE_139__["ToastPlugin"]; });
+/* harmony import */ var _components_tabs_tab__WEBPACK_IMPORTED_MODULE_139__ = __webpack_require__(/*! ./components/tabs/tab */ "./node_modules/bootstrap-vue/esm/components/tabs/tab.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTab", function() { return _components_tabs_tab__WEBPACK_IMPORTED_MODULE_139__["BTab"]; });
 
-/* harmony import */ var _components_toast_toast__WEBPACK_IMPORTED_MODULE_140__ = __webpack_require__(/*! ./components/toast/toast */ "./node_modules/bootstrap-vue/esm/components/toast/toast.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BToast", function() { return _components_toast_toast__WEBPACK_IMPORTED_MODULE_140__["BToast"]; });
+/* harmony import */ var _components_toast__WEBPACK_IMPORTED_MODULE_140__ = __webpack_require__(/*! ./components/toast */ "./node_modules/bootstrap-vue/esm/components/toast/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ToastPlugin", function() { return _components_toast__WEBPACK_IMPORTED_MODULE_140__["ToastPlugin"]; });
 
-/* harmony import */ var _components_toast_toaster__WEBPACK_IMPORTED_MODULE_141__ = __webpack_require__(/*! ./components/toast/toaster */ "./node_modules/bootstrap-vue/esm/components/toast/toaster.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BToaster", function() { return _components_toast_toaster__WEBPACK_IMPORTED_MODULE_141__["BToaster"]; });
+/* harmony import */ var _components_toast_toast__WEBPACK_IMPORTED_MODULE_141__ = __webpack_require__(/*! ./components/toast/toast */ "./node_modules/bootstrap-vue/esm/components/toast/toast.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BToast", function() { return _components_toast_toast__WEBPACK_IMPORTED_MODULE_141__["BToast"]; });
 
-/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_142__ = __webpack_require__(/*! ./components/tooltip */ "./node_modules/bootstrap-vue/esm/components/tooltip/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TooltipPlugin", function() { return _components_tooltip__WEBPACK_IMPORTED_MODULE_142__["TooltipPlugin"]; });
+/* harmony import */ var _components_toast_toaster__WEBPACK_IMPORTED_MODULE_142__ = __webpack_require__(/*! ./components/toast/toaster */ "./node_modules/bootstrap-vue/esm/components/toast/toaster.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BToaster", function() { return _components_toast_toaster__WEBPACK_IMPORTED_MODULE_142__["BToaster"]; });
 
-/* harmony import */ var _components_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_143__ = __webpack_require__(/*! ./components/tooltip/tooltip */ "./node_modules/bootstrap-vue/esm/components/tooltip/tooltip.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTooltip", function() { return _components_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_143__["BTooltip"]; });
+/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_143__ = __webpack_require__(/*! ./components/tooltip */ "./node_modules/bootstrap-vue/esm/components/tooltip/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TooltipPlugin", function() { return _components_tooltip__WEBPACK_IMPORTED_MODULE_143__["TooltipPlugin"]; });
 
-/* harmony import */ var _directives_modal__WEBPACK_IMPORTED_MODULE_144__ = __webpack_require__(/*! ./directives/modal */ "./node_modules/bootstrap-vue/esm/directives/modal/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBModalPlugin", function() { return _directives_modal__WEBPACK_IMPORTED_MODULE_144__["VBModalPlugin"]; });
+/* harmony import */ var _components_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_144__ = __webpack_require__(/*! ./components/tooltip/tooltip */ "./node_modules/bootstrap-vue/esm/components/tooltip/tooltip.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BTooltip", function() { return _components_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_144__["BTooltip"]; });
 
-/* harmony import */ var _directives_modal_modal__WEBPACK_IMPORTED_MODULE_145__ = __webpack_require__(/*! ./directives/modal/modal */ "./node_modules/bootstrap-vue/esm/directives/modal/modal.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBModal", function() { return _directives_modal_modal__WEBPACK_IMPORTED_MODULE_145__["VBModal"]; });
+/* harmony import */ var _directives_modal__WEBPACK_IMPORTED_MODULE_145__ = __webpack_require__(/*! ./directives/modal */ "./node_modules/bootstrap-vue/esm/directives/modal/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBModalPlugin", function() { return _directives_modal__WEBPACK_IMPORTED_MODULE_145__["VBModalPlugin"]; });
 
-/* harmony import */ var _directives_popover__WEBPACK_IMPORTED_MODULE_146__ = __webpack_require__(/*! ./directives/popover */ "./node_modules/bootstrap-vue/esm/directives/popover/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBPopoverPlugin", function() { return _directives_popover__WEBPACK_IMPORTED_MODULE_146__["VBPopoverPlugin"]; });
+/* harmony import */ var _directives_modal_modal__WEBPACK_IMPORTED_MODULE_146__ = __webpack_require__(/*! ./directives/modal/modal */ "./node_modules/bootstrap-vue/esm/directives/modal/modal.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBModal", function() { return _directives_modal_modal__WEBPACK_IMPORTED_MODULE_146__["VBModal"]; });
 
-/* harmony import */ var _directives_popover_popover__WEBPACK_IMPORTED_MODULE_147__ = __webpack_require__(/*! ./directives/popover/popover */ "./node_modules/bootstrap-vue/esm/directives/popover/popover.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBPopover", function() { return _directives_popover_popover__WEBPACK_IMPORTED_MODULE_147__["VBPopover"]; });
+/* harmony import */ var _directives_popover__WEBPACK_IMPORTED_MODULE_147__ = __webpack_require__(/*! ./directives/popover */ "./node_modules/bootstrap-vue/esm/directives/popover/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBPopoverPlugin", function() { return _directives_popover__WEBPACK_IMPORTED_MODULE_147__["VBPopoverPlugin"]; });
 
-/* harmony import */ var _directives_scrollspy__WEBPACK_IMPORTED_MODULE_148__ = __webpack_require__(/*! ./directives/scrollspy */ "./node_modules/bootstrap-vue/esm/directives/scrollspy/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBScrollspyPlugin", function() { return _directives_scrollspy__WEBPACK_IMPORTED_MODULE_148__["VBScrollspyPlugin"]; });
+/* harmony import */ var _directives_popover_popover__WEBPACK_IMPORTED_MODULE_148__ = __webpack_require__(/*! ./directives/popover/popover */ "./node_modules/bootstrap-vue/esm/directives/popover/popover.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBPopover", function() { return _directives_popover_popover__WEBPACK_IMPORTED_MODULE_148__["VBPopover"]; });
 
-/* harmony import */ var _directives_scrollspy_scrollspy__WEBPACK_IMPORTED_MODULE_149__ = __webpack_require__(/*! ./directives/scrollspy/scrollspy */ "./node_modules/bootstrap-vue/esm/directives/scrollspy/scrollspy.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBScrollspy", function() { return _directives_scrollspy_scrollspy__WEBPACK_IMPORTED_MODULE_149__["VBScrollspy"]; });
+/* harmony import */ var _directives_scrollspy__WEBPACK_IMPORTED_MODULE_149__ = __webpack_require__(/*! ./directives/scrollspy */ "./node_modules/bootstrap-vue/esm/directives/scrollspy/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBScrollspyPlugin", function() { return _directives_scrollspy__WEBPACK_IMPORTED_MODULE_149__["VBScrollspyPlugin"]; });
 
-/* harmony import */ var _directives_toggle__WEBPACK_IMPORTED_MODULE_150__ = __webpack_require__(/*! ./directives/toggle */ "./node_modules/bootstrap-vue/esm/directives/toggle/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTogglePlugin", function() { return _directives_toggle__WEBPACK_IMPORTED_MODULE_150__["VBTogglePlugin"]; });
+/* harmony import */ var _directives_scrollspy_scrollspy__WEBPACK_IMPORTED_MODULE_150__ = __webpack_require__(/*! ./directives/scrollspy/scrollspy */ "./node_modules/bootstrap-vue/esm/directives/scrollspy/scrollspy.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBScrollspy", function() { return _directives_scrollspy_scrollspy__WEBPACK_IMPORTED_MODULE_150__["VBScrollspy"]; });
 
-/* harmony import */ var _directives_toggle_toggle__WEBPACK_IMPORTED_MODULE_151__ = __webpack_require__(/*! ./directives/toggle/toggle */ "./node_modules/bootstrap-vue/esm/directives/toggle/toggle.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBToggle", function() { return _directives_toggle_toggle__WEBPACK_IMPORTED_MODULE_151__["VBToggle"]; });
+/* harmony import */ var _directives_toggle__WEBPACK_IMPORTED_MODULE_151__ = __webpack_require__(/*! ./directives/toggle */ "./node_modules/bootstrap-vue/esm/directives/toggle/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTogglePlugin", function() { return _directives_toggle__WEBPACK_IMPORTED_MODULE_151__["VBTogglePlugin"]; });
 
-/* harmony import */ var _directives_tooltip__WEBPACK_IMPORTED_MODULE_152__ = __webpack_require__(/*! ./directives/tooltip */ "./node_modules/bootstrap-vue/esm/directives/tooltip/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTooltipPlugin", function() { return _directives_tooltip__WEBPACK_IMPORTED_MODULE_152__["VBTooltipPlugin"]; });
+/* harmony import */ var _directives_toggle_toggle__WEBPACK_IMPORTED_MODULE_152__ = __webpack_require__(/*! ./directives/toggle/toggle */ "./node_modules/bootstrap-vue/esm/directives/toggle/toggle.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBToggle", function() { return _directives_toggle_toggle__WEBPACK_IMPORTED_MODULE_152__["VBToggle"]; });
 
-/* harmony import */ var _directives_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_153__ = __webpack_require__(/*! ./directives/tooltip/tooltip */ "./node_modules/bootstrap-vue/esm/directives/tooltip/tooltip.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTooltip", function() { return _directives_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_153__["VBTooltip"]; });
+/* harmony import */ var _directives_tooltip__WEBPACK_IMPORTED_MODULE_153__ = __webpack_require__(/*! ./directives/tooltip */ "./node_modules/bootstrap-vue/esm/directives/tooltip/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTooltipPlugin", function() { return _directives_tooltip__WEBPACK_IMPORTED_MODULE_153__["VBTooltipPlugin"]; });
 
-/* harmony import */ var _directives_visible__WEBPACK_IMPORTED_MODULE_154__ = __webpack_require__(/*! ./directives/visible */ "./node_modules/bootstrap-vue/esm/directives/visible/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBVisiblePlugin", function() { return _directives_visible__WEBPACK_IMPORTED_MODULE_154__["VBVisiblePlugin"]; });
+/* harmony import */ var _directives_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_154__ = __webpack_require__(/*! ./directives/tooltip/tooltip */ "./node_modules/bootstrap-vue/esm/directives/tooltip/tooltip.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBTooltip", function() { return _directives_tooltip_tooltip__WEBPACK_IMPORTED_MODULE_154__["VBTooltip"]; });
 
-/* harmony import */ var _directives_visible_visible__WEBPACK_IMPORTED_MODULE_155__ = __webpack_require__(/*! ./directives/visible/visible */ "./node_modules/bootstrap-vue/esm/directives/visible/visible.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBVisible", function() { return _directives_visible_visible__WEBPACK_IMPORTED_MODULE_155__["VBVisible"]; });
+/* harmony import */ var _directives_visible__WEBPACK_IMPORTED_MODULE_155__ = __webpack_require__(/*! ./directives/visible */ "./node_modules/bootstrap-vue/esm/directives/visible/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBVisiblePlugin", function() { return _directives_visible__WEBPACK_IMPORTED_MODULE_155__["VBVisiblePlugin"]; });
+
+/* harmony import */ var _directives_visible_visible__WEBPACK_IMPORTED_MODULE_156__ = __webpack_require__(/*! ./directives/visible/visible */ "./node_modules/bootstrap-vue/esm/directives/visible/visible.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VBVisible", function() { return _directives_visible_visible__WEBPACK_IMPORTED_MODULE_156__["VBVisible"]; });
 
 /*!
- * BootstrapVue 2.2.0
+ * BootstrapVue 2.4.0
  *
  * @link https://bootstrap-vue.js.org
  * @source https://github.com/bootstrap-vue/bootstrap-vue
@@ -29565,9 +29059,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var NAME = 'BootstrapVue'; //
-// BootstrapVue installer
-//
+var NAME = 'BootstrapVue'; // --- BootstrapVue installer ---
 
 var install =
 /*#__PURE__*/
@@ -29576,22 +29068,16 @@ Object(_utils_plugins__WEBPACK_IMPORTED_MODULE_0__["installFactory"])({
     componentsPlugin: _components__WEBPACK_IMPORTED_MODULE_1__["componentsPlugin"],
     directivesPlugin: _directives__WEBPACK_IMPORTED_MODULE_2__["directivesPlugin"]
   }
-}); //
-// BootstrapVue plugin
-//
+}); // --- BootstrapVue plugin ---
 
 var BootstrapVue =
 /*#__PURE__*/
 {
   install: install,
   NAME: NAME
-}; //
-// Named exports for BvConfigPlugin
-//
+}; // --- Named exports for BvConfigPlugin ---
 
- //
-// Export named injection plugins
-//
+ // --- Export named injection plugins ---
 // TODO:
 //   We should probably move injections into their own
 //   parent directory (i.e. `/src/injections`)
@@ -29603,18 +29089,15 @@ var BootstrapVue =
 // Webpack v5 fixes the optimizations with re-export of re-exports so this
 // can be reverted back to `export * from './table'` when Webpack v5 is released
 // See: https://github.com/webpack/webpack/pull/9203 (available in Webpack v5.0.0-alpha.15)
-//
-// Export Icon components and IconPlugin/BootstrapVueIcons
-//
+// -- Export Icon components and IconPlugin/BootstrapVueIcons ---
 // export * from './icons'
 
 
- // This re-export is only a single level deep, which
-// Webpack 4 handles correctly when tree shaking
 
- //
-// Export all individual components and component group plugins as named exports.
-//
+ // This re-export is only a single level deep, which
+// Webpack 4 (usually) handles correctly when tree shaking
+
+ // --- Export all individual components and component group plugins as named exports ---
 // export * from './components/alert'
 
 
@@ -29789,9 +29272,7 @@ var BootstrapVue =
  // export * from './components/tooltip'
 
 
- //
-// Named exports of all directives (VB<Name>) and Plugins (VB<name>Plugin)
-//
+ // --- Named exports of all directives (VB<Name>) and plugins (VB<Name>Plugin) ---
 // Webpack 4 has optimization difficulties with re-export of re-exports,
 // so we import the directives individually here for better tree shaking
 //
@@ -29899,7 +29380,7 @@ var eventOptions = {
     }
 
     if (!this.clickOutEventName) {
-      this.clickOutEventName = 'ontouchstart' in document.documentElement ? 'touchstart' : 'click';
+      this.clickOutEventName = 'click';
     }
 
     if (this.listenForClickOut) {
@@ -29938,8 +29419,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/key-codes */ "./node_modules/bootstrap-vue/esm/utils/key-codes.js");
 /* harmony import */ var _utils_bv_event_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/bv-event.class */ "./node_modules/bootstrap-vue/esm/utils/bv-event.class.js");
 /* harmony import */ var _utils_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom */ "./node_modules/bootstrap-vue/esm/utils/dom.js");
-/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/env */ "./node_modules/bootstrap-vue/esm/utils/env.js");
-/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/inspect */ "./node_modules/bootstrap-vue/esm/utils/inspect.js");
+/* harmony import */ var _utils_safe_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/safe-types */ "./node_modules/bootstrap-vue/esm/utils/safe-types.js");
 /* harmony import */ var _utils_warn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/warn */ "./node_modules/bootstrap-vue/esm/utils/warn.js");
 /* harmony import */ var _click_out__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./click-out */ "./node_modules/bootstrap-vue/esm/mixins/click-out.js");
 /* harmony import */ var _focus_in__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./focus-in */ "./node_modules/bootstrap-vue/esm/mixins/focus-in.js");
@@ -29968,9 +29449,7 @@ var filterVisibles = function filterVisibles(els) {
 
 var ROOT_DROPDOWN_PREFIX = 'bv::dropdown::';
 var ROOT_DROPDOWN_SHOWN = "".concat(ROOT_DROPDOWN_PREFIX, "shown");
-var ROOT_DROPDOWN_HIDDEN = "".concat(ROOT_DROPDOWN_PREFIX, "hidden"); // Delay when loosing focus before closing menu (in ms)
-
-var FOCUSOUT_DELAY = _utils_env__WEBPACK_IMPORTED_MODULE_4__["hasTouchSupport"] ? 450 : 150; // Dropdown item CSS selectors
+var ROOT_DROPDOWN_HIDDEN = "".concat(ROOT_DROPDOWN_PREFIX, "hidden"); // Dropdown item CSS selectors
 
 var Selector = {
   FORM_CHILD: '.dropdown form',
@@ -30004,6 +29483,11 @@ var AttachmentMap = {
     return {
       bvDropdown: this
     };
+  },
+  inject: {
+    bvNavbar: {
+      default: null
+    }
   },
   props: {
     disabled: {
@@ -30057,16 +29541,24 @@ var AttachmentMap = {
     popperOpts: {
       // type: Object,
       default: function _default() {}
+    },
+    boundary: {
+      // String: `scrollParent`, `window` or `viewport`
+      // HTMLElement: HTML Element reference
+      type: [String, _utils_safe_types__WEBPACK_IMPORTED_MODULE_5__["HTMLElement"]],
+      default: 'scrollParent'
     }
   },
   data: function data() {
     return {
       visible: false,
-      inNavbar: null,
       visibleChangePrevented: false
     };
   },
   computed: {
+    inNavbar: function inNavbar() {
+      return !Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_4__["isNull"])(this.bvNavbar);
+    },
     toggler: function toggler() {
       var toggle = this.$refs.toggle;
       return toggle ? toggle.$el || toggle : null;
@@ -30104,7 +29596,7 @@ var AttachmentMap = {
         if (bvEvt.defaultPrevented) {
           // Reset value and exit if canceled
           this.visibleChangePrevented = true;
-          this.visible = oldValue; // Just in case a child element triggered this.hide(true)
+          this.visible = oldValue; // Just in case a child element triggered `this.hide(true)`
 
           this.$off('hidden', this.focusToggler);
           return;
@@ -30127,9 +29619,6 @@ var AttachmentMap = {
   created: function created() {
     // Create non-reactive property
     this.$_popper = null;
-    this.$_hideTimeout = null;
-
-    this.$_noop = function () {};
   },
   deactivated: function deactivated()
   /* istanbul ignore next: not easy to test */
@@ -30143,7 +29632,6 @@ var AttachmentMap = {
     this.visible = false;
     this.whileOpenListen(false);
     this.destroyPopper();
-    this.clearHideTimeout();
   },
   methods: {
     // Event emitter
@@ -30158,34 +29646,27 @@ var AttachmentMap = {
       if (this.disabled) {
         /* istanbul ignore next */
         return;
-      } // Are we in a navbar ?
-
-
-      if (Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_5__["isNull"])(this.inNavbar) && this.isNav) {
-        // We should use an injection for this
-
-        /* istanbul ignore next */
-        this.inNavbar = Boolean(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["closest"])('.navbar', this.$el));
-      } // Disable totally Popper.js for Dropdown in Navbar
+      } // Only instantiate Popper.js when dropdown is not in `<b-navbar>`
 
 
       if (!this.inNavbar) {
         if (typeof popper_js__WEBPACK_IMPORTED_MODULE_0__["default"] === 'undefined') {
           /* istanbul ignore next */
-          Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('b-dropdown: Popper.js not found. Falling back to CSS positioning.');
+          Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('Popper.js not found. Falling back to CSS positioning', 'BDropdown');
         } else {
-          // for dropup with alignment we use the parent element as popper container
-          var element = this.dropup && this.right || this.split ? this.$el : this.$refs.toggle; // Make sure we have a reference to an element, not a component!
+          // For dropup with alignment we use the parent element as popper container
+          var el = this.dropup && this.right || this.split ? this.$el : this.$refs.toggle; // Make sure we have a reference to an element, not a component!
 
-          element = element.$el || element; // Instantiate popper.js
+          el = el.$el || el; // Instantiate Popper.js
 
-          this.createPopper(element);
+          this.createPopper(el);
         }
       } // Ensure other menus are closed
 
 
-      this.$root.$emit(ROOT_DROPDOWN_SHOWN, this);
-      this.whileOpenListen(true); // Wrap in nextTick to ensure menu is fully rendered/shown
+      this.$root.$emit(ROOT_DROPDOWN_SHOWN, this); // Enable listeners
+
+      this.whileOpenListen(true); // Wrap in `$nextTick()` to ensure menu is fully rendered/shown
 
       this.$nextTick(function () {
         // Focus on the menu container on show
@@ -30206,19 +29687,12 @@ var AttachmentMap = {
       this.$_popper = new popper_js__WEBPACK_IMPORTED_MODULE_0__["default"](element, this.$refs.menu, this.getPopperConfig());
     },
     destroyPopper: function destroyPopper() {
+      // Ensure popper event listeners are removed cleanly
       if (this.$_popper) {
-        // Ensure popper event listeners are removed cleanly
         this.$_popper.destroy();
       }
 
       this.$_popper = null;
-    },
-    clearHideTimeout: function clearHideTimeout() {
-      /* istanbul ignore next */
-      if (this.$_hideTimeout) {
-        clearTimeout(this.$_hideTimeout);
-        this.$_hideTimeout = null;
-      }
     },
     getPopperConfig: function getPopperConfig() {
       var placement = AttachmentMap.BOTTOM;
@@ -30274,7 +29748,7 @@ var AttachmentMap = {
       // Public method to show dropdown
       if (this.disabled) {
         return;
-      } // Wrap in a requestAnimationFrame to allow any previous
+      } // Wrap in a `requestAF()` to allow any previous
       // click handling to occur first
 
 
@@ -30300,13 +29774,13 @@ var AttachmentMap = {
     },
     // Called only by a button that toggles the menu
     toggle: function toggle(evt) {
-      evt = evt || {};
-      var type = evt.type;
-      var key = evt.keyCode;
+      evt = evt || {}; // Early exit when not a click event or ENTER, SPACE or DOWN were pressed
 
-      if (type !== 'click' && !(type === 'keydown' && (key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].ENTER || key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].SPACE || key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].DOWN))) {
-        // We only toggle on Click, Enter, Space, and Arrow Down
+      var _evt = evt,
+          type = _evt.type,
+          keyCode = _evt.keyCode;
 
+      if (type !== 'click' && !(type === 'keydown' && [_utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].ENTER, _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].SPACE, _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].DOWN].indexOf(keyCode) !== -1)) {
         /* istanbul ignore next */
         return;
       }
@@ -30328,32 +29802,36 @@ var AttachmentMap = {
         this.show();
       }
     },
-    // Called only in split button mode, for the split button
-    click: function click(evt) {
-      /* istanbul ignore next */
-      if (this.disabled) {
-        this.visible = false;
-        return;
-      }
-
-      this.$emit('click', evt);
+    // Mousedown handler for the toggle
+    onMousedown: function onMousedown(evt)
+    /* istanbul ignore next */
+    {
+      // We prevent the 'mousedown' event for the toggle to stop the
+      // 'focusin' event from being fired
+      // The event would otherwise be picked up by the global 'focusin'
+      // listener and there is no cross-browser solution to detect it
+      // relates to the toggle click
+      // The 'click' event will still be fired and we handle closing
+      // other dropdowns there too
+      // See https://github.com/bootstrap-vue/bootstrap-vue/issues/4328
+      evt.preventDefault();
     },
     // Called from dropdown menu context
     onKeydown: function onKeydown(evt) {
-      var key = evt.keyCode;
+      var keyCode = evt.keyCode;
 
-      if (key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].ESC) {
+      if (keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].ESC) {
         // Close on ESC
         this.onEsc(evt);
-      } else if (key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].DOWN) {
+      } else if (keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].DOWN) {
         // Down Arrow
         this.focusNext(evt, false);
-      } else if (key === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].UP) {
+      } else if (keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_1__["default"].UP) {
         // Up Arrow
         this.focusNext(evt, true);
       }
     },
-    // If uses presses ESC to close menu
+    // If user presses ESC, close the menu
     onEsc: function onEsc(evt) {
       if (this.visible) {
         this.visible = false;
@@ -30363,38 +29841,40 @@ var AttachmentMap = {
         this.$once('hidden', this.focusToggler);
       }
     },
-    // Document click out listener
-    clickOutHandler: function clickOutHandler(evt) {
-      var _this3 = this;
+    // Called only in split button mode, for the split button
+    onSplitClick: function onSplitClick(evt) {
+      /* istanbul ignore next */
+      if (this.disabled) {
+        this.visible = false;
+        return;
+      }
 
+      this.$emit('click', evt);
+    },
+    // Shared hide handler between click-out and focus-in events
+    hideHandler: function hideHandler(evt) {
       var target = evt.target;
 
       if (this.visible && !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["contains"])(this.$refs.menu, target) && !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["contains"])(this.toggler, target)) {
-        var doHide = function doHide() {
-          _this3.visible = false;
-          return null;
-        }; // When we are in a navbar (which has been responsively stacked), we
-        // delay the dropdown's closing so that the next element has a chance
-        // to have it's click handler fired (in case it's position moves on
-        // the screen do to a navbar menu above it collapsing)
-        // https://github.com/bootstrap-vue/bootstrap-vue/issues/4113
-
-
-        this.clearHideTimeout();
-        this.$_hideTimeout = this.inNavbar ? setTimeout(doHide, FOCUSOUT_DELAY) : doHide();
+        this.hide();
       }
     },
-    // Document focusin listener
+    // Document click-out listener
+    clickOutHandler: function clickOutHandler(evt) {
+      this.hideHandler(evt);
+    },
+    // Document focus-in listener
     focusInHandler: function focusInHandler(evt) {
-      // Shared logic with click-out handler
-      this.clickOutHandler(evt);
+      this.hideHandler(evt);
     },
     // Keyboard nav
     focusNext: function focusNext(evt, up) {
-      var _this4 = this;
+      var _this3 = this;
 
       // Ignore key up/down on form elements
-      if (!this.visible || evt && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["closest"])(Selector.FORM_CHILD, evt.target)) {
+      var target = evt.target;
+
+      if (!this.visible || evt && Object(_utils_dom__WEBPACK_IMPORTED_MODULE_3__["closest"])(Selector.FORM_CHILD, target)) {
         /* istanbul ignore next: should never happen */
         return;
       }
@@ -30402,14 +29882,14 @@ var AttachmentMap = {
       evt.preventDefault();
       evt.stopPropagation();
       this.$nextTick(function () {
-        var items = _this4.getItems();
+        var items = _this3.getItems();
 
         if (items.length < 1) {
           /* istanbul ignore next: should never happen */
           return;
         }
 
-        var index = items.indexOf(evt.target);
+        var index = items.indexOf(target);
 
         if (up && index > 0) {
           index--;
@@ -30422,7 +29902,7 @@ var AttachmentMap = {
           index = 0;
         }
 
-        _this4.focusItem(index, items);
+        _this3.focusItem(index, items);
       });
     },
     focusItem: function focusItem(idx, items) {
@@ -30442,10 +29922,10 @@ var AttachmentMap = {
       this.$refs.menu.focus && this.$refs.menu.focus();
     },
     focusToggler: function focusToggler() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.$nextTick(function () {
-        var toggler = _this5.toggler;
+        var toggler = _this4.toggler;
 
         if (toggler && toggler.focus) {
           toggler.focus();
@@ -31276,10 +30756,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    computedDebounce: function computedDebounce() {
-      // Ensure we have a positive number equal to or greater than 0
-      return Math.max(Object(_utils_number__WEBPACK_IMPORTED_MODULE_1__["toInteger"])(this.debounce) || 0, 0);
-    },
     computedClass: function computedClass() {
       return [{
         // Range input needs class `custom-range`
@@ -31304,6 +30780,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
       return this.ariaInvalid;
+    },
+    computedDebounce: function computedDebounce() {
+      // Ensure we have a positive number equal to or greater than 0
+      return Math.max(Object(_utils_number__WEBPACK_IMPORTED_MODULE_1__["toInteger"])(this.debounce) || 0, 0);
+    },
+    hasFormatter: function hasFormatter() {
+      return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_0__["isFunction"])(this.formatter);
     }
   },
   watch: {
@@ -31342,7 +30825,7 @@ __webpack_require__.r(__webpack_exports__);
       var force = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       value = Object(_utils_string__WEBPACK_IMPORTED_MODULE_2__["toString"])(value);
 
-      if ((!this.lazyFormatter || force) && Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_0__["isFunction"])(this.formatter)) {
+      if (this.hasFormatter && (!this.lazyFormatter || force)) {
         value = this.formatter(value, evt);
       }
 
@@ -31367,7 +30850,6 @@ __webpack_require__.r(__webpack_exports__);
 
       var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var lazy = this.lazy;
-      var ms = this.computedDebounce;
 
       if (lazy && !force) {
         return;
@@ -31384,12 +30866,29 @@ __webpack_require__.r(__webpack_exports__);
           _this.$emit('update', value);
         };
 
-        if (ms > 0 && !lazy && !force) {
-          // Change/Blur/Force will not be debounced
-          this.$_inputDebounceTimer = setTimeout(doUpdate, ms);
+        var debounce = this.computedDebounce; // Only debounce the value update when a value greater than `0`
+        // is set and we are not in lazy mode or this is a forced update
+
+        if (debounce > 0 && !lazy && !force) {
+          this.$_inputDebounceTimer = setTimeout(doUpdate, debounce);
         } else {
           // Immediately update the v-model
           doUpdate();
+        }
+      } else if (this.hasFormatter) {
+        // When the `vModelValue` hasn't changed but the actual input value
+        // is out of sync, make sure to change it to the given one
+        // Usually caused by browser autocomplete and how it triggers the
+        // change or input event, or depending on the formatter function
+        // https://github.com/bootstrap-vue/bootstrap-vue/issues/2657
+        // https://github.com/bootstrap-vue/bootstrap-vue/issues/3498
+
+        /* istanbul ignore next: hard to test */
+        var $input = this.$refs.input;
+        /* istanbul ignore if: hard to test outof sync value */
+
+        if ($input && value !== $input.value) {
+          $input.value = value;
         }
       }
     },
@@ -32022,12 +31521,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // Common props, computed, data, render function, and methods
-// for <b-pagination> and <b-pagination-nav>
+// for `<b-pagination>` and `<b-pagination-nav>`
+// --- Constants ---
 // Threshold of limit size when we start/stop showing ellipsis
 
 var ELLIPSIS_THRESHOLD = 3; // Default # of buttons limit
 
-var DEFAULT_LIMIT = 5; // Make an array of N to N+X
+var DEFAULT_LIMIT = 5; // --- Helper methods ---
+// Make an array of N to N+X
 
 var makePageArray = function makePageArray(startNumber, numberOfPages) {
   return Object(_utils_range__WEBPACK_IMPORTED_MODULE_1__["default"])(numberOfPages).map(function (val, i) {
@@ -32062,7 +31563,8 @@ var onSpaceKey = function onSpaceKey(evt) {
     evt.currentTarget.click();
     return false;
   }
-};
+}; // --- Props ---
+
 
 var props = {
   disabled: {
@@ -32075,10 +31577,10 @@ var props = {
     validator: function validator(value)
     /* istanbul ignore next */
     {
-      var num = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toInteger"])(value);
+      var number = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toInteger"])(value);
 
-      if (!Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_3__["isNull"])(value) && (isNaN(num) || num < 1)) {
-        Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('pagination: v-model value must be a number greater than 0');
+      if (!Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_3__["isNull"])(value) && (isNaN(number) || number < 1)) {
+        Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('"v-model" value must be a number greater than "0"', 'BPagination');
         return false;
       }
 
@@ -32091,10 +31593,10 @@ var props = {
     validator: function validator(value)
     /* istanbul ignore next */
     {
-      var num = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toInteger"])(value);
+      var number = Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toInteger"])(value);
 
-      if (isNaN(num) || num < 1) {
-        Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('pagination: prop "limit" must be a number greater than 0');
+      if (isNaN(number) || number < 1) {
+        Object(_utils_warn__WEBPACK_IMPORTED_MODULE_6__["warn"])('Prop "limit" must be a number greater than "0"', 'BPagination');
         return false;
       }
 
@@ -32126,6 +31628,14 @@ var props = {
     default: "\xAB" // '«'
 
   },
+  firstNumber: {
+    type: Boolean,
+    default: false
+  },
+  firstClass: {
+    type: [String, Array, Object],
+    default: null
+  },
   labelPrevPage: {
     type: String,
     default: 'Go to previous page'
@@ -32134,6 +31644,10 @@ var props = {
     type: String,
     default: "\u2039" // '‹'
 
+  },
+  prevClass: {
+    type: [String, Array, Object],
+    default: null
   },
   labelNextPage: {
     type: String,
@@ -32144,6 +31658,10 @@ var props = {
     default: "\u203A" // '›'
 
   },
+  nextClass: {
+    type: [String, Array, Object],
+    default: null
+  },
   labelLastPage: {
     type: String,
     default: 'Go to last page'
@@ -32153,9 +31671,21 @@ var props = {
     default: "\xBB" // '»'
 
   },
+  lastNumber: {
+    type: Boolean,
+    default: false
+  },
+  lastClass: {
+    type: [String, Array, Object],
+    default: null
+  },
   labelPage: {
     type: [String, Function],
     default: 'Go to page'
+  },
+  pageClass: {
+    type: [String, Array, Object],
+    default: null
   },
   hideEllipsis: {
     type: Boolean,
@@ -32165,6 +31695,10 @@ var props = {
     type: String,
     default: "\u2026" // '…'
 
+  },
+  ellipsisClass: {
+    type: [String, Array, Object],
+    default: null
   }
 }; // @vue/component
 
@@ -32196,8 +31730,8 @@ var props = {
       } else if (align === 'end' || align === 'right') {
         return 'justify-content-end';
       } else if (align === 'fill') {
-        // The page-items will also have 'flex-fill' added.
-        // We ad text centering to make the button appearance better in fill mode.
+        // The page-items will also have 'flex-fill' added
+        // We add text centering to make the button appearance better in fill mode
         return 'text-center';
       }
 
@@ -32211,50 +31745,80 @@ var props = {
     },
     paginationParams: function paginationParams() {
       // Determine if we should show the the ellipsis
-      var limit = this.limit;
+      var limit = this.localLimit;
       var numberOfPages = this.localNumberOfPages;
       var currentPage = this.computedCurrentPage;
       var hideEllipsis = this.hideEllipsis;
+      var firstNumber = this.firstNumber;
+      var lastNumber = this.lastNumber;
       var showFirstDots = false;
       var showLastDots = false;
       var numberOfLinks = limit;
       var startNumber = 1;
 
       if (numberOfPages <= limit) {
-        // Special Case: Less pages available than the limit of displayed pages
+        // Special case: Less pages available than the limit of displayed pages
         numberOfLinks = numberOfPages;
       } else if (currentPage < limit - 1 && limit > ELLIPSIS_THRESHOLD) {
-        // We are near the beginning of the page list
-        if (!hideEllipsis) {
+        if (!hideEllipsis || lastNumber) {
           showLastDots = true;
-          numberOfLinks = limit - 1;
+          numberOfLinks = limit - (firstNumber ? 0 : 1);
         }
+
+        numberOfLinks = Math.min(numberOfLinks, limit);
       } else if (numberOfPages - currentPage + 2 < limit && limit > ELLIPSIS_THRESHOLD) {
-        // We are near the end of the list
-        if (!hideEllipsis) {
-          numberOfLinks = limit - 1;
+        if (!hideEllipsis || firstNumber) {
           showFirstDots = true;
+          numberOfLinks = limit - (lastNumber ? 0 : 1);
         }
 
         startNumber = numberOfPages - numberOfLinks + 1;
       } else {
         // We are somewhere in the middle of the page list
-        if (limit > ELLIPSIS_THRESHOLD && !hideEllipsis) {
+        if (limit > ELLIPSIS_THRESHOLD) {
           numberOfLinks = limit - 2;
-          showFirstDots = showLastDots = true;
+          showFirstDots = !!(!hideEllipsis || firstNumber);
+          showLastDots = !!(!hideEllipsis || lastNumber);
         }
 
         startNumber = currentPage - Math.floor(numberOfLinks / 2);
       } // Sanity checks
 
+      /* istanbul ignore if */
+
 
       if (startNumber < 1) {
-        /* istanbul ignore next */
         startNumber = 1;
+        showFirstDots = false;
       } else if (startNumber > numberOfPages - numberOfLinks) {
         startNumber = numberOfPages - numberOfLinks + 1;
+        showLastDots = false;
       }
 
+      if (showFirstDots && firstNumber && startNumber < 4) {
+        numberOfLinks = numberOfLinks + 2;
+        startNumber = 1;
+        showFirstDots = false;
+      }
+
+      var lastPageNumber = startNumber + numberOfLinks - 1;
+
+      if (showLastDots && lastNumber && lastPageNumber > numberOfPages - 3) {
+        numberOfLinks = numberOfLinks + (lastPageNumber === numberOfPages - 2 ? 2 : 3);
+        showLastDots = false;
+      } // Special handling for lower limits (where ellipsis are never shown)
+
+
+      if (limit <= ELLIPSIS_THRESHOLD) {
+        if (firstNumber && startNumber === 1) {
+          numberOfLinks = Math.min(numberOfLinks + 1, numberOfPages, limit + 1);
+        } else if (lastNumber && numberOfPages === startNumber + numberOfLinks - 1) {
+          startNumber = Math.max(startNumber - 1, 1);
+          numberOfLinks = Math.min(numberOfPages - startNumber + 1, numberOfPages, limit + 1);
+        }
+      }
+
+      numberOfLinks = Math.min(numberOfLinks, numberOfPages - startNumber + 1);
       return {
         showFirstDots: showFirstDots,
         showLastDots: showLastDots,
@@ -32336,15 +31900,15 @@ var props = {
   },
   methods: {
     handleKeyNav: function handleKeyNav(evt) {
-      var keyCode = evt.keyCode;
-      var shift = evt.shiftKey;
+      var keyCode = evt.keyCode,
+          shiftKey = evt.shiftKey;
 
       if (keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_0__["default"].LEFT || keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_0__["default"].UP) {
         evt.preventDefault();
-        shift ? this.focusFirst() : this.focusPrev();
+        shiftKey ? this.focusFirst() : this.focusPrev();
       } else if (keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_0__["default"].RIGHT || keyCode === _utils_key_codes__WEBPACK_IMPORTED_MODULE_0__["default"].DOWN) {
         evt.preventDefault();
-        shift ? this.focusLast() : this.focusNext();
+        shiftKey ? this.focusLast() : this.focusNext();
       }
     },
     getButtons: function getButtons() {
@@ -32359,7 +31923,7 @@ var props = {
     focusCurrent: function focusCurrent() {
       var _this2 = this;
 
-      // We do this in next tick to ensure buttons have finished rendering
+      // We do this in `$nextTick()` to ensure buttons have finished rendering
       this.$nextTick(function () {
         var btn = _this2.getButtons().find(function (el) {
           return Object(_utils_number__WEBPACK_IMPORTED_MODULE_4__["toInteger"])(Object(_utils_dom__WEBPACK_IMPORTED_MODULE_2__["getAttr"])(el, 'aria-posinset')) === _this2.computedCurrentPage;
@@ -32376,7 +31940,7 @@ var props = {
     focusFirst: function focusFirst() {
       var _this3 = this;
 
-      // We do this in next tick to ensure buttons have finished rendering
+      // We do this in `$nextTick()` to ensure buttons have finished rendering
       this.$nextTick(function () {
         var btn = _this3.getButtons().find(function (el) {
           return !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_2__["isDisabled"])(el);
@@ -32390,7 +31954,7 @@ var props = {
     focusLast: function focusLast() {
       var _this4 = this;
 
-      // We do this in next tick to ensure buttons have finished rendering
+      // We do this in `$nextTick()` to ensure buttons have finished rendering
       this.$nextTick(function () {
         var btn = _this4.getButtons().reverse().find(function (el) {
           return !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_2__["isDisabled"])(el);
@@ -32404,7 +31968,7 @@ var props = {
     focusPrev: function focusPrev() {
       var _this5 = this;
 
-      // We do this in next tick to ensure buttons have finished rendering
+      // We do this in `$nextTick()` to ensure buttons have finished rendering
       this.$nextTick(function () {
         var buttons = _this5.getButtons();
 
@@ -32418,7 +31982,7 @@ var props = {
     focusNext: function focusNext() {
       var _this6 = this;
 
-      // We do this in next tick to ensure buttons have finished rendering
+      // We do this in `$nextTick()` to ensure buttons have finished rendering
       this.$nextTick(function () {
         var buttons = _this6.getButtons();
 
@@ -32436,6 +32000,9 @@ var props = {
 
     var buttons = [];
     var numberOfPages = this.localNumberOfPages;
+    var pageNumbers = this.pageList.map(function (p) {
+      return p.number;
+    });
     var disabled = this.disabled;
     var _this$paginationParam2 = this.paginationParams,
         showFirstDots = _this$paginationParam2.showFirstDots,
@@ -32447,10 +32014,10 @@ var props = {
       return pageNum === currentPage;
     };
 
-    var noCurrPage = this.currentPage < 1; // Factory function for prev/next/first/last buttons
+    var noCurrentPage = this.currentPage < 1; // Factory function for prev/next/first/last buttons
 
-    var makeEndBtn = function makeEndBtn(linkTo, ariaLabel, btnSlot, btnText, pageTest, key) {
-      var isDisabled = disabled || isActivePage(pageTest) || noCurrPage || linkTo < 1 || linkTo > numberOfPages;
+    var makeEndBtn = function makeEndBtn(linkTo, ariaLabel, btnSlot, btnText, btnClass, pageTest, key) {
+      var isDisabled = disabled || isActivePage(pageTest) || noCurrentPage || linkTo < 1 || linkTo > numberOfPages;
       var pageNum = linkTo < 1 ? 1 : linkTo > numberOfPages ? numberOfPages : linkTo;
       var scope = {
         disabled: isDisabled,
@@ -32478,10 +32045,10 @@ var props = {
       return h('li', {
         key: key,
         staticClass: 'page-item',
-        class: {
+        class: [{
           disabled: isDisabled,
           'flex-fill': fill
-        },
+        }, btnClass],
         attrs: {
           role: 'presentation',
           'aria-hidden': isDisabled ? 'true' : null
@@ -32494,26 +32061,20 @@ var props = {
       return h('li', {
         key: "ellipsis-".concat(isLast ? 'last' : 'first'),
         staticClass: 'page-item',
-        class: ['disabled', 'bv-d-xs-down-none', fill ? 'flex-fill' : ''],
+        class: ['disabled', 'bv-d-xs-down-none', fill ? 'flex-fill' : '', _this7.ellipsisClass],
         attrs: {
           role: 'separator'
         }
       }, [h('span', {
         staticClass: 'page-link'
       }, [_this7.normalizeSlot('ellipsis-text') || Object(_utils_string__WEBPACK_IMPORTED_MODULE_5__["toString"])(_this7.ellipsisText) || h()])]);
-    }; // Goto First Page button bookend
+    }; // Page button factory
 
 
-    buttons.push(this.hideGotoEndButtons ? h() : makeEndBtn(1, this.labelFirstPage, 'first-text', this.firstText, 1, 'bookend-goto-first')); // Goto Previous page button bookend
+    var makePageButton = function makePageButton(page, idx) {
+      var active = isActivePage(page.number) && !noCurrentPage; // Active page will have tabindex of 0, or if no current page and first page button
 
-    buttons.push(makeEndBtn(currentPage - 1, this.labelPrevPage, 'prev-text', this.prevText, 1, 'bookend-goto-prev')); // First Ellipsis Bookend
-
-    buttons.push(showFirstDots ? makeEllipsis(false) : h()); // Individual Page links
-
-    this.pageList.forEach(function (page, idx) {
-      var active = isActivePage(page.number) && !noCurrPage; // Active page will have tabindex of 0, or if no current page and first page button
-
-      var tabIndex = disabled ? null : active || noCurrPage && idx === 0 ? '0' : '-1';
+      var tabIndex = disabled ? null : active || noCurrentPage && idx === 0 ? '0' : '-1';
       var attrs = {
         role: 'menuitemradio',
         'aria-disabled': disabled ? 'true' : null,
@@ -32544,27 +32105,61 @@ var props = {
           keydown: onSpaceKey
         }
       }, [_this7.normalizeSlot('page', scope) || btnContent]);
-      buttons.push(h('li', {
+      return h('li', {
         key: "page-".concat(page.number),
         staticClass: 'page-item',
         class: [{
           disabled: disabled,
           active: active,
           'flex-fill': fill
-        }, page.classes],
+        }, page.classes, _this7.pageClass],
         attrs: {
           role: 'presentation'
         }
-      }, [inner]));
-    }); // Last Ellipsis Bookend
+      }, [inner]);
+    }; // Goto first page button
+    // Don't render button when `hideGotoEndButtons` or `firstNumber` is set
 
-    buttons.push(showLastDots ? makeEllipsis(true) : h()); // Goto Next page button bookend
 
-    buttons.push(makeEndBtn(currentPage + 1, this.labelNextPage, 'next-text', this.nextText, numberOfPages, 'bookend-goto-next')); // Goto Last Page button bookend
+    var $firstPageBtn = h();
 
-    buttons.push(this.hideGotoEndButtons ? h() : makeEndBtn(numberOfPages, this.labelLastPage, 'last-text', this.lastText, numberOfPages, 'bookend-goto-last')); // Assemble the pagination buttons
+    if (!this.firstNumber && !this.hideGotoEndButtons) {
+      $firstPageBtn = makeEndBtn(1, this.labelFirstPage, 'first-text', this.firstText, this.firstClass, 1, 'pagination-goto-first');
+    }
 
-    var pagination = h('ul', {
+    buttons.push($firstPageBtn); // Goto previous page button
+
+    buttons.push(makeEndBtn(currentPage - 1, this.labelPrevPage, 'prev-text', this.prevText, this.prevClass, 1, 'pagination-goto-prev')); // Show first (1) button?
+
+    buttons.push(this.firstNumber && pageNumbers[0] !== 1 ? makePageButton({
+      number: 1
+    }, 0) : h()); // First ellipsis
+
+    buttons.push(showFirstDots ? makeEllipsis(false) : h()); // Individual page links
+
+    this.pageList.forEach(function (page, idx) {
+      var offset = showFirstDots && _this7.firstNumber && pageNumbers[0] !== 1 ? 1 : 0;
+      buttons.push(makePageButton(page, idx + offset));
+    }); // Last ellipsis
+
+    buttons.push(showLastDots ? makeEllipsis(true) : h()); // Show last page button?
+
+    buttons.push(this.lastNumber && pageNumbers[pageNumbers.length - 1] !== numberOfPages ? makePageButton({
+      number: numberOfPages
+    }, -1) : h()); // Goto next page button
+
+    buttons.push(makeEndBtn(currentPage + 1, this.labelNextPage, 'next-text', this.nextText, this.nextClass, numberOfPages, 'pagination-goto-next')); // Goto last page button
+    // Don't render button when `hideGotoEndButtons` or `lastNumber` is set
+
+    var $lastPageBtn = h();
+
+    if (!this.lastNumber && !this.hideGotoEndButtons) {
+      $lastPageBtn = makeEndBtn(numberOfPages, this.labelLastPage, 'last-text', this.lastText, this.lastClass, numberOfPages, 'pagination-goto-last');
+    }
+
+    buttons.push($lastPageBtn); // Assemble the pagination buttons
+
+    var $pagination = h('ul', {
       ref: 'ul',
       staticClass: 'pagination',
       class: ['b-pagination', this.btnSize, this.alignment, this.styleClass],
@@ -32576,7 +32171,7 @@ var props = {
       on: {
         keydown: this.handleKeyNav
       }
-    }, buttons); // if we are pagination-nav, wrap in '<nav>' wrapper
+    }, buttons); // If we are `<b-pagination-nav>`, wrap in `<nav>` wrapper
 
     if (this.isNav) {
       return h('nav', {
@@ -32584,10 +32179,10 @@ var props = {
           'aria-disabled': disabled ? 'true' : null,
           'aria-hidden': disabled ? 'true' : 'false'
         }
-      }, [pagination]);
-    } else {
-      return pagination;
+      }, [$pagination]);
     }
+
+    return $pagination;
   }
 });
 
@@ -32631,8 +32226,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayIncludes", function() { return arrayIncludes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "concat", function() { return concat; });
 // --- Static ---
-var from = Array.from;
-var isArray = Array.isArray; // --- Instance ---
+var from = function from() {
+  return Array.from.apply(Array, arguments);
+};
+var isArray = function isArray(val) {
+  return Array.isArray(val);
+}; // --- Instance ---
 
 var arrayIncludes = function arrayIncludes(array, value) {
   return array.indexOf(value) !== -1;
@@ -33055,6 +32654,7 @@ __webpack_require__.r(__webpack_exports__);
     variant: 'secondary'
   },
   BButtonClose: {
+    content: '&times;',
     // `textVariant` is `null` to inherit the current text color
     textVariant: null,
     ariaLabel: 'Close'
@@ -33130,6 +32730,7 @@ __webpack_require__.r(__webpack_exports__);
     cancelVariant: 'secondary',
     okTitle: 'OK',
     okVariant: 'primary',
+    headerCloseContent: '&times;',
     headerCloseLabel: 'Close'
   },
   BNavbar: {
@@ -33221,6 +32822,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
  // --- Constants ---
 
+var NAME = 'BvConfig';
 var PROP_NAME = '$bvConfig'; // Config manager class
 
 var BvConfig =
@@ -33260,7 +32862,7 @@ function () {
       configKeys.forEach(function (cmpName) {
         /* istanbul ignore next */
         if (!Object(_object__WEBPACK_IMPORTED_MODULE_4__["hasOwnProperty"])(_config_defaults__WEBPACK_IMPORTED_MODULE_6__["default"], cmpName)) {
-          Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])("config: unknown config property \"".concat(cmpName, "\""));
+          Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])("Unknown config property \"".concat(cmpName, "\""), NAME);
           return;
         }
 
@@ -33274,7 +32876,7 @@ function () {
           if (!Object(_inspect__WEBPACK_IMPORTED_MODULE_3__["isArray"])(breakpoints) || breakpoints.length < 2 || breakpoints.some(function (b) {
             return !Object(_inspect__WEBPACK_IMPORTED_MODULE_3__["isString"])(b) || b.length === 0;
           })) {
-            Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])('config: "breakpoints" must be an array of at least 2 breakpoint names');
+            Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])('"breakpoints" must be an array of at least 2 breakpoint names', NAME);
           } else {
             _this.$_config.breakpoints = Object(_clone_deep__WEBPACK_IMPORTED_MODULE_1__["default"])(breakpoints);
           }
@@ -33284,7 +32886,7 @@ function () {
           props.forEach(function (prop) {
             /* istanbul ignore if */
             if (!Object(_object__WEBPACK_IMPORTED_MODULE_4__["hasOwnProperty"])(_config_defaults__WEBPACK_IMPORTED_MODULE_6__["default"][cmpName], prop)) {
-              Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])("config: unknown config property \"".concat(cmpName, ".").concat(prop, "\""));
+              Object(_warn__WEBPACK_IMPORTED_MODULE_5__["warn"])("Unknown config property \"".concat(cmpName, ".").concat(prop, "\""), NAME);
             } else {
               // TODO: If we pre-populate the config with defaults, we can skip this line
               _this.$_config[cmpName] = _this.$_config[cmpName] || {};
@@ -33623,11 +33225,13 @@ var removeNode = function removeNode(el) {
 }; // Determine if an element is an HTML element
 
 var isElement = function isElement(el) {
-  return Boolean(el && el.nodeType === Node.ELEMENT_NODE);
+  return !!(el && el.nodeType === Node.ELEMENT_NODE);
 }; // Determine if an HTML element is visible - Faster than CSS check
 
 var isVisible = function isVisible(el) {
-  if (!isElement(el) || !contains(d.body, el)) {
+  if (!isElement(el) || !el.parentNode || !contains(d.body, el)) {
+    // Note this can fail for shadow dom elements since they
+    // are not a direct descendant of document.body
     return false;
   }
 
@@ -33642,12 +33246,12 @@ var isVisible = function isVisible(el) {
 
 
   var bcr = getBCR(el);
-  return Boolean(bcr && bcr.height > 0 && bcr.width > 0);
+  return !!(bcr && bcr.height > 0 && bcr.width > 0);
 }; // Determine if an element is disabled
 
 var isDisabled = function isDisabled(el) {
   return !isElement(el) || el.disabled || hasAttr(el, 'disabled') || hasClass(el, 'disabled');
-}; // Cause/wait-for an element to reflow it's content (adjusting it's height/width)
+}; // Cause/wait-for an element to reflow its content (adjusting its height/width)
 
 var reflow = function reflow(el) {
   // Requesting an elements offsetHight will trigger a reflow of the element content
@@ -33665,11 +33269,7 @@ var select = function select(selector, root) {
 }; // Determine if an element matches a selector
 
 var matches = function matches(el, selector) {
-  if (!isElement(el)) {
-    return false;
-  }
-
-  return matchesEl.call(el, selector);
+  return isElement(el) ? matchesEl.call(el, selector) : false;
 }; // Finds closest element matching selector. Returns `null` if not found
 
 var closest = function closest(selector, root) {
@@ -33687,11 +33287,7 @@ var closest = function closest(selector, root) {
 }; // Returns true if the parent element contains the child element
 
 var contains = function contains(parent, child) {
-  if (!parent || !Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(parent.contains)) {
-    return false;
-  }
-
-  return parent.contains(child);
+  return parent && Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(parent.contains) ? parent.contains(child) : false;
 }; // Get an element given an ID
 
 var getById = function getById(id) {
@@ -33791,7 +33387,7 @@ var offset = function offset(el)
   }
 
   return _offset;
-}; // Return an element's offset with respect to to it's offsetParent
+}; // Return an element's offset with respect to to its offsetParent
 // https://j11y.io/jquery/#v=git&fn=jQuery.fn.position
 
 var position = function position(el)
@@ -34093,7 +33689,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isPlainObject", function() { return _object__WEBPACK_IMPORTED_MODULE_1__["isPlainObject"]; });
 
 /* harmony import */ var _safe_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./safe-types */ "./node_modules/bootstrap-vue/esm/utils/safe-types.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
@@ -34470,23 +34066,23 @@ var toFixed = function toFixed(val, precision) {
 /*!********************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/utils/object.js ***!
   \********************************************************/
-/*! exports provided: assign, getOwnPropertyNames, keys, defineProperties, defineProperty, freeze, getOwnPropertyDescriptor, getOwnPropertySymbols, getPrototypeOf, create, isFrozen, is, hasOwnProperty, toString, isObject, isPlainObject, clone, omit, readonlyDescriptor, deepFreeze */
+/*! exports provided: assign, create, defineProperties, defineProperty, freeze, getOwnPropertyNames, getOwnPropertyDescriptor, getOwnPropertySymbols, getPrototypeOf, is, isFrozen, keys, hasOwnProperty, toString, isObject, isPlainObject, clone, omit, readonlyDescriptor, deepFreeze */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "assign", function() { return assign; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOwnPropertyNames", function() { return getOwnPropertyNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "keys", function() { return keys; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defineProperties", function() { return defineProperties; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defineProperty", function() { return defineProperty; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "freeze", function() { return freeze; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOwnPropertyNames", function() { return getOwnPropertyNames; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOwnPropertyDescriptor", function() { return getOwnPropertyDescriptor; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOwnPropertySymbols", function() { return getOwnPropertySymbols; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPrototypeOf", function() { return getPrototypeOf; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFrozen", function() { return isFrozen; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "is", function() { return is; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFrozen", function() { return isFrozen; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "keys", function() { return keys; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasOwnProperty", function() { return hasOwnProperty; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toString", function() { return toString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isObject", function() { return isObject; });
@@ -34502,22 +34098,46 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
  // --- Static ---
 
-var assign = Object.assign;
-var getOwnPropertyNames = Object.getOwnPropertyNames;
-var keys = Object.keys;
-var defineProperties = Object.defineProperties;
-var defineProperty = Object.defineProperty;
-var freeze = Object.freeze;
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var getPrototypeOf = Object.getPrototypeOf;
-var create = Object.create;
-var isFrozen = Object.isFrozen;
-var is = Object.is; // --- "Instance" ---
+var assign = function assign() {
+  return Object.assign.apply(Object, arguments);
+};
+var create = function create(proto, optionalProps) {
+  return Object.create(proto, optionalProps);
+};
+var defineProperties = function defineProperties(obj, props) {
+  return Object.defineProperties(obj, props);
+};
+var defineProperty = function defineProperty(obj, prop, descr) {
+  return Object.defineProperty(obj, prop, descr);
+};
+var freeze = function freeze(obj) {
+  return Object.freeze(obj);
+};
+var getOwnPropertyNames = function getOwnPropertyNames(obj) {
+  return Object.getOwnPropertyNames(obj);
+};
+var getOwnPropertyDescriptor = function getOwnPropertyDescriptor(obj, prop) {
+  return Object.getOwnPropertyDescriptor(obj, prop);
+};
+var getOwnPropertySymbols = function getOwnPropertySymbols(obj) {
+  return Object.getOwnPropertySymbols(obj);
+};
+var getPrototypeOf = function getPrototypeOf(obj) {
+  return Object.getPrototypeOf(obj);
+};
+var is = function is(value1, value2) {
+  return Object.is(value1, value2);
+};
+var isFrozen = function isFrozen(obj) {
+  return Object.isFrozen(obj);
+};
+var keys = function keys(obj) {
+  return Object.keys(obj);
+}; // --- "Instance" ---
 
 var hasOwnProperty = function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -35181,7 +34801,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SVGElement", function() { return SVGElement; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "File", function() { return File; });
 /* harmony import */ var _env__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./env */ "./node_modules/bootstrap-vue/esm/utils/env.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -35570,7 +35190,7 @@ __webpack_require__.r(__webpack_exports__);
  // BTransporterSingle/BTransporterTargetSingle:
 //
 // Single root node portaling of content, which retains parent/child hierarchy
-// Unlike Portal-Vue where portaled content is no longer a descendent of it's
+// Unlike Portal-Vue where portaled content is no longer a descendent of its
 // intended parent components
 //
 // Private components for use by Tooltips, Popovers and Modals
@@ -35659,13 +35279,13 @@ _vue__WEBPACK_IMPORTED_MODULE_0__["default"].extend({
     this.mountTarget();
   },
   updated: function updated() {
-    var _this = this;
-
-    // Placed in a nextTick to ensure that children have completed
-    // updating before rendering in the target
-    this.$nextTick(function () {
-      _this.updateTarget();
-    });
+    // We need to make sure that all children have completed updating
+    // before rendering in the target
+    // `vue-simple-portal` has the this in a `$nextTick()`,
+    // while `portal-vue` doesn't
+    // Just trying to see if the `$nextTick()` delay is required or not
+    // Since all slots in Vue 2.6.x are always functions
+    this.updateTarget();
   },
   beforeDestroy: function beforeDestroy() {
     this.unmountTarget();
@@ -37191,7 +36811,7 @@ return Promise$1;
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.16.0
+ * @version 1.16.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -37537,7 +37157,7 @@ function getBordersSize(styles, axis) {
   var sideA = axis === 'x' ? 'Left' : 'Top';
   var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
-  return parseFloat(styles['border' + sideA + 'Width'], 10) + parseFloat(styles['border' + sideB + 'Width'], 10);
+  return parseFloat(styles['border' + sideA + 'Width']) + parseFloat(styles['border' + sideB + 'Width']);
 }
 
 function getSize(axis, body, html, computedStyle) {
@@ -37692,8 +37312,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   var scrollParent = getScrollParent(children);
 
   var styles = getStyleComputedProperty(parent);
-  var borderTopWidth = parseFloat(styles.borderTopWidth, 10);
-  var borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
+  var borderTopWidth = parseFloat(styles.borderTopWidth);
+  var borderLeftWidth = parseFloat(styles.borderLeftWidth);
 
   // In cases where the parent is fixed, we must ignore negative scroll in offset calc
   if (fixedPosition && isHTML) {
@@ -37714,8 +37334,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   // differently when margins are applied to it. The margins are included in
   // the box of the documentElement, in the other cases not.
   if (!isIE10 && isHTML) {
-    var marginTop = parseFloat(styles.marginTop, 10);
-    var marginLeft = parseFloat(styles.marginLeft, 10);
+    var marginTop = parseFloat(styles.marginTop);
+    var marginLeft = parseFloat(styles.marginLeft);
 
     offsets.top -= borderTopWidth - marginTop;
     offsets.bottom -= borderTopWidth - marginTop;
@@ -38654,8 +38274,8 @@ function arrow(data, options) {
   // Compute the sideValue using the updated popper offsets
   // take popper margin in account because we don't have this info available
   var css = getStyleComputedProperty(data.instance.popper);
-  var popperMarginSide = parseFloat(css['margin' + sideCapitalized], 10);
-  var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width'], 10);
+  var popperMarginSide = parseFloat(css['margin' + sideCapitalized]);
+  var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width']);
   var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
 
   // prevent arrowElement from being placed not contiguously to its popper
@@ -41507,7 +41127,7 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -41562,6 +41182,7 @@ function () {
       that.filterIncludedFields = [];
       that.busy = false;
       that.totalRows = 0;
+      that.isLocal = false;
       that.pageLengths = [{
         value: 15,
         text: '15'
@@ -41700,6 +41321,8 @@ function () {
       that.startRow = 1;
       that.totalRows = items ? items.length : 0;
       that.endRow = that.totalRows;
+      that.perPage = -1;
+      that.isLocal = true;
 
       _localItems.set(this, items);
     }
@@ -41909,6 +41532,7 @@ function () {
 
       that.resetCounterVars();
       that.busy = true;
+      that.isLocal = false;
 
       if (that.method === 'POST') {
         promise = that.getAxios().post(that.getAjaxUrl(), query);

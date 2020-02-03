@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.5
+ * @version v0.9.6
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -114,7 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -169,6 +169,7 @@ function () {
       that.filterIncludedFields = [];
       that.busy = false;
       that.totalRows = 0;
+      that.isLocal = false;
       that.pageLengths = [{
         value: 15,
         text: '15'
@@ -307,6 +308,8 @@ function () {
       that.startRow = 1;
       that.totalRows = items ? items.length : 0;
       that.endRow = that.totalRows;
+      that.perPage = -1;
+      that.isLocal = true;
 
       _localItems.set(this, items);
     }
@@ -516,6 +519,7 @@ function () {
 
       that.resetCounterVars();
       that.busy = true;
+      that.isLocal = false;
 
       if (that.method === 'POST') {
         promise = that.getAxios().post(that.getAjaxUrl(), query);

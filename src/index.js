@@ -29,14 +29,15 @@ class ItemsProvider {
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
 
-    that.fields = fields
-    that.perPage = 15
-    that.currentPage = 1
-    that.filter = null
-    that.filterIgnoredFields = []
+    that.fields               = fields
+    that.perPage              = 15
+    that.currentPage          = 1
+    that.filter               = null
+    that.filterIgnoredFields  = []
     that.filterIncludedFields = []
-    that.busy = false
-    that.totalRows = 0
+    that.busy                 = false
+    that.totalRows            = 0
+    that.isLocal              = false
     that.pageLengths = [
       { value: 15, text: '15'},
       { value: 100, text: '100'},
@@ -151,6 +152,8 @@ class ItemsProvider {
     that.startRow    = 1
     that.totalRows   = items ? items.length : 0
     that.endRow      = that.totalRows
+    that.perPage     = -1
+    that.isLocal     = true
 
     _localItems.set(this, items)
   }
@@ -337,7 +340,8 @@ class ItemsProvider {
     }
 
     that.resetCounterVars()
-    that.busy = true
+    that.busy    = true
+    that.isLocal = false
 
     if (that.method === 'POST') {
       promise = that.getAxios().post(that.getAjaxUrl(), query)
