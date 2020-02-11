@@ -371,7 +371,7 @@ class ItemsProvider {
       that.busy = false
 
       if (typeof that.onResponseError === 'function') {
-        that.onResponseError(rsp)
+        that.onResponseError(err)
       }
 
       return []
