@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.7
+ * @version v0.9.8
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -544,7 +544,7 @@ function () {
 
         that.busy = false;
         return myData.data || [];
-      }).catch(function (error) {
+      }).catch(function (err) {
         that.busy = false;
 
         if (typeof that.onResponseError === 'function') {

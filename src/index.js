@@ -367,7 +367,7 @@ class ItemsProvider {
       that.busy = false
 
       return myData.data || []
-    }).catch(error => {
+    }).catch(err => {
       that.busy = false
 
       if (typeof that.onResponseError === 'function') {

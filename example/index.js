@@ -41557,7 +41557,7 @@ function () {
 
         that.busy = false;
         return myData.data || [];
-      }).catch(function (error) {
+      }).catch(function (err) {
         that.busy = false;
 
         if (typeof that.onResponseError === 'function') {
