@@ -6,5 +6,24 @@
         "regenerator": true
       }
     ]
-  ]
+  ],
+  "env": {
+    "production": {
+      "retainLines": false,
+      "minified": true
+    },
+    "development": {
+      "retainLines": true,
+      "plugins": [
+        "@babel/plugin-transform-runtime"
+      ]
+    },
+    "test": {
+      "retainLines": true,
+      "plugins": [
+        "@babel/plugin-transform-runtime",
+        "istanbul"
+      ]
+    }
+  }
 }

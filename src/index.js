@@ -11,25 +11,24 @@ class ItemsProvider {
    * @param Object opts  options object
 	 * @return             an instance of ItemsProvider
 	 */
-  constructor(opts, fields = null) {
+  constructor(opts, fields) {
     const that = this
 
     // temp support backward compatibility with version < 1.0
-    if (fields) {
+    if (typeof(fields) !== 'undefined') {
       return that.init({
         fields: fields,
         axios: opts
       })
     }
 
-    return that.init(axios)
+    return that.init(opts)
   }
 
   /**
 	 * Initialize an instance of ItemsProvider
    *
-	 * @param  Object  axios                  an instance of axios
-	 * @param  Object  fields                 object containing our fields definition
+   * @param Object opts  options object
 	 * @return ItemsProvider       an instance of ItemsProvider
 	 */
   init(opts = {}) {
@@ -50,6 +49,7 @@ class ItemsProvider {
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
 
+    that.opts                 = opts
     that.fields               = fields
     that.perPage              = 15
     that.currentPage          = 1
@@ -402,11 +402,13 @@ class ItemsProvider {
     that.busy    = true
     that.isLocal = false
 
+    const axios = that.getAxios()
+
     if (that.method === 'POST') {
-      promise = that.getAxios().post(that.getAjaxUrl(), query)
+      promise = axios.post(that.getAjaxUrl(), query)
     } else {
       const apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query)
-      promise = that.getAxios().get(apiUrl)
+      promise = axios.get(apiUrl)
     }
 
     return promise.then(rsp => {

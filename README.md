@@ -39,7 +39,7 @@ export default {
   name: 'App',
   data() {
     const fields = [ ... your fields here ... ]
-    const ip = new ItemsProvider(axios, fields)
+    const ip = new ItemsProvider({axios: axios, fields: fields})
 
     return {
       ip: ip

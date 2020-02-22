@@ -4,12 +4,12 @@ import sinon from 'sinon'
 import axios from 'axios'
 
 test('ItemsProvider return correct name', t => {
-  const ip = new ItemsProvider(null, [])
+  const ip = new ItemsProvider({axios: null, fields: []})
   t.is(ip.getName(), 'ItemsProvider')
 })
 
 test('ItemsProvider can set and return local items', t => {
-  const ip = new ItemsProvider(null, [])
+  const ip = new ItemsProvider(axios, [])
   ip.setLocalItems([{name: 'test'}])
 
   const items = ip.getLocalItems()
@@ -23,7 +23,7 @@ test('ItemsProvider can set and return local items', t => {
 })
 
 test('ItemsProvider executeQuery returns local items', t => {
-  const ip = new ItemsProvider(null, [])
+  const ip = new ItemsProvider({axios: null, fields: []})
   ip.setLocalItems([{name: 'test'}])
 
   const items = ip.executeQuery({ apiUrl: 'test' })
@@ -37,7 +37,7 @@ test('ItemsProvider executeQuery returns local items', t => {
 })
 
 test('ItemsProvider.setLocalItems with nulls result in empty array', t => {
-  const ip = new ItemsProvider(null, [])
+  const ip = new ItemsProvider({axios: null, fields: []})
   ip.setLocalItems(null)
 
   const items = ip.getLocalItems()
@@ -50,12 +50,12 @@ test('ItemsProvider.setLocalItems with nulls result in empty array', t => {
 
 test('ItemsProvider.executeQuery fail and return error', async (t) => {
   sinon.stub(axios, 'get')
-    .withArgs('https://www.google.com/?draw=1&start=0&length=1&search%5Bvalue%5D=test&search%5Bregex%5D=false&&&test=unit')
+    .withArgs(sinon.match.string)
     .returns(new Promise((resolve, reject) => {
       reject('test')
     }))
 
-  const ip = new ItemsProvider(axios, [])
+  const ip = new ItemsProvider({axios: axios, fields: []})
   let errorCalled = false
   ip.onResponseError = (err) => {
     errorCalled = (err === 'test')
@@ -71,3 +71,4 @@ test('ItemsProvider.executeQuery fail and return error', async (t) => {
   axios.get.restore()
   t.is(errorCalled, true)
 })
+

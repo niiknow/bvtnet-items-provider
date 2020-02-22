@@ -146,7 +146,7 @@ export default {
       }
     }
 
-    const ip = new ItemsProvider(axios, fields)
+    const ip = new ItemsProvider({axios: axios, fields: fields})
 
     return {
       ip: ip,
