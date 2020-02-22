@@ -7,11 +7,22 @@ let _name = new WeakMap(),
 class ItemsProvider {
   /**
 	 * Initialize an instance of ItemsProvider
-	 *
-	 * @return an instance of ItemsProvider
+   *
+   * @param Object opts  options object
+	 * @return             an instance of ItemsProvider
 	 */
-  constructor(axios, fields) {
-    return this.init(axios, fields)
+  constructor(opts, fields = null) {
+    const that = this
+
+    // temp support backward compatibility with version < 1.0
+    if (fields) {
+      return that.init({
+        fields: fields,
+        axios: opts
+      })
+    }
+
+    return that.init(axios)
   }
 
   /**
@@ -21,10 +32,20 @@ class ItemsProvider {
 	 * @param  Object  fields                 object containing our fields definition
 	 * @return ItemsProvider       an instance of ItemsProvider
 	 */
-  init(axios, fields) {
-    const that = this
+  init(opts = {}) {
+    const that   = this
+    const fields = opts.fields
+    const axios  = opts.axios
+    // validate fields and axios
+
     const isFieldsArray = fields.constructor === Array || Array.isArray(fields)
-    const copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']
+    const copyable = [
+      'onFieldTranslate', 'searchable', 'isLocal', 'key', 'label',
+      'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable',
+      'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass',
+      'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader',
+      'stickyColumn'
+    ] // these are either internal or fields listed from b-table
 
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
@@ -78,6 +99,8 @@ class ItemsProvider {
     that.items = function (ctx, cb) {
       return that.executeQuery(ctx, cb, this)
     }
+
+    return that
   }
 
   /**
@@ -253,6 +276,7 @@ class ItemsProvider {
     const that   = this
     const fields = that.fields
     const fDict  = {}
+    const opts   = that.opts
     const query  = {
       draw: 1,
       start: (ctx.currentPage - 1) * ctx.perPage,
@@ -267,7 +291,7 @@ class ItemsProvider {
     }
 
     let index = 0
-    for (let i = 0; i < fields.length; i++) {
+    for (const i = 0; i < fields.length; i++) {
       let field = fields[i]
       if (typeof field === 'string') {
         field = { key: field }
@@ -277,8 +301,6 @@ class ItemsProvider {
         data: field.key,
         name: field.key,
         searchable: true,
-        // implement this only when we allow for per field filter
-        // search: { value: '', regex: false },
         orderable: field.sortable || true
       }
 
@@ -294,15 +316,52 @@ class ItemsProvider {
         that.onFieldTranslate(field, col)
       }
 
-      if (ctx.sortBy === field.key && col.orderable) {
-        query.order.push({column: index, dir: ctx.sortDesc ? 'desc' : 'asc' })
-      }
-
       // skip local field or empty key
-      if (!field.isLocal || `${field.key}` === '') {
+      if (field.isLocal || `${field.key}` === '') {
+        continue
+      } else {
         query.columns.push(col)
         index++
       }
+
+      // handle server-side for non-local fields
+      if (col.orderable && ctx.sortBy === field.key) {
+        query.order.push({column: index, dir: ctx.sortDesc ? 'desc' : 'asc' })
+      }
+
+      // implement per field search/filtering
+      if (col.searchable && opts.search) {
+        const val = opts.search[field.key]
+
+        if (val) {
+          // see api - https://datatables.net/reference/api/column().search()
+          col.search = {
+            value: val.input,
+            regex: val.regex || false,
+            smart: val.smart || true,
+            caseInsen: val.caseInsen || true,
+
+            // enhancing search with custom operator parameter, loosely based on
+            // this example - https://datatables.yajrabox.com/eloquent/advance-filter
+            operator: val.operator || '='
+          }
+        }
+      }
+
+      // handle multi-columns sorting
+      if (col.orderable && opts.sorts) {
+        const sort = opts.sorts[col.key]
+
+        // validate valid values
+        if (sort === 'asc' || sort  === 'desc') {
+          query.order.push({ column: index, dir: sort })
+        }
+      }
+
+    }
+
+    if (query.columns.length <= 0) {
+      delete query['columns']
     }
 
     return query
