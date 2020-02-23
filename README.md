@@ -55,12 +55,24 @@ This plugin support most server-side features except for:
 
 This is because b-table does not currently natively support it.  Future work is in progress, see b-table issue links.
 
+# State Object
+> Below are fields on the state object, which are useful for binding to various components in Vue.  If `saveStateId` is provided, then this object get saved after successful data returned from ajax called and reload right after ItemsProvider construction.
+
+[] `currentPage` - save the current page
+[] `perPage` - save the per page selection
+[] `filter` - save the search filter
+[] `filterIgnoredFields` - array of ignored fields - see b-table
+[] `filterIncludedFields` - array of included fields - see b-table
+[] `searchFields` - per-column field search/filter
+[] `extraQuery` - additional query parameters
+[] `sortFields` - per-column field sorting
+
 # RELEASE
 1.0.0 - Future release with new features.  Big change in this release is the moving several bindable properties `perPage, currentPage, filter, filterIgnoredFields, filterIncludedFields` to `provider.state` object.  This allow for logical separation between what are being saved to the `localStorage`
 
-* custom per-column filtering provide `options.search` as key-value object
+* custom per-column filtering provide `options.searchFields` as key-value object
 * additional `options.extraQuery` as key-value object - allow for custom advance search, such as range search on date or numeric column
-* custom multi-column sorting with `options.sort` as key-value object
+* custom multi-column sorting with `options.sortFields` as key-value object
 * introducing `saveStateId` property for saving previous state and query on `localStorage`.  
 
 0.9.9 - remove multi-parameters constructor for single object parameter, update doc to prep for version 1.0.0 release.

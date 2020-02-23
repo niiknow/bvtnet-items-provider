@@ -334,8 +334,8 @@ class ItemsProvider {
       }
 
       // implement per field search/filtering
-      if (col.searchable && opts.search) {
-        const val = opts.search[field.key]
+      if (col.searchable && opts.searchFields) {
+        const val = opts.searchFields[field.key]
 
         if (val) {
           col.search = col.search || {}
@@ -345,8 +345,8 @@ class ItemsProvider {
       }
 
       // handle multi-columns sorting
-      if (col.orderable && opts.sorts) {
-        const sort = opts.sorts[col.key]
+      if (col.orderable && opts.sortFields) {
+        const sort = opts.sortFields[col.key]
 
         // validate valid values
         if (sort === 'asc' || sort  === 'desc') {

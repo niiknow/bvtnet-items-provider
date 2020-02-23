@@ -605,8 +605,8 @@ function () {
         } // implement per field search/filtering
 
 
-        if (col.searchable && opts.search) {
-          var val = opts.search[field.key];
+        if (col.searchable && opts.searchFields) {
+          var val = opts.searchFields[field.key];
 
           if (val) {
             col.search = col.search || {};
@@ -616,8 +616,8 @@ function () {
         } // handle multi-columns sorting
 
 
-        if (col.orderable && opts.sorts) {
-          var sort = opts.sorts[col.key]; // validate valid values
+        if (col.orderable && opts.sortFields) {
+          var sort = opts.sortFields[col.key]; // validate valid values
 
           if (sort === 'asc' || sort === 'desc') {
             query.order.push({
