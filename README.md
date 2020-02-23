@@ -13,16 +13,16 @@ https://datatables.net/manual/server-side
   :items="ip.items"
   :fields="ip.fields"
   :busy="ip.busy"
-  :current-page="ip.currentPage"
-  :per-page="ip.perPage"
-  :filter="ip.filter"
-  :filter-ignored-fields="ip.filterIgnoredFields"
-  :filter-included-fields="ip.filterIncludedFields"
+  :current-page="ip.state.currentPage"
+  :per-page="ip.state.perPage"
+  :filter="ip.state.filter"
+  :filter-ignored-fields="ip.state.filterIgnoredFields"
+  :filter-included-fields="ip.state.filterIncludedFields"
 />
 <b-pagination
-  v-model="ip.currentPage"
+  v-model="ip.state.currentPage"
   :total-rows="ip.totalRows"
-  :per-page="ip.perPage"
+  :per-page="ip.state.perPage"
 />
 ```
 
@@ -56,12 +56,13 @@ This plugin support most server-side features except for:
 This is because b-table does not currently natively support it.  Future work is in progress, see b-table issue links.
 
 # RELEASE
-1.0.0 - Future release with new features
-    * custom per column filtering provide options.search object
-    * additional options.extraQuery object - hint custom date range search
-    * custom multi-column sorting with options.sort object
-    * introducing `saveStateId` property saving previous state and query on local storage.  Big change is moving several bindable fields to provider.state object.
+1.0.0 - Future release with new features.  Big change in this release is the moving several bindable properties `perPage, currentPage, filter, filterIgnoredFields, filterIncludedFields` to `provider.state` object.  This allow for logical separation between what are being saved to the `localStorage`
 
-0.9.9 - remove multi-parameters construction, opting for single object parameter construction as options
+    * custom per-column filtering provide `options.search` as key-value object
+    * additional `options.extraQuery` as key-value object - allow for custom advanced ssearch such as range search on date or numeric column
+    * custom multi-column sorting with `options.sort` as key-value object
+    * introducing `saveStateId` property for saving previous state and query on `localStorage`.  
+
+0.9.9 - remove multi-parameters constructor for single object parameter
 
 # MIT
