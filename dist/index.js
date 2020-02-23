@@ -149,6 +149,47 @@ module.exports = _createClass;
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/defineProperty.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/readOnlyError.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/readOnlyError.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _readOnlyError(name) {
+  throw new Error("\"" + name + "\" is read-only");
+}
+
+module.exports = _readOnlyError;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/typeof.js":
 /*!*******************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/typeof.js ***!
@@ -185,15 +226,25 @@ module.exports = _typeof;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/readOnlyError */ "./node_modules/@babel/runtime/helpers/readOnlyError.js");
+/* harmony import */ var _babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var _name = new WeakMap(),
     _ajaxUrl = new WeakMap(),
@@ -206,34 +257,48 @@ var ItemsProvider =
 function () {
   /**
   * Initialize an instance of ItemsProvider
-  *
-  * @return an instance of ItemsProvider
+   *
+   * @param Object opts  options object
+  * @return             an instance of ItemsProvider
   */
-  function ItemsProvider(axios, fields) {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, ItemsProvider);
+  function ItemsProvider(opts, fields) {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default()(this, ItemsProvider);
 
-    return this.init(axios, fields);
+    var that = this; // temp support backward compatibility with version < 1.0
+
+    if (typeof fields !== 'undefined') {
+      return that.init({
+        fields: fields,
+        axios: opts
+      });
+    }
+
+    return that.init(opts);
   }
   /**
   * Initialize an instance of ItemsProvider
    *
-  * @param  Object  axios                  an instance of axios
-  * @param  Object  fields                 object containing our fields definition
+   * @param Object opts  options object
   * @return ItemsProvider       an instance of ItemsProvider
   */
 
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(ItemsProvider, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(ItemsProvider, [{
     key: "init",
-    value: function init(axios, fields) {
+    value: function init() {
+      var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var that = this;
+      var fields = opts.fields;
+      var axios = opts.axios; // validate fields and axios
+
       var isFieldsArray = fields.constructor === Array || Array.isArray(fields);
-      var copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn'];
+      var copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']; // these are either internal or fields listed from b-table
 
       _name.set(that, 'ItemsProvider');
 
       _axios.set(that, axios);
 
+      that.opts = opts;
       that.fields = fields;
       that.perPage = 15;
       that.currentPage = 1;
@@ -290,6 +355,8 @@ function () {
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
       };
+
+      return that;
     }
     /**
      * Reset counter ariables
@@ -469,7 +536,7 @@ function () {
         if (obj.hasOwnProperty(p)) {
           var k = prefix ? prefix + '[' + p + ']' : p,
               v = obj[p];
-          str.push(v !== null && _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(v) === 'object' ? that.queryStringify(v, k) : encode(k) + '=' + encode(v));
+          str.push(v !== null && _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_2___default()(v) === 'object' ? that.queryStringify(v, k) : encode(k) + '=' + encode(v));
         }
       }
 
@@ -489,8 +556,10 @@ function () {
       var inQuery = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var that = this;
       var fields = that.fields;
-      var fDict = {};
-      var query = {
+      var opts = that.opts;
+      var qry = opts.query || {};
+
+      var query = _objectSpread({
         draw: 1,
         start: (ctx.currentPage - 1) * ctx.perPage,
         length: ctx.perPage,
@@ -500,15 +569,19 @@ function () {
         },
         order: [],
         columns: []
-      };
+      }, qry);
 
       for (var k in inQuery) {
         query[k] = inQuery[k];
       }
 
+      if (query.search.regex) {
+        query.search.value = ctx.filter.source;
+      }
+
       var index = 0;
 
-      for (var i = 0; i < fields.length; i++) {
+      for (var i = 0; i < fields.length; _babel_runtime_helpers_readOnlyError__WEBPACK_IMPORTED_MODULE_0___default()("i"), i++) {
         var field = fields[i];
 
         if (typeof field === 'string') {
@@ -521,8 +594,6 @@ function () {
           data: field.key,
           name: field.key,
           searchable: true,
-          // implement this only when we allow for per field filter
-          // search: { value: '', regex: false },
           orderable: field.sortable || true
         };
 
@@ -536,20 +607,50 @@ function () {
 
         if (typeof that.onFieldTranslate === 'function') {
           that.onFieldTranslate(field, col);
-        }
+        } // skip local field or empty key
 
-        if (ctx.sortBy === field.key && col.orderable) {
+
+        if (field.isLocal || "".concat(field.key) === '') {
+          continue;
+        } else {
+          query.columns.push(col);
+          index++;
+        } // handle server-side for non-local fields
+
+
+        if (col.orderable && ctx.sortBy === field.key) {
           query.order.push({
             column: index,
             dir: ctx.sortDesc ? 'desc' : 'asc'
           });
-        } // skip local field or empty key
+        } // implement per field search/filtering
 
 
-        if (!field.isLocal || "".concat(field.key) === '') {
-          query.columns.push(col);
-          index++;
+        if (col.searchable && opts.search) {
+          var val = opts.search[field.key];
+
+          if (val) {
+            col.search = col.search || {};
+            col.search.regex = val instanceof RegExp || false;
+            col.search.value = ol.search.regex ? val.source : "".concat(val || '');
+          }
+        } // handle multi-columns sorting
+
+
+        if (col.orderable && opts.sorts) {
+          var sort = opts.sorts[col.key]; // validate valid values
+
+          if (sort === 'asc' || sort === 'desc') {
+            query.order.push({
+              column: index,
+              dir: sort
+            });
+          }
         }
+      }
+
+      if (query.columns.length <= 0) {
+        delete query['columns'];
       }
 
       return query;
@@ -593,12 +694,13 @@ function () {
       that.resetCounterVars();
       that.busy = true;
       that.isLocal = false;
+      var axios = that.getAxios();
 
       if (that.method === 'POST') {
-        promise = that.getAxios().post(that.getAjaxUrl(), query);
+        promise = axios.post(that.getAjaxUrl(), query);
       } else {
         var apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query);
-        promise = that.getAxios().get(apiUrl);
+        promise = axios.get(apiUrl);
       }
 
       return promise.then(function (rsp) {
@@ -617,7 +719,7 @@ function () {
 
         that.busy = false;
         return myData.data || [];
-      }).catch(function (err) {
+      })["catch"](function (err) {
         that.busy = false;
 
         if (typeof that.onResponseError === 'function') {

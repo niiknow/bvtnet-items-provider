@@ -275,15 +275,17 @@ class ItemsProvider {
   translateContext(ctx, inQuery = {}) {
     const that   = this
     const fields = that.fields
-    const fDict  = {}
     const opts   = that.opts
+    const qry    = opts.query || {}
     const query  = {
       draw: 1,
       start: (ctx.currentPage - 1) * ctx.perPage,
       length: ctx.perPage,
       search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
       order: [],
-      columns: []
+      columns: [],
+      // object spread allow for overriding or passing additional query parameters
+      ...qry
     }
 
     for(let k in inQuery) {
@@ -291,7 +293,7 @@ class ItemsProvider {
     }
 
     if (query.search.regex) {
-      query.search.value = ctx.filter.source;
+      query.search.value = ctx.filter.source
     }
 
     let index = 0
@@ -338,14 +340,9 @@ class ItemsProvider {
         const val = opts.search[field.key]
 
         if (val) {
-          col.search = {
-            value: `${val || ''}`,
-            regex: (val instanceof RegExp) || false
-          }
-
-          if (col.search.regex) {
-            cols.search.value = val.source
-          }
+          col.search = col.search || {}
+          col.search.regex  = (val instanceof RegExp) || false
+          col.search.value =  ol.search.regex ? val.source : `${val || ''}`
         }
       }
 
@@ -358,7 +355,6 @@ class ItemsProvider {
           query.order.push({ column: index, dir: sort })
         }
       }
-
     }
 
     if (query.columns.length <= 0) {
