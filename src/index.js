@@ -173,8 +173,8 @@ class ItemsProvider {
   setLocalItems(items) {
     const that       = this
     that.currentPage = 1
-    that.startRow    = 1
     that.totalRows   = items ? items.length : 0
+    that.startRow    = that.totalRows > 0 ? 1 : 0
     that.endRow      = that.totalRows
     that.perPage     = -1
     that.isLocal     = true
@@ -409,7 +409,7 @@ class ItemsProvider {
     return promise.then(rsp => {
       const myData   = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow  = query.length > 0 ? query.start + 1 : 0
+      that.startRow  = that.totalRows > 0 ? query.start + 1 : 0
       that.endRow    = query.start + query.length
 
       if (that.endRow > that.totalRows || that.endRow < 0) {

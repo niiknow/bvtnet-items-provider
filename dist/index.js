@@ -428,8 +428,8 @@ function () {
     value: function setLocalItems(items) {
       var that = this;
       that.currentPage = 1;
-      that.startRow = 1;
       that.totalRows = items ? items.length : 0;
+      that.startRow = that.totalRows > 0 ? 1 : 0;
       that.endRow = that.totalRows;
       that.perPage = -1;
       that.isLocal = true;
@@ -685,7 +685,7 @@ function () {
       return promise.then(function (rsp) {
         var myData = rsp.data;
         that.totalRows = myData.recordsFiltered || myData.recordsTotal;
-        that.startRow = query.length > 0 ? query.start + 1 : 0;
+        that.startRow = that.totalRows > 0 ? query.start + 1 : 0;
         that.endRow = query.start + query.length;
 
         if (that.endRow > that.totalRows || that.endRow < 0) {
