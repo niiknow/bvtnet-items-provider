@@ -557,7 +557,7 @@ function () {
       var that = this;
       var fields = that.fields;
       var opts = that.opts;
-      var qry = opts.query || {};
+      var qry = opts.extraQuery || {};
 
       var query = _objectSpread({
         draw: 1,

@@ -276,7 +276,7 @@ class ItemsProvider {
     const that   = this
     const fields = that.fields
     const opts   = that.opts
-    const qry    = opts.query || {}
+    const qry    = opts.extraQuery || {}
     const query  = {
       draw: 1,
       start: (ctx.currentPage - 1) * ctx.perPage,
