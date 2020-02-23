@@ -55,4 +55,13 @@ This plugin support most server-side features except for:
 
 This is because b-table does not currently natively support it.  Future work is in progress, see b-table issue links.
 
+# RELEASE
+1.0.0 - Future release with new features
+    * custom per column filtering provide options.search object
+    * additional options.extraQuery object - hint custom date range search
+    * custom multi-column sorting with options.sort object
+    * introducing `saveStateId` property saving previous state and query on local storage.  Big change is moving several bindable fields to provider.state object.
+
+0.9.9 - remove multi-parameters construction, opting for single object parameter construction as options
+
 # MIT
