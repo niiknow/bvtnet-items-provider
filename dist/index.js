@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.8
+ * @version v0.9.9
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -267,6 +267,7 @@ function () {
     var that = this; // temp support backward compatibility with version < 1.0
 
     if (typeof fields !== 'undefined') {
+      console.log('multi-parameters constructor has been deprecated in 0.9.9 and will be removed in 1.0.0 release.');
       return that.init({
         fields: fields,
         axios: opts
