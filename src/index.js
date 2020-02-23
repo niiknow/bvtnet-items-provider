@@ -290,6 +290,10 @@ class ItemsProvider {
       query[k] = inQuery[k]
     }
 
+    if (query.search.regex) {
+      query.search.value = ctx.filter.source;
+    }
+
     let index = 0
     for (const i = 0; i < fields.length; i++) {
       let field = fields[i]
@@ -334,16 +338,13 @@ class ItemsProvider {
         const val = opts.search[field.key]
 
         if (val) {
-          // see api - https://datatables.net/reference/api/column().search()
           col.search = {
-            value: val.input,
-            regex: val.regex || false,
-            smart: val.smart || true,
-            caseInsen: val.caseInsen || true,
+            value: `${val || ''}`,
+            regex: (val instanceof RegExp) || false
+          }
 
-            // enhancing search with custom operator parameter, loosely based on
-            // this example - https://datatables.yajrabox.com/eloquent/advance-filter
-            operator: val.operator || '='
+          if (col.search.regex) {
+            cols.search.value = val.source
           }
         }
       }
