@@ -63,6 +63,6 @@ This is because b-table does not currently natively support it.  Future work is 
 * custom multi-column sorting with `options.sort` as key-value object
 * introducing `saveStateId` property for saving previous state and query on `localStorage`.  
 
-0.9.9 - remove multi-parameters constructor for single object parameter
+0.9.9 - remove multi-parameters constructor for single object parameter, update doc to prep for version 1.0.0 release.
 
 # MIT
