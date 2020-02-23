@@ -286,11 +286,8 @@ class ItemsProvider {
       order: [],
       columns: [],
       // object spread allow for overriding or passing additional query parameters
-      ...qry
-    }
-
-    for(let k in inQuery) {
-      query[k] = inQuery[k]
+      ...qry,
+      ...inQuery
     }
 
     if (query.search.regex) {
@@ -298,7 +295,7 @@ class ItemsProvider {
     }
 
     let index = 0
-    for (const i = 0; i < fields.length; i++) {
+    for (let i = 0; i < fields.length; i++) {
       let field = fields[i]
       if (typeof field === 'string') {
         field = { key: field }
@@ -410,9 +407,9 @@ class ItemsProvider {
     }
 
     return promise.then(rsp => {
-      let myData     = rsp.data
+      const myData   = rsp.data
    		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow  = query.start + 1
+      that.startRow  = query.length > 0 ? query.start + 1 : 0
       that.endRow    = query.start + query.length
 
       if (that.endRow > that.totalRows || that.endRow < 0) {
