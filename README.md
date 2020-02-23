@@ -21,8 +21,8 @@ https://datatables.net/manual/server-side
 />
 <b-pagination
   v-model="ip.state.currentPage"
-  :total-rows="ip.totalRows"
   :per-page="ip.state.perPage"
+  :total-rows="ip.totalRows"
 />
 ```
 
@@ -58,10 +58,10 @@ This is because b-table does not currently natively support it.  Future work is 
 # RELEASE
 1.0.0 - Future release with new features.  Big change in this release is the moving several bindable properties `perPage, currentPage, filter, filterIgnoredFields, filterIncludedFields` to `provider.state` object.  This allow for logical separation between what are being saved to the `localStorage`
 
-    * custom per-column filtering provide `options.search` as key-value object
-    * additional `options.extraQuery` as key-value object - allow for custom advanced ssearch such as range search on date or numeric column
-    * custom multi-column sorting with `options.sort` as key-value object
-    * introducing `saveStateId` property for saving previous state and query on `localStorage`.  
+* custom per-column filtering provide `options.search` as key-value object
+* additional `options.extraQuery` as key-value object - allow for custom advance search, such as range search on date or numeric column
+* custom multi-column sorting with `options.sort` as key-value object
+* introducing `saveStateId` property for saving previous state and query on `localStorage`.  
 
 0.9.9 - remove multi-parameters constructor for single object parameter
 
