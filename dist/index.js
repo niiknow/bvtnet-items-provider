@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.9
+ * @version v0.9.10
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -599,7 +599,7 @@ function () {
 
         if (col.orderable && ctx.sortBy === field.key) {
           query.order.push({
-            column: index,
+            column: index - 1,
             dir: ctx.sortDesc ? 'desc' : 'asc'
           });
         } // implement per field search/filtering
@@ -621,7 +621,7 @@ function () {
 
           if (sort === 'asc' || sort === 'desc') {
             query.order.push({
-              column: index,
+              column: index - 1,
               dir: sort
             });
           }

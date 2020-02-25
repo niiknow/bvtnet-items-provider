@@ -44391,7 +44391,7 @@ ItemsProvider = /*#__PURE__*/function () {
 
         // handle server-side for non-local fields
         if (col.orderable && ctx.sortBy === field.key) {
-          query.order.push({ column: index, dir: ctx.sortDesc ? 'desc' : 'asc' });
+          query.order.push({ column: index - 1, dir: ctx.sortDesc ? 'desc' : 'asc' });
         }
 
         // implement per field search/filtering
@@ -44411,7 +44411,7 @@ ItemsProvider = /*#__PURE__*/function () {
 
           // validate valid values
           if (sort === 'asc' || sort === 'desc') {
-            query.order.push({ column: index, dir: sort });
+            query.order.push({ column: index - 1, dir: sort });
           }
         }
       }
