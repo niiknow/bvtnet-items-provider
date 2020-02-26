@@ -29,9 +29,11 @@ class ItemsProvider {
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
 
+    that.stateId     = opts.stateId
     that.state       = state
     that.fields      = fields
     that.busy        = false
+    that.storage     = opts.storage || window.localStorage
     that.pageLengths = [
       { value: 15, text: '15'},
       { value: 100, text: '100'},
@@ -85,6 +87,20 @@ class ItemsProvider {
     // passing the b-table component as 3rd parameter
     that.items = function (ctx, cb) {
       return that.executeQuery(ctx, cb, this)
+    }
+
+    // finally, load states
+    if (typeof(that.stateId) === 'string') {
+
+      if (typeof that.onLoadingState === 'function') {
+        that.onLoadingState()
+      }
+
+      // begin saving state
+      const savedState = that.storage.getItem(that.stateId)
+      if (typeof(savedState) === 'string' && savedState.indexOf('}') > 0) {
+        that.state = JSON.parse(savedState)
+      }
     }
 
     return that
@@ -342,6 +358,28 @@ class ItemsProvider {
   }
 
   /**
+   * perform state saving
+   *
+   * @return Object ItemsProvider
+   */
+  performSaveState() {
+    const that = this
+
+    if (typeof(that.stateId) !== 'string') {
+      return that
+    }
+
+    if (typeof that.onSavingState === 'function') {
+      that.onSavingState(that.stateId, that.state)
+    }
+
+    // begin saving state
+    that.storage.setItem(that.stateId, JSON.stringify(that.state))
+
+    return that
+  }
+
+  /**
 	 * the provider function to use with bootstrap vue
 	 *
 	 * @param  Object   ctx bootstrap-vue context object
@@ -385,8 +423,6 @@ class ItemsProvider {
       that.state.startRow  = that.state.totalRows > 0 ? query.start + 1 : 0
       that.state.endRow    = query.start + query.length
 
-      console.log(that.state.endRow)
-      console.log(that.state.totalRows)
       if (that.state.endRow > that.state.totalRows) {
         that.state.endRow = that.state.totalRows
       }
@@ -396,6 +432,9 @@ class ItemsProvider {
       }
 
       that.busy = false
+
+      // finally, save state on successful response
+      that.performSaveState()
 
       return myData.data || []
     }).catch(err => {
