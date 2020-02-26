@@ -10,7 +10,7 @@
       <div class="col-12 col-md-3">
         <form
           class="form-inline d-flex mx-1 justify-content-end"
-          @submit.stop.prevent="ip.filter = quickSearch"
+          @submit.stop.prevent="ip.state.filter = quickSearch"
         >
           <div class="input-group">
             <input
@@ -40,22 +40,22 @@
       :items="ip.items"
       :fields="ip.fields"
       :busy="ip.busy"
-      :current-page="ip.currentPage"
-      :per-page="ip.perPage"
-      :filter="ip.filter"
-      :filter-ignored-fields="ip.filterIgnoredFields"
-      :filter-included-fields="ip.filterIncludedFields"
+      :current-page="ip.state.currentPage"
+      :per-page="ip.state.perPage"
+      :filter="ip.state.filter"
+      :filter-ignored-fields="ip.state.filterIgnoredFields"
+      :filter-included-fields="ip.state.filterIncludedFields"
       api-url="https://laratt.niiknow.org/api/v1/democontact/example?x-tenant=test&x-api-key=demo123"
     />
      <div class="row">
       <div class="col-12 col-md-5">
-        Showing {{ ip.startRow }} to {{ ip.endRow }} of {{ ip.totalRows }} entries
+        Showing {{ ip.state.startRow }} to {{ ip.state.endRow }} of {{ ip.state.totalRows }} entries
       </div>
       <div class="col-12 col-md-7">
         <b-pagination
-          v-model="ip.currentPage"
-          :total-rows="ip.totalRows"
-          :per-page="ip.perPage"
+          v-model="ip.state.currentPage"
+          :total-rows="ip.state.totalRows"
+          :per-page="ip.state.perPage"
           class="float-right"
           aria-controls="my-table"
         />
@@ -64,7 +64,7 @@
           <label>
             Show
             <b-form-select
-              v-model="ip.perPage"
+              v-model="ip.state.perPage"
               :options="ip.pageLengths"
               class="dataTables_length_select"
             />

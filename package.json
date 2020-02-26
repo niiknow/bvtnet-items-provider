@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "0.9.10",
+  "version": "1.0.0",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",
@@ -29,7 +29,6 @@
     "build": "npm run production",
     "production": "cross-env NODE_ENV=build node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "cross-env NODE_ENV=test node_modules/.bin/nyc node_modules/.bin/ava --verbose",
-    "watch-test": "npm run test -- --watch",
     "lint": "eslint --ext .js,.vue src/",
     "lint-fix": "eslint --fix --ext .js,.vue src/",
     "check-outdated": "npm outdated"

@@ -58,13 +58,21 @@ This is because b-table does not currently natively support it.  Future work is 
 # State Object
 > Below are fields on the state object, which are useful for binding to various components in Vue.  If `saveStateId` is provided, then this object get saved after successful data returned from ajax called and reload right after ItemsProvider construction.
 
+
 [] `currentPage` - save the current page
+
 [] `perPage` - save the per page selection
+
 [] `filter` - save the search filter
+
 [] `filterIgnoredFields` - array of ignored fields - see b-table
+
 [] `filterIncludedFields` - array of included fields - see b-table
+
 [] `searchFields` - per-column field search/filter
+
 [] `extraQuery` - additional query parameters
+
 [] `sortFields` - per-column field sorting
 
 # RELEASE

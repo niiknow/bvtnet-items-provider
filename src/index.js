@@ -1,6 +1,4 @@
 let _name = new WeakMap(),
- _ajaxUrl = new WeakMap(),
- _query = new WeakMap(),
  _axios = new WeakMap(),
  _localItems = new WeakMap()
 
@@ -11,19 +9,8 @@ class ItemsProvider {
    * @param Object opts  options object
 	 * @return             an instance of ItemsProvider
 	 */
-  constructor(opts, fields) {
-    const that = this
-
-    // temp support backward compatibility with version < 1.0
-    if (typeof(fields) !== 'undefined') {
-      console.log('multi-parameters constructor has been deprecated in 0.9.9 and will be removed in 1.0.0 release.')
-      return that.init({
-        fields: fields,
-        axios: opts
-      })
-    }
-
-    return that.init(opts)
+  constructor(opts) {
+    return this.init(opts)
   }
 
   /**
@@ -34,32 +21,17 @@ class ItemsProvider {
 	 */
   init(opts = {}) {
     const that   = this
-    const fields = opts.fields
+    const fields = opts.fields || []
     const axios  = opts.axios
-    // validate fields and axios
-
+    const state  = {}
     const isFieldsArray = fields.constructor === Array || Array.isArray(fields)
-    const copyable = [
-      'onFieldTranslate', 'searchable', 'isLocal', 'key', 'label',
-      'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable',
-      'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass',
-      'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader',
-      'stickyColumn'
-    ] // these are either internal or fields listed from b-table
 
     _name.set(that, 'ItemsProvider')
     _axios.set(that, axios)
 
-    that.opts                 = opts
-    that.fields               = fields
-    that.perPage              = 15
-    that.currentPage          = 1
-    that.filter               = null
-    that.filterIgnoredFields  = []
-    that.filterIncludedFields = []
-    that.busy                 = false
-    that.totalRows            = 0
-    that.isLocal              = false
+    that.state       = state
+    that.fields      = fields
+    that.busy        = false
     that.pageLengths = [
       { value: 15, text: '15'},
       { value: 100, text: '100'},
@@ -69,17 +41,31 @@ class ItemsProvider {
     ]
     that.resetCounterVars()
 
+    state.isLocal              = opts.isLocal || true
+    state.perPage              = opts.perPage || 15
+    state.currentPage          = opts.currentPage || 1
+    state.filter               = opts.filter || {}
+    state.filterIgnoredFields  = opts.filterIgnoredFields || []
+    state.filterIncludedFields = opts.filterIncludedFields || []
+    state.searchFields         = opts.searchFields || {}
+    state.sortFields           = opts.sortFields || {}
+    state.query                = opts.query || {}
+    state.queryUrl             = opts.queryUrl
+
+    // field is not array, must be object type
     if (!isFieldsArray) {
       that.fields = []
+      // these are either internal or fields listed from b-table
+      const copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label','headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn', 'data', 'name']
 
       for (let k in fields) {
         const field = fields[k]
-        let col = {}
+        const col   = {}
 
-        field.key  = `${field.key || field.name || field.data || k}`
+        field.key = `${field.key || field.name || field.data || k}`
 
         // disable search and sort for local field
-        if (field.isLocal || `${field.key}` === '') {
+        if (field.isLocal) {
           field.searchable = false
           field.sortable  = false
           delete field['filterByFormatted']
@@ -111,7 +97,7 @@ class ItemsProvider {
    */
   resetCounterVars() {
     const that = this
-    that.startRow = that.endRow = 0
+    that.totalRows = that.startRow = that.endRow = 0
   }
 
   /**
@@ -124,30 +110,12 @@ class ItemsProvider {
   }
 
   /**
-   * Get last server params
-   *
-   * @return Object last server parameters/query object
-   */
-  getServerParams() {
-    return _query.get(this)
-  }
-
-  /**
    * get the axios
    *
    * @return Object the axios object
    */
   getAxios() {
     return _axios.get(this)
-  }
-
-  /**
-   * get last ajax url (without query)
-   *
-   * @return String the last ajax url without query/server parameters object
-   */
-  getAjaxUrl() {
-    return _ajaxUrl.get(this)
   }
 
   /**
@@ -172,12 +140,12 @@ class ItemsProvider {
    */
   setLocalItems(items) {
     const that       = this
-    that.currentPage = 1
-    that.totalRows   = items ? items.length : 0
-    that.startRow    = that.totalRows > 0 ? 1 : 0
-    that.endRow      = that.totalRows
-    that.perPage     = -1
-    that.isLocal     = true
+    that.state.currentPage = 1
+    that.state.totalRows   = items ? items.length : 0
+    that.state.startRow    = that.totalRows > 0 ? 1 : 0
+    that.state.endRow      = that.totalRows
+    that.state.perPage     = -1
+    that.state.isLocal     = true
 
     _localItems.set(this, items)
   }
@@ -276,13 +244,13 @@ class ItemsProvider {
   translateContext(ctx, inQuery = {}) {
     const that   = this
     const fields = that.fields
-    const opts   = that.opts
-    const qry    = opts.extraQuery || {}
+    const state  = that.state
+    const qry    = state.extraQuery || {}
     const query  = {
       draw: 1,
       start: (ctx.currentPage - 1) * ctx.perPage,
       length: ctx.perPage,
-      search: { value: `${ctx.filter || ''}`, regex: (ctx.filter instanceof RegExp) },
+      search: { value: `${ctx.filter || ''}` },
       order: [],
       columns: [],
       // object spread allow for overriding or passing additional query parameters
@@ -290,11 +258,14 @@ class ItemsProvider {
       ...inQuery
     }
 
-    if (query.search.regex) {
+    if (ctx.filter instanceof RegExp) {
+      query.search.regex = true
       query.search.value = ctx.filter.source
+    } else if (typeof(ctx.filter) !== 'string') {
+      query.search.value = ''
     }
 
-    let index = 0
+    let index = -1
     for (let i = 0; i < fields.length; i++) {
       let field = fields[i]
       if (typeof field === 'string') {
@@ -302,17 +273,17 @@ class ItemsProvider {
       }
 
       const col = {
-        data: field.key,
-        name: field.key,
-        searchable: true,
-        orderable: field.sortable || true
+        data: field.data || field.key,
+        name: field.name || field.key,
+        searchable: typeof(field.searchable) === 'undefined' ? true : field.searchable,
+        orderable: typeof(field.sortable) === 'undefined' ? true : field.sortable
       }
 
-      if (that.filterIgnoredFields && that.filterIgnoredFields.indexOf(field.key) > -1) {
+      if (state.filterIgnoredFields && state.filterIgnoredFields.indexOf(field.key) > -1) {
         col.searchable = false
       }
 
-      if (that.filterIncludedFields && that.filterIncludedFields.indexOf(field.key) > -1) {
+      if (state.filterIncludedFields && state.filterIncludedFields.indexOf(field.key) > -1) {
         col.searchable = true
       }
 
@@ -330,27 +301,35 @@ class ItemsProvider {
 
       // handle server-side for non-local fields
       if (col.orderable && ctx.sortBy === field.key) {
-        query.order.push({column: index - 1, dir: ctx.sortDesc ? 'desc' : 'asc' })
+        query.order.push({column: index, dir: ctx.sortDesc ? 'desc' : 'asc' })
       }
 
       // implement per field search/filtering
-      if (col.searchable && opts.searchFields) {
-        const val = opts.searchFields[field.key]
+      if (col.searchable && state.searchFields) {
+        const val = state.searchFields[field.key]
 
         if (val) {
-          col.search = col.search || {}
-          col.search.regex  = (val instanceof RegExp) || false
-          col.search.value =  ol.search.regex ? val.source : `${val || ''}`
+          // actual object with value, then simply assign it
+          if (val.value) {
+            col.search = val
+          } else {
+            col.search = col.search || {}
+            col.search.value =  { value: `${val || ''}`, regex: false }
+            if (val instanceof RegExp) {
+              col.search.regex = true
+              col.search.value = val.source
+            }
+          }
         }
       }
 
       // handle multi-columns sorting
-      if (col.orderable && opts.sortFields) {
-        const sort = opts.sortFields[col.key]
+      if (col.orderable && state.sortFields) {
+        const sort = state.sortFields[field.key]
 
         // validate valid values
         if (sort === 'asc' || sort  === 'desc') {
-          query.order.push({ column: index - 1, dir: sort })
+          query.order.push({ column: index, dir: sort })
         }
       }
     }
@@ -373,8 +352,7 @@ class ItemsProvider {
     const that     = this
     const locItems = that.getLocalItems(cb)
     const apiParts = (ctx.apiUrl || that.apiUrl).split('?')
-    let query = {},
-      promise = null
+    let query = {}
 
     if (apiParts.length > 1) {
       query = that.queryParseString(apiParts[1])
@@ -386,34 +364,31 @@ class ItemsProvider {
       that.onBeforeQuery(query, ctx)
     }
 
-    _ajaxUrl.set(that, apiParts[0])
-    _query.set(that, query)
+    that.state.queryUrl = apiParts[0]
+    that.state.query    = query
 
     if (locItems) {
       return locItems
     }
 
     that.resetCounterVars()
-    that.busy    = true
-    that.isLocal = false
+    that.busy          = true
+    that.state.isLocal = false
 
-    const axios = that.getAxios()
-
-    if (that.method === 'POST') {
-      promise = axios.post(that.getAjaxUrl(), query)
-    } else {
-      const apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query)
-      promise = axios.get(apiUrl)
-    }
+    const axios   = that.getAxios()
+    const ajaxUrl = that.state.queryUrl
+    const promise = (that.method === 'POST') ? axios.post(ajaxUrl, query) : axios.get(`${ajaxUrl}?${that.queryStringify(query)}`)
 
     return promise.then(rsp => {
       const myData   = rsp.data
-   		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow  = that.totalRows > 0 ? query.start + 1 : 0
-      that.endRow    = query.start + query.length
+   		that.state.totalRows = myData.recordsFiltered || myData.recordsTotal
+      that.state.startRow  = that.state.totalRows > 0 ? query.start + 1 : 0
+      that.state.endRow    = query.start + query.length
 
-      if (that.endRow > that.totalRows || that.endRow < 0) {
-        that.endRow = that.totalRows
+      console.log(that.state.endRow)
+      console.log(that.state.totalRows)
+      if (that.state.endRow > that.state.totalRows) {
+        that.state.endRow = that.state.totalRows
       }
 
       if (typeof that.onResponseComplete === 'function') {
