@@ -97,7 +97,7 @@ class ItemsProvider {
       }
 
       // begin saving state
-      const savedState = that.storage.getItem(that.stateId)
+      const savedState = that.storage.getItem(that.getStateId())
       if (typeof(savedState) === 'string' && savedState.indexOf('}') > 0) {
         const state = JSON.parse(savedState)
         for(let k in state) {
@@ -365,6 +365,15 @@ class ItemsProvider {
   }
 
   /**
+   * computed state id
+   *
+   * @return String the computed state id
+   */
+  getStateId() {
+    return `bvtnetip.${this.stateId}`
+  }
+
+  /**
    * perform state saving
    *
    * @return Object ItemsProvider
@@ -381,7 +390,7 @@ class ItemsProvider {
     }
 
     // begin saving state
-    that.storage.setItem(that.stateId, JSON.stringify(that.state))
+    that.storage.setItem(that.getStateId(), JSON.stringify(that.state))
 
     if (typeof that.onStateSaved === 'function') {
       that.onStateSaved()

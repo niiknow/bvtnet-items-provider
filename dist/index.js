@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v1.0.1
+ * @version v1.0.2
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -340,7 +340,7 @@ function () {
         } // begin saving state
 
 
-        var savedState = that.storage.getItem(that.stateId);
+        var savedState = that.storage.getItem(that.getStateId());
 
         if (typeof savedState === 'string' && savedState.indexOf('}') > 0) {
           var _state = JSON.parse(savedState);
@@ -643,6 +643,17 @@ function () {
       return query;
     }
     /**
+     * computed state id
+     *
+     * @return String the computed state id
+     */
+
+  }, {
+    key: "getStateId",
+    value: function getStateId() {
+      return "bvtnetip.".concat(this.stateId);
+    }
+    /**
      * perform state saving
      *
      * @return Object ItemsProvider
@@ -662,7 +673,7 @@ function () {
       } // begin saving state
 
 
-      that.storage.setItem(that.stateId, JSON.stringify(that.state));
+      that.storage.setItem(that.getStateId(), JSON.stringify(that.state));
 
       if (typeof that.onStateSaved === 'function') {
         that.onStateSaved();
