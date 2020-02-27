@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v0.9.10
+ * @version v1.0.1
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -229,8 +229,6 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var _name = new WeakMap(),
-    _ajaxUrl = new WeakMap(),
-    _query = new WeakMap(),
     _axios = new WeakMap(),
     _localItems = new WeakMap();
 
@@ -243,20 +241,10 @@ function () {
    * @param Object opts  options object
   * @return             an instance of ItemsProvider
   */
-  function ItemsProvider(opts, fields) {
+  function ItemsProvider(opts) {
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, ItemsProvider);
 
-    var that = this; // temp support backward compatibility with version < 1.0
-
-    if (typeof fields !== 'undefined') {
-      console.log('multi-parameters constructor has been deprecated in 0.9.9 and will be removed in 1.0.0 release.');
-      return that.init({
-        fields: fields,
-        axios: opts
-      });
-    }
-
-    return that.init(opts);
+    return this.init(opts);
   }
   /**
   * Initialize an instance of ItemsProvider
@@ -271,26 +259,20 @@ function () {
     value: function init() {
       var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var that = this;
-      var fields = opts.fields;
-      var axios = opts.axios; // validate fields and axios
-
+      var fields = opts.fields || [];
+      var axios = opts.axios;
+      var state = {};
       var isFieldsArray = fields.constructor === Array || Array.isArray(fields);
-      var copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn']; // these are either internal or fields listed from b-table
 
       _name.set(that, 'ItemsProvider');
 
       _axios.set(that, axios);
 
-      that.opts = opts;
+      that.stateId = opts.stateId;
+      that.state = state;
       that.fields = fields;
-      that.perPage = 15;
-      that.currentPage = 1;
-      that.filter = null;
-      that.filterIgnoredFields = [];
-      that.filterIncludedFields = [];
       that.busy = false;
-      that.totalRows = 0;
-      that.isLocal = false;
+      that.storage = opts.storage || window.localStorage;
       that.pageLengths = [{
         value: 15,
         text: '15'
@@ -308,16 +290,28 @@ function () {
         text: 'All'
       }];
       that.resetCounterVars();
+      state.isLocal = opts.isLocal || true;
+      state.perPage = opts.perPage || 15;
+      state.currentPage = opts.currentPage || 1;
+      state.filter = opts.filter || {};
+      state.filterIgnoredFields = opts.filterIgnoredFields || [];
+      state.filterIncludedFields = opts.filterIncludedFields || [];
+      state.searchFields = opts.searchFields || {};
+      state.sortFields = opts.sortFields || {};
+      state.query = opts.query || {};
+      state.queryUrl = opts.queryUrl; // field is not array, must be object type
 
       if (!isFieldsArray) {
-        that.fields = [];
+        that.fields = []; // these are either internal or fields listed from b-table
+
+        var copyable = ['onFieldTranslate', 'searchable', 'isLocal', 'key', 'label', 'headerTitle', 'headerAbbr', 'class', 'formatter', 'sortable', 'sortDirection', 'sortByFormatted', 'filterByFormatted', 'tdClass', 'thClass', 'thStyle', 'variant', 'tdAttr', 'thAttr', 'isRowHeader', 'stickyColumn', 'data', 'name'];
 
         for (var k in fields) {
           var field = fields[k];
           var col = {};
           field.key = "".concat(field.key || field.name || field.data || k); // disable search and sort for local field
 
-          if (field.isLocal || "".concat(field.key) === '') {
+          if (field.isLocal) {
             field.searchable = false;
             field.sortable = false;
             delete field['filterByFormatted'];
@@ -337,7 +331,29 @@ function () {
 
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
-      };
+      }; // finally, load states
+
+
+      if (typeof that.stateId === 'string') {
+        if (typeof that.onStateLoading === 'function') {
+          that.onStateLoading();
+        } // begin saving state
+
+
+        var savedState = that.storage.getItem(that.stateId);
+
+        if (typeof savedState === 'string' && savedState.indexOf('}') > 0) {
+          var _state = JSON.parse(savedState);
+
+          for (var _k in _state) {
+            that.state[_k] = _state[_k];
+          }
+
+          if (typeof that.onStateLoaded === 'function') {
+            that.onStateLoaded(_state);
+          }
+        }
+      }
 
       return that;
     }
@@ -351,7 +367,7 @@ function () {
     key: "resetCounterVars",
     value: function resetCounterVars() {
       var that = this;
-      that.startRow = that.endRow = 0;
+      that.totalRows = that.startRow = that.endRow = 0;
     }
     /**
      * get the component name
@@ -365,17 +381,6 @@ function () {
       return _name.get(this);
     }
     /**
-     * Get last server params
-     *
-     * @return Object last server parameters/query object
-     */
-
-  }, {
-    key: "getServerParams",
-    value: function getServerParams() {
-      return _query.get(this);
-    }
-    /**
      * get the axios
      *
      * @return Object the axios object
@@ -385,17 +390,6 @@ function () {
     key: "getAxios",
     value: function getAxios() {
       return _axios.get(this);
-    }
-    /**
-     * get last ajax url (without query)
-     *
-     * @return String the last ajax url without query/server parameters object
-     */
-
-  }, {
-    key: "getAjaxUrl",
-    value: function getAjaxUrl() {
-      return _ajaxUrl.get(this);
     }
     /**
      * Get the local items
@@ -427,12 +421,12 @@ function () {
     key: "setLocalItems",
     value: function setLocalItems(items) {
       var that = this;
-      that.currentPage = 1;
-      that.totalRows = items ? items.length : 0;
-      that.startRow = that.totalRows > 0 ? 1 : 0;
-      that.endRow = that.totalRows;
-      that.perPage = -1;
-      that.isLocal = true;
+      that.state.currentPage = 1;
+      that.state.totalRows = items ? items.length : 0;
+      that.state.startRow = that.totalRows > 0 ? 1 : 0;
+      that.state.endRow = that.totalRows;
+      that.state.perPage = -1;
+      that.state.isLocal = true;
 
       _localItems.set(this, items);
     }
@@ -539,26 +533,28 @@ function () {
       var inQuery = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var that = this;
       var fields = that.fields;
-      var opts = that.opts;
-      var qry = opts.extraQuery || {};
+      var state = that.state;
+      var qry = state.extraQuery || {};
 
       var query = _objectSpread({
         draw: 1,
         start: (ctx.currentPage - 1) * ctx.perPage,
         length: ctx.perPage,
         search: {
-          value: "".concat(ctx.filter || ''),
-          regex: ctx.filter instanceof RegExp
+          value: "".concat(ctx.filter || '')
         },
         order: [],
         columns: []
       }, qry, {}, inQuery);
 
-      if (query.search.regex) {
+      if (ctx.filter instanceof RegExp) {
+        query.search.regex = true;
         query.search.value = ctx.filter.source;
+      } else if (typeof ctx.filter !== 'string') {
+        query.search.value = '';
       }
 
-      var index = 0;
+      var index = -1;
 
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
@@ -570,17 +566,17 @@ function () {
         }
 
         var col = {
-          data: field.key,
-          name: field.key,
-          searchable: true,
-          orderable: field.sortable || true
+          data: field.data || field.key,
+          name: field.name || field.key,
+          searchable: typeof field.searchable === 'undefined' ? true : field.searchable,
+          orderable: typeof field.sortable === 'undefined' ? true : field.sortable
         };
 
-        if (that.filterIgnoredFields && that.filterIgnoredFields.indexOf(field.key) > -1) {
+        if (state.filterIgnoredFields && state.filterIgnoredFields.indexOf(field.key) > -1) {
           col.searchable = false;
         }
 
-        if (that.filterIncludedFields && that.filterIncludedFields.indexOf(field.key) > -1) {
+        if (state.filterIncludedFields && state.filterIncludedFields.indexOf(field.key) > -1) {
           col.searchable = true;
         }
 
@@ -599,29 +595,41 @@ function () {
 
         if (col.orderable && ctx.sortBy === field.key) {
           query.order.push({
-            column: index - 1,
+            column: index,
             dir: ctx.sortDesc ? 'desc' : 'asc'
           });
         } // implement per field search/filtering
 
 
-        if (col.searchable && opts.searchFields) {
-          var val = opts.searchFields[field.key];
+        if (col.searchable && state.searchFields) {
+          var val = state.searchFields[field.key];
 
           if (val) {
-            col.search = col.search || {};
-            col.search.regex = val instanceof RegExp || false;
-            col.search.value = ol.search.regex ? val.source : "".concat(val || '');
+            // actual object with value, then simply assign it
+            if (val.value) {
+              col.search = val;
+            } else {
+              col.search = col.search || {};
+              col.search.value = {
+                value: "".concat(val || ''),
+                regex: false
+              };
+
+              if (val instanceof RegExp) {
+                col.search.regex = true;
+                col.search.value = val.source;
+              }
+            }
           }
         } // handle multi-columns sorting
 
 
-        if (col.orderable && opts.sortFields) {
-          var sort = opts.sortFields[col.key]; // validate valid values
+        if (col.orderable && state.sortFields) {
+          var sort = state.sortFields[field.key]; // validate valid values
 
           if (sort === 'asc' || sort === 'desc') {
             query.order.push({
-              column: index - 1,
+              column: index,
               dir: sort
             });
           }
@@ -633,6 +641,34 @@ function () {
       }
 
       return query;
+    }
+    /**
+     * perform state saving
+     *
+     * @return Object ItemsProvider
+     */
+
+  }, {
+    key: "performSaveState",
+    value: function performSaveState() {
+      var that = this;
+
+      if (typeof that.stateId !== 'string') {
+        return that;
+      }
+
+      if (typeof that.onStateSaving === 'function') {
+        that.onStateSaving();
+      } // begin saving state
+
+
+      that.storage.setItem(that.stateId, JSON.stringify(that.state));
+
+      if (typeof that.onStateSaved === 'function') {
+        that.onStateSaved();
+      }
+
+      return that;
     }
     /**
     * the provider function to use with bootstrap vue
@@ -649,8 +685,7 @@ function () {
       var that = this;
       var locItems = that.getLocalItems(cb);
       var apiParts = (ctx.apiUrl || that.apiUrl).split('?');
-      var query = {},
-          promise = null;
+      var query = {};
 
       if (apiParts.length > 1) {
         query = that.queryParseString(apiParts[1]);
@@ -662,9 +697,8 @@ function () {
         that.onBeforeQuery(query, ctx);
       }
 
-      _ajaxUrl.set(that, apiParts[0]);
-
-      _query.set(that, query);
+      that.state.queryUrl = apiParts[0];
+      that.state.query = query;
 
       if (locItems) {
         return locItems;
@@ -672,31 +706,27 @@ function () {
 
       that.resetCounterVars();
       that.busy = true;
-      that.isLocal = false;
+      that.state.isLocal = false;
       var axios = that.getAxios();
-
-      if (that.method === 'POST') {
-        promise = axios.post(that.getAjaxUrl(), query);
-      } else {
-        var apiUrl = that.getAjaxUrl() + '?' + that.queryStringify(query);
-        promise = axios.get(apiUrl);
-      }
-
+      var ajaxUrl = that.state.queryUrl;
+      var promise = that.method === 'POST' ? axios.post(ajaxUrl, query) : axios.get("".concat(ajaxUrl, "?").concat(that.queryStringify(query)));
       return promise.then(function (rsp) {
         var myData = rsp.data;
-        that.totalRows = myData.recordsFiltered || myData.recordsTotal;
-        that.startRow = that.totalRows > 0 ? query.start + 1 : 0;
-        that.endRow = query.start + query.length;
+        that.state.totalRows = myData.recordsFiltered || myData.recordsTotal;
+        that.state.startRow = that.state.totalRows > 0 ? query.start + 1 : 0;
+        that.state.endRow = query.start + query.length;
 
-        if (that.endRow > that.totalRows || that.endRow < 0) {
-          that.endRow = that.totalRows;
+        if (that.state.endRow > that.state.totalRows) {
+          that.state.endRow = that.state.totalRows;
         }
 
         if (typeof that.onResponseComplete === 'function') {
           that.onResponseComplete(rsp);
         }
 
-        that.busy = false;
+        that.busy = false; // finally, save state on successful response
+
+        that.performSaveState();
         return myData.data || [];
       })["catch"](function (err) {
         that.busy = false;

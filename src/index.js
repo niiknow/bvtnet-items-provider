@@ -92,14 +92,21 @@ class ItemsProvider {
     // finally, load states
     if (typeof(that.stateId) === 'string') {
 
-      if (typeof that.onLoadingState === 'function') {
-        that.onLoadingState()
+      if (typeof that.onStateLoading === 'function') {
+        that.onStateLoading()
       }
 
       // begin saving state
       const savedState = that.storage.getItem(that.stateId)
       if (typeof(savedState) === 'string' && savedState.indexOf('}') > 0) {
-        that.state = JSON.parse(savedState)
+        const state = JSON.parse(savedState)
+        for(let k in state) {
+          that.state[k] = state[k]
+        }
+
+        if (typeof that.onStateLoaded === 'function') {
+          that.onStateLoaded(state)
+        }
       }
     }
 
@@ -369,12 +376,16 @@ class ItemsProvider {
       return that
     }
 
-    if (typeof that.onSavingState === 'function') {
-      that.onSavingState(that.stateId, that.state)
+    if (typeof that.onStateSaving === 'function') {
+      that.onStateSaving()
     }
 
     // begin saving state
     that.storage.setItem(that.stateId, JSON.stringify(that.state))
+
+    if (typeof that.onStateSaved === 'function') {
+      that.onStateSaved()
+    }
 
     return that
   }
