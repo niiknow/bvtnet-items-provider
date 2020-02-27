@@ -2,7 +2,7 @@
  * bvtnet-items-provider
  * datatables.net ajax items provider for bootstrap-vue b-table
 
- * @version v1.0.2
+ * @version v1.0.3
  * @author Tom Noogen
  * @homepage https://github.com/niiknow/bvtnet-items-provider
  * @repository https://github.com/niiknow/bvtnet-items-provider.git
@@ -290,10 +290,9 @@ function () {
         text: 'All'
       }];
       that.resetCounterVars();
-      state.isLocal = opts.isLocal || true;
       state.perPage = opts.perPage || 15;
       state.currentPage = opts.currentPage || 1;
-      state.filter = opts.filter || {};
+      state.filter = opts.filter;
       state.filterIgnoredFields = opts.filterIgnoredFields || [];
       state.filterIncludedFields = opts.filterIncludedFields || [];
       state.searchFields = opts.searchFields || {};
@@ -422,11 +421,10 @@ function () {
     value: function setLocalItems(items) {
       var that = this;
       that.state.currentPage = 1;
-      that.state.totalRows = items ? items.length : 0;
-      that.state.startRow = that.totalRows > 0 ? 1 : 0;
-      that.state.endRow = that.totalRows;
+      that.totalRows = items ? items.length : 0;
+      that.startRow = that.totalRows > 0 ? 1 : 0;
+      that.endRow = that.totalRows;
       that.state.perPage = -1;
-      that.state.isLocal = true;
 
       _localItems.set(this, items);
     }
@@ -717,18 +715,17 @@ function () {
 
       that.resetCounterVars();
       that.busy = true;
-      that.state.isLocal = false;
       var axios = that.getAxios();
       var ajaxUrl = that.state.queryUrl;
       var promise = that.method === 'POST' ? axios.post(ajaxUrl, query) : axios.get("".concat(ajaxUrl, "?").concat(that.queryStringify(query)));
       return promise.then(function (rsp) {
         var myData = rsp.data;
-        that.state.totalRows = myData.recordsFiltered || myData.recordsTotal;
-        that.state.startRow = that.state.totalRows > 0 ? query.start + 1 : 0;
-        that.state.endRow = query.start + query.length;
+        that.totalRows = myData.recordsFiltered || myData.recordsTotal;
+        that.startRow = that.totalRows > 0 ? query.start + 1 : 0;
+        that.endRow = query.start + query.length;
 
-        if (that.state.endRow > that.state.totalRows) {
-          that.state.endRow = that.state.totalRows;
+        if (that.endRow > that.totalRows) {
+          that.endRow = that.totalRows;
         }
 
         if (typeof that.onResponseComplete === 'function') {

@@ -25,9 +25,8 @@ test('ItemsProvider can set and return local items', t => {
   t.is(called, true)
   t.is(!!items, true)
   t.is(items.length, 1)
-  t.is(ip.state.totalRows, 1)
+  t.is(ip.totalRows, 1)
   t.is(ip.state.perPage, -1)
-  t.is(ip.state.isLocal, true)
   t.is(items[0].name, 'test')
 })
 
@@ -39,9 +38,8 @@ test('ItemsProvider executeQuery returns local items', t => {
 
   t.is(!!items, true)
   t.is(items.length, 1)
-  t.is(ip.state.totalRows, 1)
+  t.is(ip.totalRows, 1)
   t.is(ip.state.perPage, -1)
-  t.is(ip.state.isLocal, true)
   t.is(items[0].name, 'test')
 })
 
@@ -52,9 +50,8 @@ test('ItemsProvider.setLocalItems with nulls', t => {
   const items = ip.getLocalItems()
 
   t.is(items, null)
-  t.is(ip.state.totalRows, 0)
+  t.is(ip.totalRows, 0)
   t.is(ip.state.perPage, -1)
-  t.is(ip.state.isLocal, true)
 })
 
 test('ItemsProvider.executeQuery fail and return error', async (t) => {

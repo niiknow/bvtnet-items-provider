@@ -43,10 +43,9 @@ class ItemsProvider {
     ]
     that.resetCounterVars()
 
-    state.isLocal              = opts.isLocal || true
     state.perPage              = opts.perPage || 15
     state.currentPage          = opts.currentPage || 1
-    state.filter               = opts.filter || {}
+    state.filter               = opts.filter
     state.filterIgnoredFields  = opts.filterIgnoredFields || []
     state.filterIncludedFields = opts.filterIncludedFields || []
     state.searchFields         = opts.searchFields || {}
@@ -164,11 +163,10 @@ class ItemsProvider {
   setLocalItems(items) {
     const that       = this
     that.state.currentPage = 1
-    that.state.totalRows   = items ? items.length : 0
-    that.state.startRow    = that.totalRows > 0 ? 1 : 0
-    that.state.endRow      = that.totalRows
+    that.totalRows         = items ? items.length : 0
+    that.startRow          = that.totalRows > 0 ? 1 : 0
+    that.endRow            = that.totalRows
     that.state.perPage     = -1
-    that.state.isLocal     = true
 
     _localItems.set(this, items)
   }
@@ -430,8 +428,7 @@ class ItemsProvider {
     }
 
     that.resetCounterVars()
-    that.busy          = true
-    that.state.isLocal = false
+    that.busy = true
 
     const axios   = that.getAxios()
     const ajaxUrl = that.state.queryUrl
@@ -439,12 +436,12 @@ class ItemsProvider {
 
     return promise.then(rsp => {
       const myData   = rsp.data
-   		that.state.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.state.startRow  = that.state.totalRows > 0 ? query.start + 1 : 0
-      that.state.endRow    = query.start + query.length
+   		that.totalRows = myData.recordsFiltered || myData.recordsTotal
+      that.startRow  = that.totalRows > 0 ? query.start + 1 : 0
+      that.endRow    = query.start + query.length
 
-      if (that.state.endRow > that.state.totalRows) {
-        that.state.endRow = that.state.totalRows
+      if (that.endRow > that.totalRows) {
+        that.endRow = that.totalRows
       }
 
       if (typeof that.onResponseComplete === 'function') {

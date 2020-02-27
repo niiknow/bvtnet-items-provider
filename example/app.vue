@@ -49,13 +49,13 @@
     />
      <div class="row">
       <div class="col-12 col-md-5">
-        Showing {{ ip.state.startRow }} to {{ ip.state.endRow }} of {{ ip.state.totalRows }} entries
+        Showing {{ ip.startRow }} to {{ ip.endRow }} of {{ ip.totalRows }} entries
       </div>
       <div class="col-12 col-md-7">
         <b-pagination
           v-model="ip.state.currentPage"
-          :total-rows="ip.state.totalRows"
-          :per-page="ip.state.perPage"
+          :total-rows="ip.totalRows"
+          :per-page="ip.perPage"
           class="float-right"
           aria-controls="my-table"
         />

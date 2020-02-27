@@ -43823,11 +43823,11 @@ var render = function() {
         _c("div", { staticClass: "col-12 col-md-5" }, [
           _vm._v(
             "\n      Showing " +
-              _vm._s(_vm.ip.state.startRow) +
+              _vm._s(_vm.ip.startRow) +
               " to " +
-              _vm._s(_vm.ip.state.endRow) +
+              _vm._s(_vm.ip.endRow) +
               " of " +
-              _vm._s(_vm.ip.state.totalRows) +
+              _vm._s(_vm.ip.totalRows) +
               " entries\n    "
           )
         ]),
@@ -43839,8 +43839,8 @@ var render = function() {
             _c("b-pagination", {
               staticClass: "float-right",
               attrs: {
-                "total-rows": _vm.ip.state.totalRows,
-                "per-page": _vm.ip.state.perPage,
+                "total-rows": _vm.ip.totalRows,
+                "per-page": _vm.ip.perPage,
                 "aria-controls": "my-table"
               },
               model: {
@@ -44090,9 +44090,11 @@ ItemsProvider = /*#__PURE__*/function () {
       _name.set(that, 'ItemsProvider');
       _axios.set(that, axios);
 
+      that.stateId = opts.stateId;
       that.state = state;
       that.fields = fields;
       that.busy = false;
+      that.storage = opts.storage || window.localStorage;
       that.pageLengths = [
       { value: 15, text: '15' },
       { value: 100, text: '100' },
@@ -44102,10 +44104,9 @@ ItemsProvider = /*#__PURE__*/function () {
 
       that.resetCounterVars();
 
-      state.isLocal = opts.isLocal || true;
       state.perPage = opts.perPage || 15;
       state.currentPage = opts.currentPage || 1;
-      state.filter = opts.filter || {};
+      state.filter = opts.filter;
       state.filterIgnoredFields = opts.filterIgnoredFields || [];
       state.filterIncludedFields = opts.filterIncludedFields || [];
       state.searchFields = opts.searchFields || {};
@@ -44147,6 +44148,27 @@ ItemsProvider = /*#__PURE__*/function () {
       that.items = function (ctx, cb) {
         return that.executeQuery(ctx, cb, this);
       };
+
+      // finally, load states
+      if (typeof that.stateId === 'string') {
+
+        if (typeof that.onStateLoading === 'function') {
+          that.onStateLoading();
+        }
+
+        // begin saving state
+        var savedState = that.storage.getItem(that.getStateId());
+        if (typeof savedState === 'string' && savedState.indexOf('}') > 0) {
+          var _state = JSON.parse(savedState);
+          for (var _k in _state) {
+            that.state[_k] = _state[_k];
+          }
+
+          if (typeof that.onStateLoaded === 'function') {
+            that.onStateLoaded(_state);
+          }
+        }
+      }
 
       return that;
     }
@@ -44202,11 +44224,10 @@ ItemsProvider = /*#__PURE__*/function () {
     items) {
       var that = this;
       that.state.currentPage = 1;
-      that.state.totalRows = items ? items.length : 0;
-      that.state.startRow = that.totalRows > 0 ? 1 : 0;
-      that.state.endRow = that.totalRows;
+      that.totalRows = items ? items.length : 0;
+      that.startRow = that.totalRows > 0 ? 1 : 0;
+      that.endRow = that.totalRows;
       that.state.perPage = -1;
-      that.state.isLocal = true;
 
       _localItems.set(this, items);
     }
@@ -44403,6 +44424,41 @@ ItemsProvider = /*#__PURE__*/function () {
     }
 
     /**
+       * computed state id
+       *
+       * @return String the computed state id
+       */ }, { key: "getStateId", value: function getStateId()
+    {
+      return "bvtnetip.".concat(this.stateId);
+    }
+
+    /**
+       * perform state saving
+       *
+       * @return Object ItemsProvider
+       */ }, { key: "performSaveState", value: function performSaveState()
+    {
+      var that = this;
+
+      if (typeof that.stateId !== 'string') {
+        return that;
+      }
+
+      if (typeof that.onStateSaving === 'function') {
+        that.onStateSaving();
+      }
+
+      // begin saving state
+      that.storage.setItem(that.getStateId(), JSON.stringify(that.state));
+
+      if (typeof that.onStateSaved === 'function') {
+        that.onStateSaved();
+      }
+
+      return that;
+    }
+
+    /**
       * the provider function to use with bootstrap vue
       *
       * @param  Object   ctx bootstrap-vue context object
@@ -44434,7 +44490,6 @@ ItemsProvider = /*#__PURE__*/function () {
 
       that.resetCounterVars();
       that.busy = true;
-      that.state.isLocal = false;
 
       var axios = that.getAxios();
       var ajaxUrl = that.state.queryUrl;
@@ -44442,14 +44497,12 @@ ItemsProvider = /*#__PURE__*/function () {
 
       return promise.then(function (rsp) {
         var myData = rsp.data;
-        that.state.totalRows = myData.recordsFiltered || myData.recordsTotal;
-        that.state.startRow = that.state.totalRows > 0 ? query.start + 1 : 0;
-        that.state.endRow = query.start + query.length;
+        that.totalRows = myData.recordsFiltered || myData.recordsTotal;
+        that.startRow = that.totalRows > 0 ? query.start + 1 : 0;
+        that.endRow = query.start + query.length;
 
-        console.log(that.state.endRow);
-        console.log(that.state.totalRows);
-        if (that.state.endRow > that.state.totalRows) {
-          that.state.endRow = that.state.totalRows;
+        if (that.endRow > that.totalRows) {
+          that.endRow = that.totalRows;
         }
 
         if (typeof that.onResponseComplete === 'function') {
@@ -44457,6 +44510,9 @@ ItemsProvider = /*#__PURE__*/function () {
         }
 
         that.busy = false;
+
+        // finally, save state on successful response
+        that.performSaveState();
 
         return myData.data || [];
       })["catch"](function (err) {
