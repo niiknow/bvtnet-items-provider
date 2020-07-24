@@ -19,11 +19,16 @@ https://datatables.net/manual/server-side
   :filter-ignored-fields="ip.state.filterIgnoredFields"
   :filter-included-fields="ip.state.filterIncludedFields"
 />
-<b-pagination
-  v-model="ip.state.currentPage"
-  :per-page="ip.state.perPage"
-  :total-rows="ip.totalRows"
-/>
+<div 
+  v-if="ip.totalRows > 0"
+  class="row"
+>
+  <b-pagination
+    v-model="ip.state.currentPage"
+    :per-page="ip.state.perPage"
+    :total-rows="ip.totalRows"
+  />
+</div>
 ```
 
 ```js
@@ -59,21 +64,21 @@ This is because b-table does not currently natively support it.  Future work is 
 > Below are fields on the state object, which are useful for binding to various components in Vue.  If `saveStateId` is provided, then this object get saved after successful data returned from ajax called and reload right after ItemsProvider construction.
 
 
-[] `currentPage` - save the current page
+[x] `currentPage` - save the current page
 
-[] `perPage` - save the per page selection
+[x] `perPage` - save the per page selection
 
-[] `filter` - save the search filter
+[x] `filter` - save the search filter
 
-[] `filterIgnoredFields` - array of ignored fields - see b-table
+[x] `filterIgnoredFields` - array of ignored fields - see b-table
 
-[] `filterIncludedFields` - array of included fields - see b-table
+[x] `filterIncludedFields` - array of included fields - see b-table
 
-[] `searchFields` - per-column field search/filter
+[x] `searchFields` - per-column field search/filter
 
-[] `extraQuery` - additional query parameters
+[x] `extraQuery` - additional query parameters
 
-[] `sortFields` - per-column field sorting
+[x] `sortFields` - per-column field sorting
 
 # RELEASE
 1.0.0 - Future release with new features.  Big change in this release is the moving several bindable properties `perPage, currentPage, filter, filterIgnoredFields, filterIncludedFields` to `provider.state` object.  This allow for logical separation between what are being saved to the `localStorage`
