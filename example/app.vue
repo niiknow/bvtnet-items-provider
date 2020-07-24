@@ -45,17 +45,23 @@
       :filter="ip.state.filter"
       :filter-ignored-fields="ip.state.filterIgnoredFields"
       :filter-included-fields="ip.state.filterIncludedFields"
+      :no-provider-paging="isLocal"
+      :no-provider-sorting="isLocal"
+      :no-provider-filtering="isLocal"
       api-url="https://laratt.niiknow.org/api/v1/democontact/example?x-tenant=test&x-api-key=demo123"
     />
-     <div class="row">
+    <div class="row">
       <div class="col-12 col-md-5">
         Showing {{ ip.startRow }} to {{ ip.endRow }} of {{ ip.totalRows }} entries
       </div>
-      <div class="col-12 col-md-7">
+      <div
+        v-if="ip.totalRows > 0"
+        class="col-12 col-md-7"
+      >
         <b-pagination
           v-model="ip.state.currentPage"
           :total-rows="ip.totalRows"
-          :per-page="ip.perPage"
+          :per-page="ip.state.perPage"
           class="float-right"
           aria-controls="my-table"
         />
@@ -150,7 +156,8 @@ export default {
 
     return {
       ip: ip,
-      quickSearch: ''
+      quickSearch: '',
+      isLocal: false
     }
   }
 }
