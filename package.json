@@ -41,7 +41,7 @@
     "@babel/register": "^7.10.1",
     "@babel/runtime": "^7.10.2",
     "ava": "^3.8.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "bootstrap-vue": "^2.15.0",
