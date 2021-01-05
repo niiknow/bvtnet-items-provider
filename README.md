@@ -60,6 +60,8 @@ This plugin support most server-side features except for:
 
 This is because b-table does not currently natively support it.  Future work is in progress, see b-table issue links.
 
+Although this Component was written for datatables.net and b-table, it is a completely independent library written based off API contracts.
+
 # State Object
 > Below are fields on the state object, which are useful for binding to various components in Vue.  If `saveStateId` is provided, then this object get saved after successful data returned from ajax called and reload right after ItemsProvider construction.
 

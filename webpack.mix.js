@@ -1,9 +1,10 @@
-const webpack = require('webpack');
-const path    = require('path');
-const mix     = require('laravel-mix');
-const pkg     = require('./package.json');
-const fs      = require('fs');
-const public  = process.env.NODE_ENV.trim() === 'build' ? 'dist' : 'example';
+const webpack      = require('webpack');
+const path         = require('path');
+const mix          = require('laravel-mix');
+const pkg          = require('./package.json');
+const fs           = require('fs');
+const public       = process.env.NODE_ENV.trim() === 'build' ? 'dist' : 'example';
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 mix.setPublicPath(path.normalize(public));
 
@@ -25,17 +26,6 @@ const config = {
   },
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.(vue|js)$/i,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'eslint-loader',
-        options: {
-          fix: false,
-          cache: false,
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
       {
         test: /\.tpl$/i,
         exclude: /(node_modules|bower_components)/,
@@ -60,7 +50,8 @@ const config = {
   plugins: [
     new webpack.ProvidePlugin({
       Promise: 'es6-promise'
-    })
+    }),
+    new ESLintPlugin()
   ]
 };
 
@@ -81,7 +72,7 @@ if (process.env.NODE_ENV.trim() === 'build') {
   mix.version();
   mix.disableNotifications();
 } else {
-  mix.js(`example/app.js`, `${ public }`);
+  mix.js(`example/app.js`, `${ public }`).vue();
   mix.browserSync({
     proxy: false,
     port: 3000,
