@@ -119,7 +119,7 @@ class ItemsProvider {
    */
   resetCounterVars() {
     const that = this
-    that.totalRows = that.startRow = that.endRow = 0
+    that.totalRows = that.recordsTotal = that.startRow = that.endRow = 0
   }
 
   /**
@@ -164,6 +164,7 @@ class ItemsProvider {
     const that       = this
     that.state.currentPage = 1
     that.totalRows         = items ? items.length : 0
+    that.recordsTotal      = 0
     that.startRow          = that.totalRows > 0 ? 1 : 0
     that.endRow            = that.totalRows
     that.state.perPage     = -1
@@ -435,10 +436,11 @@ class ItemsProvider {
     const promise = (that.method === 'POST') ? axios.post(ajaxUrl, query) : axios.get(`${ajaxUrl}?${that.queryStringify(query)}`)
 
     return promise.then(rsp => {
-      const myData   = rsp.data
-   		that.totalRows = myData.recordsFiltered || myData.recordsTotal
-      that.startRow  = that.totalRows > 0 ? query.start + 1 : 0
-      that.endRow    = query.start + query.length
+      const myData      = rsp.data
+   		that.totalRows    = myData.recordsFiltered
+      that.startRow     = that.totalRows > 0 ? query.start + 1 : 0
+      that.endRow       = query.start + query.length
+      that.recordsTotal = myData.recordsTotal
 
       if (that.endRow > that.totalRows) {
         that.endRow = that.totalRows
