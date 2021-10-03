@@ -1,6 +1,6 @@
 {
   "name": "bvtnet-items-provider",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "datatables.net ajax items provider for bootstrap-vue b-table",
   "author": "Tom Noogen",
   "main": "dist/index.js",
@@ -26,9 +26,9 @@
   "scripts": {
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "build": "npm run production",
+    "build": "MY_BUILD=true mix && mix --production",
     "production": "mix --production",
-    "test": "cross-env NODE_ENV=test node_modules/.bin/nyc node_modules/.bin/ava --verbose",
+    "test": "node_modules/.bin/nyc node_modules/.bin/ava --verbose",
     "lint": "eslint --ext .js,.vue src/",
     "lint-fix": "eslint --fix --ext .js,.vue src/",
     "check-outdated": "npm outdated"

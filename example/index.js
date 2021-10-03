@@ -2689,18 +2689,24 @@ ItemsProvider = /*#__PURE__*/function () {
         if (col.searchable && state.searchFields) {
           var val = state.searchFields[field.key];
 
-          if (val) {
-            // actual object with value, then simply assign it
-            if (val.value) {
+          if (val !== null && typeof val !== 'undefined') {
+            // if not null or undefined
+            if (typeof val.regex === 'boolean') {
+              // real search object has regex property, then simply assign it
               col.search = val;
-            } else {
-              col.search = col.search || {};
-              col.search.value = { value: "".concat(val || ''), regex: false };
-              if (val instanceof RegExp) {
-                col.search.regex = true;
-                col.search.value = val.source;
-              }
+
+            } else if (val instanceof RegExp) {
+              // it is a regexp object, then assign the source
+              col.search = { value: val.source, regex: true };
+
+            } else if (_typeof(val) !== 'object' && !Array.isArray(val)) {
+              // if not an object or array, then assign the string value
+              col.search = { value: "".concat(val || ''), regex: false };
+
             }
+
+            // don't know what to do otherwise it might serialize as [object object]
+            // or even some invalid object
           }
         }
 
@@ -50878,4 +50884,3 @@ __webpack_exports__ = __webpack_exports__["default"];
 /******/ })()
 ;
 });
-//# sourceMappingURL=index.js.map

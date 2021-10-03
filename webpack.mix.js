@@ -3,10 +3,11 @@ const path         = require('path');
 const mix          = require('laravel-mix');
 const pkg          = require('./package.json');
 const fs           = require('fs');
-const public       = process.env.NODE_ENV.trim() === 'build' ? 'dist' : 'example';
 const ESLintPlugin = require('eslint-webpack-plugin');
+const isBuild      = ((process.env.MY_BUILD || '').trim() === 'true')
+const buildPath    = path.resolve(path.normalize(isBuild || mix.inProduction() ? 'dist' : 'example'));
 
-mix.setPublicPath(path.normalize(public));
+mix.setPublicPath(buildPath);
 
 const libraryName = pkg.name;
 const banner  = `/*!
@@ -34,7 +35,7 @@ const config = {
     ]
   },
   output: {
-    path: path.resolve(public),
+    path: path.resolve(buildPath),
     filename: fileName,
     library: libraryName,
     libraryTarget: 'umd',
@@ -46,7 +47,6 @@ const config = {
     inline: true,
     quiet: false
   },
-  devtool: 'cheap-source-map',
   plugins: [
     new webpack.ProvidePlugin({
       Promise: 'es6-promise'
@@ -55,24 +55,29 @@ const config = {
   ]
 };
 
-mix.webpackConfig(config).sourceMaps();
-
-if (process.env.NODE_ENV.trim() === 'build') {
-  mix.js(`src/index.js`, `${ public }`);
+if (isBuild) {
+  console.log('build');
+  mix.webpackConfig(config);
+  mix.js(`src/index.js`, `${ buildPath }`);
   mix.then(function () {
-    const data   = fs.readFileSync(`${ public }/${ fileName }`);
-    const fd     = fs.openSync(`${ public }/${ fileName }`, 'w+');
+    const data   = fs.readFileSync(`${ buildPath }/${ fileName }`);
+    const fd     = fs.openSync(`${ buildPath }/${ fileName }`, 'w+');
     const insert = new Buffer(banner);
     fs.writeSync(fd, insert, 0, insert.length, 0)
     fs.writeSync(fd, data, 0, data.length, insert.length)
     fs.close(fd, (err) => {
       if (err) throw err;
     });
+
   });
-  mix.version();
   mix.disableNotifications();
+} else if (mix.inProduction()) {
+  // this should be run after build above
+  mix.minify(`${ buildPath }/index.js`);
 } else {
-  mix.js(`example/app.js`, `${ public }`).vue();
+  // only run during mix watch
+  mix.webpackConfig(config);
+  mix.js(`example/app.js`, `${ buildPath }`).vue();
   mix.browserSync({
     proxy: false,
     port: 3000,
