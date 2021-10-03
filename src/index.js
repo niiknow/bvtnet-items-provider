@@ -161,10 +161,11 @@ class ItemsProvider {
    * @param Array items list of local items
    */
   setLocalItems(items) {
-    const that       = this
+    const that = this
+
     that.state.currentPage = 1
     that.totalRows         = items ? items.length : 0
-    that.recordsTotal      = 0
+    that.recordsTotal      = that.totalRows
     that.startRow          = that.totalRows > 0 ? 1 : 0
     that.endRow            = that.totalRows
     that.state.perPage     = -1

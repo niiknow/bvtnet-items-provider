@@ -2520,9 +2520,10 @@ ItemsProvider = /*#__PURE__*/function () {
      */ }, { key: "setLocalItems", value:
     function setLocalItems(items) {
       var that = this;
+
       that.state.currentPage = 1;
       that.totalRows = items ? items.length : 0;
-      that.recordsTotal = 0;
+      that.recordsTotal = that.totalRows;
       that.startRow = that.totalRows > 0 ? 1 : 0;
       that.endRow = that.totalRows;
       that.state.perPage = -1;
